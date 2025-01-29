@@ -8,6 +8,6 @@ class AccueilController extends Controller
 {
     public function index()
     {
-        return view('Accueil'); // Retourne la vue 'welcome.blade.php'
+        return view('Accueil'); // Retourne la vue Accueil.blade.php
     }
 }
