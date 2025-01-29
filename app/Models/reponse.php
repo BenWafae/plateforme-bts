@@ -17,15 +17,19 @@ class Reponse extends Model
         'id_user'      // Clé étrangère vers la table 'users'
     ];
 
-    // Relation avec la table 'questions'
-    public function question()
-    {
-        return $this->belongsTo(Question::class, 'id_question');
-    }
+   
 
     // Relation avec la table 'users'
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    public function question()
+    {
+    return $this->belongsTo(Question::class, 'id_question');
+
+   }
 }
+
+  

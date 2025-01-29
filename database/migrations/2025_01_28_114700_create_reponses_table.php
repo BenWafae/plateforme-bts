@@ -15,11 +15,14 @@ return new class extends Migration
     {
     Schema::create('reponses', function (Blueprint $table) {
         $table->id();
-        $table->text('contenu');          // Contenu de la réponse
-        $table->timestamp('date_pub');    // Date de publication
-        $table->foreignId('id_question')->constrained()->onDelete('cascade');  // Clé étrangère vers la table 'questions'
-        $table->foreignId('id_user')->constrained()->onDelete('cascade');      // Clé étrangère vers la table 'users'
-        $table->timestamps();             // Les timestamps 'created_at' et 'updated_at'
+        $table->text('contenu');          
+        $table->timestamp('date_pub')->useCurrent(); 
+        // a l'aide de useCurrent la date et l'heure seront ajouter automatiquemnt dans database lors de l'insertion d'un nouveau reponse 
+        // on va determiner ici une cle etrangere vers la table questions
+        $table->foreignId('id_question')->constrained('questions')->onDelete('cascade');  
+        // ici une cle etrangere vers la table users
+        $table->foreignId('id_user')->constrained('users')->onDelete('cascade');      
+        $table->timestamps();            
     });
 }
 

@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 
+
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -19,9 +21,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nom',
+        'prenom',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -42,4 +46,34 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+// ici on va determiner la relation entre user et question
+  public function questions()
+  {
+    return $this->hasMany(Question::class, 'id_user');
+  }
+
+//   relation entre reponse et user
+public function reponses()
+{
+    return $this->hasMany(Reponse::class, 'user_id', 'id');
 }
+// relation user supprt educative:
+public function supportsEducatifs()
+{
+    return $this->hasMany(SupportEducatif::class, 'id_user'); 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
