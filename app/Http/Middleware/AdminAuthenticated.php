@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class EtudiantAutheticated
+class AdminAuthenticated
 {
     /**
      * Handle an incoming request.
@@ -17,17 +17,15 @@ class EtudiantAutheticated
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check()){
+        if (Auth::check()){
             $user = Auth::user();
-            // on doit verifier si lutilisateur a le role etudiant.
-            if($user->role=== 'etudiant'){
-             
+            // on va apres verifier si l'utilisateur est un administrateur;
+            if($user->role === 'administrateur'){
                 return $next($request);
-            }
-            }
-    //   si luser n'est pas un etudiant authentifier
-    return abort(403, 'Access Denied');
-    //    on va l'afficher un erreur
 
+            }
+        }
+    //    si l'utilisateur n'est pas un admin on va l'afficher un erreu;
+         return abort(403, 'Access Denied');
     }
 }
