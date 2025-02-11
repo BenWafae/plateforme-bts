@@ -1,3 +1,7 @@
+@extends('layouts.admin')
+@section('content')
+    
+@endsection
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,7 +10,6 @@
     <title>Dashboard Administrateur</title>
 </head>
 <body>
-    <h1>{{ $message }}</h1>
-    <p>Bienvenue sur votre espace administrateur !</p>
+    
 </body>
 </html>

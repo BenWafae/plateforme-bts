@@ -10,6 +10,7 @@ class Matiere extends Model
     use HasFactory;
     // ici on a specifier un autre table ccar laravel prend par defaut la table user pour l'empecher de le prendre on fais ca
     protected $table = 'matieres';
+    protected $primaryKey = 'id_Matiere';
     // les attribut qui vont etre rempis:
     
     protected $fillable = [
