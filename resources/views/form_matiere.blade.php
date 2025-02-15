@@ -1,26 +1,26 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1 class="text-center mb-4">Les Matieres Pour Chaque Filieres</h1>
+    <h1 class="text-center mb-4">Ajouter une matiere</h1>
 
-    <!-- Ajout de styles directement dans ce fichier -->
+    
     <style>
         /* Style pour le texte des options dans le select */
         select.form-select {
-            color: #333;  /* Texte noir dans le select */
-            background-color: #ffffff;  /* Fond blanc pour le select */
+            color: #333;  
+            background-color: #ffffff;  
         }
 
         /* Style pour les labels */
         .form-label {
             font-weight: bold;
-            color: #333;  /* Texte sombre pour les labels */
+            color: #333; 
         }
 
-        /* Style pour les champs de saisie */
+       
         .form-control {
-            border-radius: 0.375rem;  /* Bordures arrondies */
-            border: 1px solid #ccc;   /* Bordure grise */
+            border-radius: 0.375rem; 
+            border: 1px solid #ccc;   
             padding: 10px;
             font-size: 1rem;
         }
@@ -62,6 +62,7 @@
         <div class="mb-3">
             <label for="Nom" class="form-label">Nom de la matière</label>
             <input type="text" id="Nom" name="Nom" value="{{ old('Nom') }}" class="form-control" required>
+            {{-- on a utiliser old pourque apres l'enregistrement la valeur entre dans chaque champs reste apparut --}}
             @error('Nom')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -74,10 +75,12 @@
 
         <div class="mb-3">
             <label for="id_filiere" class="form-label">Filière</label>
+            {{-- on va utiliser select pour afficher une liste deroulant --}}
             <select id="id_filiere" name="id_filiere" class="form-select" required>
                 <option value="" disabled selected>Sélectionnez une filière</option>
                 @foreach($filieres as $filiere)
                 <option value="{{ $filiere->id_filiere }}" {{ old('id_filiere') == $filiere->id_filiere ? 'selected' : '' }}>
+                    {{-- option est une option par defaut indique au users de selectionner une filiere --}}
                     {{ $filiere->nom_filiere }}
                 </option>
             @endforeach

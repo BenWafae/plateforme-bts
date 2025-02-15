@@ -83,20 +83,21 @@
     <div class="sidebar">
         <h2>Espace Admin</h2>
         <ul>
-            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Tableau de bord</a></li>
             <li>
                 <a href="#">Formulaires</a>
                 <ul>
-                    <li><a href="{{ route('filiere.form') }}">Form Filière</a></li>
-                    <li><a href="{{ route('matiere.form') }}">Form Matière</a></li>
-                    <li><a href="#">Form Prof</a></li>
-                    <li><a href="#">Form Admin</a></li>
+                    {{-- <li><a href="{{ route('filiere.form') }}">Form Filière</a></li>
+                    <li><a href="{{ route('matiere.form') }}">Form Matière</a></li> --}}
+                    <li><a href="{{  route('user.form')}}">Form users</a></li>
+                   
                     <li><a href="#">Form Support</a></li>
                     
                 </ul>
             </li>
             <li><a href="{{ route('filiere.index') }}">Filieres</a></li>
-            <li><a href="{{ route('matiere.index') }}">Matiere</a></li>
+            <li><a href="{{ route('matiere.index') }}">Matiere</a></li> 
+            <li><a href="{{ route('user.index') }}">Users</a></li>
             <li><a href="#">Notifications</a></li>
             <li><a href="#">Supports</a></li>
         </ul>

@@ -25,7 +25,7 @@ class AdminAuthenticated
 
             }
         }
-    //    si l'utilisateur n'est pas un admin on va l'afficher un erreu;
+    //    si l'utilisateur n'est pas un admin on va l'afficher un erreur;
          return abort(403, 'Access Denied');
     }
 }

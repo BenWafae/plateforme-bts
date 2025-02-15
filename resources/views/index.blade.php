@@ -15,15 +15,16 @@
 
         <!-- Champ de recherche -->
         <div class="row mb-4">
-            <div class="col-md-6">
+            <div class="col-md-10">
                 <input type="text" id="searchInput" class="form-control" placeholder="Rechercher une filière...">
             </div>
-            <div class="col-md-6 text-right">
-                <a href="{{ route('filiere.form') }}" class="btn" style="background-color: #2a2aba; color: white;">
+            <div class="col-md-2 text-right">
+                <a href="{{ route('filiere.form') }}" class="btn btn-block" style="background-color: #2a2aba; color: white;">
                     <i class="fas fa-plus"></i> Créer
                 </a>
             </div>
         </div>
+        
 
         {{-- Tableau des filières --}}
         <table class="table table-bordered">

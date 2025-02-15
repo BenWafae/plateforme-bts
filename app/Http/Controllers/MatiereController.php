@@ -8,6 +8,35 @@ use Illuminate\Http\Request;
 
 class MatiereController extends Controller
 {
+
+    // public function search(Request $request)
+    // {
+    //     $query = $request->input('query');
+    //     $filterFiliere = $request->input('filiere');
+    
+    //     // Construire la requête
+    //     $matieres = Matiere::with('filiere')
+    //         ->where('Nom', 'LIKE', "%$query%")
+    //         ->when($filterFiliere, function ($queryBuilder) use ($filterFiliere) {
+    //             $queryBuilder->whereHas('filiere', function ($q) use ($filterFiliere) {
+    //                 $q->where('nom_filiere', 'LIKE', "%$filterFiliere%");
+    //             });
+    //         })
+    //         ->get();
+    
+    //     return response()->json($matieres);
+    // }
+    
+
+
+
+
+
+
+
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +45,7 @@ class MatiereController extends Controller
     public function index()
     {
         // Récupérer toutes les matières associées aux filières
-        $matieres = Matiere::with('filiere')->get();
+        $matieres = Matiere::with('filiere')->paginate(8);
     
         // Récupérer toutes les filières
         $filieres = Filiere::all();

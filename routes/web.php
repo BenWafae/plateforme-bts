@@ -6,6 +6,7 @@ use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminAuthenticated;
 use Illuminate\Support\Facades\Route;
 
@@ -57,8 +58,25 @@ Route::middleware('auth')->group(function () {
         Route::get('/matiere/{matiere}/edit', [MatiereController::class, 'edit'])->name('matiere.edit');
         Route::put('/matiere/{matiere}', [MatiereController::class, 'update'])->name('matiere.update');
         Route::delete('/matiere/{matiere}', [MatiereController::class, 'destroy'])->name('matiere.destroy');
+        Route::get('/matiere/search', [MatiereController::class, 'search'])->name('matiere.search');
 
-    });
+       
+
+        // route pour Users;
+         
+    Route::get('/users', [UserController::class, 'index'])->name('user.index');
+    Route::get('/user/create', [UserController::class, 'create'])->name('user.form');
+    Route::post('/user', [UserController::class, 'store'])->name('user.store');
+    Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    // 1..index:affichee la liste des users
+    // 2.create:afficher le formulaire d'ajout;
+    // 3.store:enregistrerrr un nouveau userss;
+    // 4.edit..
+});
+
+    
     
     // creation de route pour administrateur:/admin/dashboard
     Route::middleware(['auth', 'professeur.auth'])->get('/professeur/dashboard' ,[ProfesseurController::class,'dashboard'])->name('professeur.dashboard');
