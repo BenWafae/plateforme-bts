@@ -9,23 +9,7 @@ use Illuminate\Http\Request;
 class MatiereController extends Controller
 {
 
-    // public function search(Request $request)
-    // {
-    //     $query = $request->input('query');
-    //     $filterFiliere = $request->input('filiere');
-    
-    //     // Construire la requête
-    //     $matieres = Matiere::with('filiere')
-    //         ->where('Nom', 'LIKE', "%$query%")
-    //         ->when($filterFiliere, function ($queryBuilder) use ($filterFiliere) {
-    //             $queryBuilder->whereHas('filiere', function ($q) use ($filterFiliere) {
-    //                 $q->where('nom_filiere', 'LIKE', "%$filterFiliere%");
-    //             });
-    //         })
-    //         ->get();
-    
-    //     return response()->json($matieres);
-    // }
+   
     
 
 
@@ -42,17 +26,30 @@ class MatiereController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        // Récupérer toutes les matières associées aux filières
-        $matieres = Matiere::with('filiere')->paginate(8);
-    
-        // Récupérer toutes les filières
-        $filieres = Filiere::all();
-    
-        // Passer les variables à la vue
-        return view('matiere_index', compact('matieres', 'filieres'));
+    public function index(Request $request)
+{
+    // Récupérer le filtre de la filière
+    $filiereFilter = $request->input('filiere');
+
+    // Appliquer le filtre sur toute la table des matières
+    $matieresQuery = Matiere::query();
+
+    // Si une filière est spécifiée, appliquer le filtre
+    if ($filiereFilter && $filiereFilter != 'all') {
+        $matieresQuery->whereHas('filiere', function($query) use ($filiereFilter) {
+            $query->whereRaw('LOWER(nom_filiere) = ?', [strtolower($filiereFilter)]);
+        });
     }
+
+    // Paginer les résultats après avoir appliqué le filtre
+    $matieres = $matieresQuery->paginate(8)->appends(['filiere' => $filiereFilter]);
+
+    // Charger toutes les filières pour le filtre
+    $filieres = Filiere::all();
+
+    return view('matiere_index', compact('matieres', 'filieres', 'filiereFilter'));
+}
+
     /**
      * Show the form for creating a new resource.
      *

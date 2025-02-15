@@ -18,10 +18,16 @@
             <input type="text" id="searchInput" class="form-control" placeholder="Rechercher une matière...">
         </div>
         <div class="col-md-4">
-            <select id="filterFiliere" class="form-control">
-                <option value="">Toutes les Filières</option>
+            <select id="filterFiliere" class="form-control" onchange="location = this.value;">
+                <option value="{{ route('matiere.index', ['filiere' => 'all']) }}" 
+                        @if ($filiereFilter == 'all') selected @endif>
+                    Toutes les Filières
+                </option>
                 @foreach ($filieres as $filiere)
-                    <option value="{{ strtolower($filiere->nom_filiere) }}">{{ $filiere->nom_filiere }}</option>
+                    <option value="{{ route('matiere.index', ['filiere' => strtolower($filiere->nom_filiere)]) }}" 
+                            @if ($filiereFilter == strtolower($filiere->nom_filiere)) selected @endif>
+                        {{ $filiere->nom_filiere }}
+                    </option>
                 @endforeach
             </select>
         </div>
@@ -70,75 +76,33 @@
     </table>
 
     {{-- Pagination --}}
-    <div class="d-flex justify-content-center mt-4">
-        <nav>
-            <ul class="pagination">
-                {{-- Pagination simple et bien structurée --}}
-                @if ($matieres->onFirstPage())
-                    <li class="page-item disabled"><span class="page-link">Précédent</span></li>
-                @else
-                    <li class="page-item"><a class="page-link" href="{{ $matieres->previousPageUrl() }}">Précédent</a></li>
-                @endif
-
-                @foreach ($matieres->getUrlRange(1, $matieres->lastPage()) as $page => $url)
-                    <li class="page-item {{ $page == $matieres->currentPage() ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                    </li>
-                @endforeach
-
-                @if ($matieres->hasMorePages())
-                    <li class="page-item"><a class="page-link" href="{{ $matieres->nextPageUrl() }}">Suivant</a></li>
-                @else
-                    <li class="page-item disabled"><span class="page-link">Suivant</span></li>
-                @endif
+    <div class="d-flex justify-content-center mt-3">
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm">
+                {{ $matieres->links('pagination::bootstrap-4') }}
             </ul>
         </nav>
     </div>
 </div>
 
-{{-- Script pour la recherche et le filtre --}}
+{{-- Script de recherche en temps réel --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#searchInput').on('keyup', function() {
-            filterTable();
-        });
-
-        $('#filterFiliere').on('change', function() {
-            filterTable();
-        });
-
-        function filterTable() {
-            var searchTerm = $('#searchInput').val().toLowerCase();
-            var selectedFiliere = $('#filterFiliere').val().toLowerCase();
-
+            var searchTerm = $(this).val().toLowerCase();
+            
             $('#matiereTable tr').each(function() {
-                var lineText = $(this).text().toLowerCase();
-                var filiereText = $(this).find('td:nth-child(2)').text().toLowerCase();
+                var matiereName = $(this).find('td:first').text().toLowerCase(); // Récupère la 1ère colonne (Nom de la Matière)
 
-                if (lineText.includes(searchTerm) && (selectedFiliere === "" || filiereText === selectedFiliere)) {
-                    $(this).show();
+                if (matiereName.includes(searchTerm)) {
+                    $(this).show(); // Affiche la ligne si elle correspond
                 } else {
-                    $(this).hide();
+                    $(this).hide(); // Cache la ligne sinon
                 }
             });
-        }
+        });
     });
 </script>
 
-{{-- Styles personnalisés pour la pagination --}}
-<style>
-    .pagination .page-item.active .page-link {
-        background-color: #007bff;
-        border-color: #007bff;
-        color: white;
-    }
-    .pagination .page-link {
-        color: #007bff;
-    }
-    .pagination .page-link:hover {
-        background-color: #e9ecef;
-        color: #0056b3;
-    }
-</style>
 @endsection

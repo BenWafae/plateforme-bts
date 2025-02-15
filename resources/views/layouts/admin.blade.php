@@ -89,7 +89,7 @@
                 <ul>
                     {{-- <li><a href="{{ route('filiere.form') }}">Form Filière</a></li>
                     <li><a href="{{ route('matiere.form') }}">Form Matière</a></li> --}}
-                    <li><a href="{{  route('user.form')}}">Form users</a></li>
+                    {{-- <li><a href="{{  route('user.form')}}">Form users</a></li> --}}
                    
                     <li><a href="#">Form Support</a></li>
                     
