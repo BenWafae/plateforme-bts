@@ -1,3 +1,6 @@
+@extends('layouts.professeur')
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,7 +9,7 @@
     <title>Dashboard Professeur</title>
 </head>
 <body>
-    <h1>{{ $message }}</h1>
-    <p>Bienvenue sur votre espace professeur !</p>
+    {{-- <h1>{{ $message }}</h1>
+    <p>Bienvenue sur votre espace professeur !</p> --}}
 </body>
 </html>

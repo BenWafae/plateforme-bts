@@ -6,6 +6,7 @@ use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SupportController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminAuthenticated;
 use Illuminate\Support\Facades\Route;
@@ -78,10 +79,23 @@ Route::middleware('auth')->group(function () {
 
     
     
-    // creation de route pour administrateur:/admin/dashboard
+    // creation des routes pour les professeurs;
     Route::middleware(['auth', 'professeur.auth'])->get('/professeur/dashboard' ,[ProfesseurController::class,'dashboard'])->name('professeur.dashboard');
+      Route::prefix('professeur')->group(function () {
+        Route::get('/supports', [SupportController::class, 'index'])->name('supports.index');
+        Route::get('/supports/create', [SupportController::class, 'create'])->name('supports.create');
+        Route::get('/support/{id}/ouvrir', [SupportController::class, 'showPdf'])->name('support.showPdf');
+        Route::post('/supports', [SupportController::class, 'store'])->name('supports.store');
+        Route::delete('/supports/{id}', [SupportController::class, 'destroy'])->name('supports.destroy');
+        Route::get('/supports/{id}/edit', [SupportController::class, 'edit'])->name('supports.edit');
+        Route::put('/supports/{id}', [SupportController::class, 'update'])->name('supports.update');
 
 
+
+
+
+      });
+  
 
 
 

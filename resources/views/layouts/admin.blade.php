@@ -100,6 +100,15 @@
             <li><a href="{{ route('user.index') }}">Users</a></li>
             <li><a href="#">Notifications</a></li>
             <li><a href="#">Supports</a></li>
+            <li>
+                {{-- button deconnexion --}}
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                    @csrf
+                     <button type="submit" class="btn  btn-sm" title="Se déconnecter"> -
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </button>
+                </form>
+            </li>
         </ul>
     </div>
 
@@ -151,12 +160,7 @@
 
 
 
-    <!-- Lien CDN jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Lien CDN Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    
 
 
 
