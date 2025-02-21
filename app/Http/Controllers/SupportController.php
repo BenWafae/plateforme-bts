@@ -23,14 +23,20 @@ class SupportController extends Controller
             ->where('id_user', auth()->id()) // Filtrer par l'ID de l'utilisateur connecté
             ->get();
 
-        // Organiser les supports par matière
-        $supportsParMatiere = $supports->groupBy('id_Matiere');
+        // Organiser les supports par matière et type
+        $supportsParMatiereEtType = $supports->groupBy(function ($support) {
+            return $support->id_Matiere . '-' . $support->id_type;
+        });
+    
+        // Récupérer toutes les matières
+        $matieres = Matiere::all();
+        $types = Type::all(); // Récupérer les types pour affichage correct
 
         // Récupérer toutes les matières
         $matieres = Matiere::all();
 
         // Passer les données à la vue
-        return view('support_index', compact('supportsParMatiere', 'matieres'));
+        return view('support_index', compact('supportsParMatiereEtType', 'matieres', 'types'));
     }
 
 
