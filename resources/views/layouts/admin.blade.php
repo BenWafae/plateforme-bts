@@ -84,22 +84,22 @@
         <h2>Espace Admin</h2>
         <ul>
             <li><a href="#">Tableau de bord</a></li>
-            <li>
-                <a href="#">Formulaires</a>
-                <ul>
+            {{-- <li> --}}
+                {{-- <a href="#">Formulaires</a>
+                <ul> --}}
                     {{-- <li><a href="{{ route('filiere.form') }}">Form Filière</a></li>
                     <li><a href="{{ route('matiere.form') }}">Form Matière</a></li> --}}
                     {{-- <li><a href="{{  route('user.form')}}">Form users</a></li> --}}
                    
-                    <li><a href="#">Form Support</a></li>
+                    {{-- <li><a href="{{route('admin.support.create')}}">Form Support</a></li>
                     
-                </ul>
-            </li>
+                </ul> --}}
+            {{-- </li> --}}
             <li><a href="{{ route('filiere.index') }}">Filieres</a></li>
             <li><a href="{{ route('matiere.index') }}">Matiere</a></li> 
             <li><a href="{{ route('user.index') }}">Users</a></li>
-            <li><a href="#">Notifications</a></li>
-            <li><a href="#">Supports</a></li>
+            <li><a href="{{route('admin.supports.index')}}">Supports</a></li>
+            <li><a href="#">Notification</a></li>
             <li>
                 {{-- button deconnexion --}}
                 <form action="{{ route('logout') }}" method="POST" style="display: inline;">

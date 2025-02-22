@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminSupportController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\MatiereController;
@@ -76,6 +77,16 @@ Route::middleware('auth')->group(function () {
     // 3.store:enregistrerrr un nouveau userss;
     // 4.edit..
 });
+    // routes pour support_cote admins:
+
+// Routes pour la gestion des supports éducatifs par l'administrateur
+Route::get('/supports', [AdminSupportController::class, 'index'])->name('admin.supports.index');
+Route::get('/support/create', [AdminSupportController::class, 'create'])->name('admin.support.create');
+Route::post('/support', [AdminSupportController::class, 'store'])->name('admin.support.store');
+Route::get('/support/{id}/edit', [AdminSupportController::class, 'edit'])->name('admin.support.edit');
+Route::put('/support/{id}', [AdminSupportController::class, 'update'])->name('admin.support.update');
+Route::delete('/support/{id}', [AdminSupportController::class, 'destroy'])->name('admin.support.destroy');
+Route::get('/support/{id}/show', [AdminSupportController::class, 'showPdf'])->name('admin.support.showPdf');
 
     
     

@@ -33,7 +33,7 @@ class SupportController extends Controller
         $types = Type::all(); // Récupérer les types pour affichage correct
 
         // Récupérer toutes les matières
-        $matieres = Matiere::all();
+        // $matieres = Matiere::all();
 
         // Passer les données à la vue
         return view('support_index', compact('supportsParMatiereEtType', 'matieres', 'types'));

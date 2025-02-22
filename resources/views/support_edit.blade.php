@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mt-5">
     <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white text-center">
+        <div class="card-header bg-warning  text-white text-center">
             <h3>Ajouter un Support Éducatif</h3>
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -45,7 +45,13 @@
                 
 
                 <div class="mb-3">
-                    <label for="lien_url" class="form-label">Télécharger le fichier :</label>
+                    <label for="lien_url" class="form-label">Fichier actuel :</label>
+                    <p>
+                    <a href="{{ asset('storage/' . $support->lien_url) }}" target="_blank" class="btn btn-outline-primary">
+                        📂 Voir le fichier
+                    </a>
+                </p>
+                    {{-- <label for="lien_url" class="form-label">Télécharger le fichier :</label> --}}
                     <input type="file" name="lien_url" class="form-control" accept=".pdf,.docx,.pptx,.jpg,.png" required>
                 </div>
 
@@ -72,7 +78,7 @@
                 </div>
 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary w-100">Modifier</button>
+                    <button type="submit" class="btn btn-warning w-100">Modifier</button>
                 </div>
             </form>
         </div>

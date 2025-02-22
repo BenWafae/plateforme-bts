@@ -3,7 +3,7 @@
 @section('title', 'Modifier la Filière')
 
 @section('content')
-    <div class="container mt-5">
+    <div class="container mt-5 bg-warning" >
         <h2 class="mb-4">Modifier la Filière</h2>
 
         <!-- Message de succès -->
@@ -22,7 +22,7 @@
                 <input type="text" class="form-control" id="nom_filiere" name="nom_filiere" value="{{ $filiere->nom_filiere }}" required>
             </div>
 
-            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            <button type="submit" class="btn btn-warning ">Mettre à jour</button>
         </form>
     </div>
 @endsection
