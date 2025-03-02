@@ -8,42 +8,27 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     use HasFactory;
+
+    // Définir la table et la clé primaire
     protected $table = 'questions';
+    protected $primaryKey = 'id_question';  // Spécifie que la clé primaire est id_question
+
     protected $fillable = [
         'titre',
         'contenue',
         'date_pub',
         'id_user',
-        
-      ];
+    ];
 
+    // Relation avec l'utilisateur (chaque question appartient à un utilisateur)
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 
-
-
-
-    //   determiner la relation entre user et question :chauque question poster par un seul utilisateur
-    // et chaque user peut poster pas mal ds questions
-
-      public function user()
-    //   ici on a met user et pas users car la relation est blongsto donc user singulier
-      {
-          return $this->belongsTo(User::class, 'id_user');
-      }
-
-    //   relation entre question et reponse:chaque questions peut avoir pas mal ds reponses
-
+    // Relation entre question et réponses (chaque question peut avoir plusieurs réponses)
     public function reponses()
-       {
-        return $this->hasMany(Reponse::class,  'id_question');
-       }
-
-
-
-
-
-
-
-
+    {
+        return $this->hasMany(Reponse::class, 'id_question');
+    }
 }
-
-

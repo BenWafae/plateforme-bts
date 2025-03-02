@@ -3,13 +3,13 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminSupportController;
 use App\Http\Controllers\EtudiantController;
+use App\Http\Controllers\MessageController; // Ajoutez le contrôleur MessageController
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\AdminAuthenticated;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,68 +18,59 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider and all of them will be
+| assigned to the "web" middleware group. Make something great!
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+// Route d'accueil
 Route::get('/', [App\Http\Controllers\AccueilController::class, 'index']);
 
-
+// Route vers le tableau de bord
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Routes pour l'édition du profil
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-   Route::middleware(['auth', 'etudiant.auth'])->get('/etudiant/dashboard', [EtudiantController::class, 'dashboard'])->name('etudiant.dashboard');
-    // l'etudiant sera rediriger ver la page etudiant-dashboard:/admin/dashboard ,
 
-    Route::middleware(['auth', 'admin.auth'])->get('/admin/dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
-    // routes pour l'ajout des filieres par l'admins:
-    Route::prefix('admin')->group(function () {
-        Route::get('/filieres', [FiliereController::class, 'index'])->name('filiere.index');
-        Route::get('/filiere/create', [FiliereController::class, 'create'])->name('filiere.form');
-        Route::post('/filiere', [FiliereController::class, 'store'])->name('filiere.store');
-        Route::get('/filiere/{filiere}/edit', [FiliereController::class, 'edit'])->name('filiere.edit');
-        Route::put('/filiere/{filiere}', [FiliereController::class, 'update'])->name('filiere.update');
-        Route::delete('/filiere/{filiere}', [FiliereController::class, 'destroy'])->name('filiere.destroy');
+// Routes pour l'étudiant
+Route::middleware(['auth', 'etudiant.auth'])->get('/etudiant/dashboard', [EtudiantController::class, 'dashboard'])->name('etudiant.dashboard');
 
-       // Le {filiere} est un paramètre dynamique de l'URL, qui sert à capturer une valeur spécifique dans l'URL pour l'utiliser dans le contrôleur
-        // dans notre cas fait reference au id de filiee qu'on veut la supprimer
-        // maintennat gestion ds matieres:route matieres:
-        Route::get('/matieres', [MatiereController::class, 'index'])->name('matiere.index');
-        Route::get('/matiere/create', [MatiereController::class, 'create'])->name('matiere.form');
-        Route::post('/matiere', [MatiereController::class, 'store'])->name('matiere.store');
-        Route::get('/matiere/{matiere}/edit', [MatiereController::class, 'edit'])->name('matiere.edit');
-        Route::put('/matiere/{matiere}', [MatiereController::class, 'update'])->name('matiere.update');
-        Route::delete('/matiere/{matiere}', [MatiereController::class, 'destroy'])->name('matiere.destroy');
-        Route::get('/matiere/search', [MatiereController::class, 'search'])->name('matiere.search');
+// Routes pour l'administrateur
+Route::middleware(['auth', 'admin.auth'])->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-       
-
-        // route pour Users;
-         
+// Routes pour l'ajout des filières par l'admin
+Route::prefix('admin')->group(function () {
+    Route::get('/filieres', [FiliereController::class, 'index'])->name('filiere.index');
+    Route::get('/filiere/create', [FiliereController::class, 'create'])->name('filiere.form');
+    Route::post('/filiere', [FiliereController::class, 'store'])->name('filiere.store');
+    Route::get('/filiere/{filiere}/edit', [FiliereController::class, 'edit'])->name('filiere.edit');
+    Route::put('/filiere/{filiere}', [FiliereController::class, 'update'])->name('filiere.update');
+    Route::delete('/filiere/{filiere}', [FiliereController::class, 'destroy'])->name('filiere.destroy');
+    
+    // Gestion des matières
+    Route::get('/matieres', [MatiereController::class, 'index'])->name('matiere.index');
+    Route::get('/matiere/create', [MatiereController::class, 'create'])->name('matiere.form');
+    Route::post('/matiere', [MatiereController::class, 'store'])->name('matiere.store');
+    Route::get('/matiere/{matiere}/edit', [MatiereController::class, 'edit'])->name('matiere.edit');
+    Route::put('/matiere/{matiere}', [MatiereController::class, 'update'])->name('matiere.update');
+    Route::delete('/matiere/{matiere}', [MatiereController::class, 'destroy'])->name('matiere.destroy');
+    
+    // Gestion des utilisateurs
     Route::get('/users', [UserController::class, 'index'])->name('user.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('user.form');
     Route::post('/user', [UserController::class, 'store'])->name('user.store');
     Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-    // 1..index:affichee la liste des users
-    // 2.create:afficher le formulaire d'ajout;
-    // 3.store:enregistrerrr un nouveau userss;
-    // 4.edit..
 });
-    // routes pour support_cote admins:
 
-// Routes pour la gestion des supports éducatifs par l'administrateur
+// Routes pour les supports éducatifs par l'administrateur
 Route::get('/supports', [AdminSupportController::class, 'index'])->name('admin.supports.index');
 Route::get('/support/create', [AdminSupportController::class, 'create'])->name('admin.support.create');
 Route::post('/support', [AdminSupportController::class, 'store'])->name('admin.support.store');
@@ -88,32 +79,22 @@ Route::put('/support/{id}', [AdminSupportController::class, 'update'])->name('ad
 Route::delete('/support/{id}', [AdminSupportController::class, 'destroy'])->name('admin.support.destroy');
 Route::get('/support/{id}/show', [AdminSupportController::class, 'showPdf'])->name('admin.support.showPdf');
 
-    
-    
-    // creation des routes pour les professeurs;
-    Route::middleware(['auth', 'professeur.auth'])->get('/professeur/dashboard' ,[ProfesseurController::class,'dashboard'])->name('professeur.dashboard');
-      Route::prefix('professeur')->group(function () {
-        Route::get('/supports', [SupportController::class, 'index'])->name('supports.index');
-        Route::get('/supports/create', [SupportController::class, 'create'])->name('supports.create');
-        Route::get('/support/{id}/ouvrir', [SupportController::class, 'showPdf'])->name('support.showPdf');
-        Route::post('/supports', [SupportController::class, 'store'])->name('supports.store');
-        Route::delete('/supports/{id}', [SupportController::class, 'destroy'])->name('supports.destroy');
-        Route::get('/supports/{id}/edit', [SupportController::class, 'edit'])->name('supports.edit');
-        Route::put('/supports/{id}', [SupportController::class, 'update'])->name('supports.update');
+// Routes pour les professeurs
+Route::middleware(['auth', 'professeur.auth'])->get('/professeur/dashboard' ,[ProfesseurController::class,'dashboard'])->name('professeur.dashboard');
+Route::prefix('professeur')->group(function () {
+    Route::get('/supports', [SupportController::class, 'index'])->name('supports.index');
+    Route::get('/supports/create', [SupportController::class, 'create'])->name('supports.create');
+    Route::get('/support/{id}/ouvrir', [SupportController::class, 'showPdf'])->name('support.showPdf');
+    Route::post('/supports', [SupportController::class, 'store'])->name('supports.store');
+    Route::delete('/supports/{id}', [SupportController::class, 'destroy'])->name('supports.destroy');
+    Route::get('/supports/{id}/edit', [SupportController::class, 'edit'])->name('supports.edit');
+    Route::put('/supports/{id}', [SupportController::class, 'update'])->name('supports.update');
+});
 
-
-
-
-
-      });
-  
-
-
-
-
-
-
-
-
-
+// Routes pour les MESSAGES
+Route::middleware(['auth'])->get('/messages', [MessageController::class, 'showMessages'])->name('messages.index');
+Route::middleware(['auth'])->post('/questions', [MessageController::class, 'storeQuestion'])->name('questions.store');
+Route::get('/messages/{id}/edit', [MessageController::class, 'edit'])->name('questions.edit');
+Route::put('/messages/{id}', [MessageController::class, 'update'])->name('questions.update');
+Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('questions.destroy');
 require __DIR__.'/auth.php';
