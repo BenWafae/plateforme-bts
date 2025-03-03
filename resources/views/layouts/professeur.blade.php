@@ -6,14 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Espace Professeur')</title> 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-   <!-- Lien Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Lien FontAwesome pour les icônes -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Lien Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-
-
+    <!-- Lien FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
 
@@ -23,6 +21,7 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -43,15 +42,16 @@
                         @csrf
                     </form>
                 </li>
-                <li class="nav-item ms-auto"> <!-- ms-auto pour le pousser à droite -->
+
+                <!-- Notification (meilleur code : utiliser NotificationController pour le compteur) -->
+                <li class="nav-item ms-auto">
                     <a class="nav-link position-relative" href="{{ route('notifications.index') }}">
                         <i class="fa-solid fa-bell"></i> 
                         <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
-                            {{ auth()->user()->notifications->where('lue', false)->count() }}
+                            {{ \App\Http\Controllers\NotificationController::countUnreadNotifications() }}
                         </span>
                     </a>
                 </li>
-                
             </ul>
         </div>
     </nav>
@@ -61,24 +61,5 @@
     </div>
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
