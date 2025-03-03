@@ -6,6 +6,7 @@ use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\MessageController; // Ajoutez le contrôleur MessageController
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\MatiereController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupportController;
@@ -40,7 +41,17 @@ Route::middleware('auth')->group(function () {
 
 // Routes pour l'étudiant
 Route::middleware(['auth', 'etudiant.auth'])->get('/etudiant/dashboard', [EtudiantController::class, 'dashboard'])->name('etudiant.dashboard');
-
+   Route::prefix('etudiant')->group(function(){
+    // route etudiant supprot:
+    Route::get('/supports/{id}/ouvrir', [SupportController::class, 'showPdf'])->name('etudiant.supports.showPdf');
+    Route::get('/supports/{id}/download', [SupportController::class, 'download'])->name('etudiant.supports.download');
+ // Routes pour les MESSAGES
+Route::middleware(['auth'])->get('/messages', [MessageController::class, 'showMessages'])->name('messages.index');
+Route::middleware(['auth'])->post('/questions', [MessageController::class, 'storeQuestion'])->name('questions.store');
+Route::get('/messages/{id}/edit', [MessageController::class, 'edit'])->name('questions.edit');
+Route::put('/messages/{id}', [MessageController::class, 'update'])->name('questions.update');
+Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('questions.destroy');
+   });
 // Routes pour l'administrateur
 Route::middleware(['auth', 'admin.auth'])->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
@@ -79,6 +90,7 @@ Route::put('/support/{id}', [AdminSupportController::class, 'update'])->name('ad
 Route::delete('/support/{id}', [AdminSupportController::class, 'destroy'])->name('admin.support.destroy');
 Route::get('/support/{id}/show', [AdminSupportController::class, 'showPdf'])->name('admin.support.showPdf');
 
+
 // Routes pour les professeurs
 Route::middleware(['auth', 'professeur.auth'])->get('/professeur/dashboard' ,[ProfesseurController::class,'dashboard'])->name('professeur.dashboard');
 Route::prefix('professeur')->group(function () {
@@ -89,12 +101,30 @@ Route::prefix('professeur')->group(function () {
     Route::delete('/supports/{id}', [SupportController::class, 'destroy'])->name('supports.destroy');
     Route::get('/supports/{id}/edit', [SupportController::class, 'edit'])->name('supports.edit');
     Route::put('/supports/{id}', [SupportController::class, 'update'])->name('supports.update');
+    // Gestion des notifications pour les professeurs
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{id_notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    
+
 });
 
-// Routes pour les MESSAGES
-Route::middleware(['auth'])->get('/messages', [MessageController::class, 'showMessages'])->name('messages.index');
-Route::middleware(['auth'])->post('/questions', [MessageController::class, 'storeQuestion'])->name('questions.store');
-Route::get('/messages/{id}/edit', [MessageController::class, 'edit'])->name('questions.edit');
-Route::put('/messages/{id}', [MessageController::class, 'update'])->name('questions.update');
-Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('questions.destroy');
+
 require __DIR__.'/auth.php';
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -3,83 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Affiche la liste des notifications pour le professeur connecté
     public function index()
     {
-        //
+        // Vérifie que seul un professeur peut voir ses notifications
+        if (Auth::user()->role !== 'professeur') {
+            abort(403, "Vous n'avez pas l'autorisation d'accéder aux notifications.");
+        }
+
+        // Récupère les notifications pour le professeur connecté
+        $notifications = Notification::where('id_user', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('notifications_index', compact('notifications'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    // Marquer une notification comme lue (quand le professeur clique dessus)
+    public function markAsRead($id_notification)
     {
-        //
+        if (Auth::user()->role !== 'professeur') {
+            abort(403, "Vous n'avez pas l'autorisation de marquer cette notification comme lue.");
+        }
+
+        $notification = Notification::where('id_notification', $id_notification)
+            ->where('id_user', Auth::id())
+            ->firstOrFail();
+
+        $notification->update(['lue' => true]);
+
+        return redirect()->route('notifications.index')->with('success', 'Notification marquée comme lue.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    // Méthode pour afficher une notification individuelle (optionnelle)
+    // public function show($id_notification)
+    // {
+    //     if (Auth::user()->role !== 'professeur') {
+    //         abort(403, "Vous n'avez pas l'autorisation d'accéder à cette notification.");
+    //     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Notification $notification)
-    {
-        //
-    }
+    //     $notification = Notification::where('id_notification', $id_notification)
+    //         ->where('id_user', Auth::id())
+    //         ->firstOrFail();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Notification $notification)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Notification $notification)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Notification  $notification
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Notification $notification)
-    {
-        //
-    }
+    //     return view('notifications_show', compact('notification'));
+    // }
 }

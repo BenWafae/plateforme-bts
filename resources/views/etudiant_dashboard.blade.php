@@ -298,13 +298,13 @@
                                 <p class="card-text">{{ $support->description }}</p>
                                 <!-- Bouton de téléchargement ou ouverture -->
                                 @if(strpos($support->format, 'pdf') !== false)
-                                    <a href="{{ asset('storage/'.$support->lien_url) }}" class="download-btn" target="_blank">
-                                        <i class="fas fa-eye"></i> Ouvrir
-                                    </a>
+                                <a href="{{ route('etudiant.supports.showPdf', ['id' => $support->id_support]) }}" class="download-btn" target="_blank">
+                                    <i class="fas fa-eye"></i> Ouvrir
+                                </a>
                                 @else
-                                    <a href="{{ asset('storage/'.$support->lien_url) }}" class="download-btn" download>
-                                        <i class="fas fa-download"></i> Télécharger
-                                    </a>
+                                <a href="{{ route('etudiant.supports.download', ['id' => $support->id_support]) }}" class="download-btn">
+                                    <i class="fas fa-download"></i> Télécharger
+                                </a>
                                 @endif
                             </div>
                         </div>

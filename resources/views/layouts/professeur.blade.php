@@ -43,6 +43,15 @@
                         @csrf
                     </form>
                 </li>
+                <li class="nav-item ms-auto"> <!-- ms-auto pour le pousser à droite -->
+                    <a class="nav-link position-relative" href="{{ route('notifications.index') }}">
+                        <i class="fa-solid fa-bell"></i> 
+                        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                            {{ auth()->user()->notifications->where('lue', false)->count() }}
+                        </span>
+                    </a>
+                </li>
+                
             </ul>
         </div>
     </nav>

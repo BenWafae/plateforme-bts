@@ -5,7 +5,12 @@ namespace App\Providers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
+
+// Importe correctement
+use App\Events\SupportConsulted;
+use App\Events\SupportDownloaded;
+use App\Listeners\SupportConsultedListener;
+use App\Listeners\SupportDownloadedListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,25 +23,23 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        SupportConsulted::class => [
+            SupportConsultedListener::class,
+        ],
+        SupportDownloaded::class => [
+            SupportDownloadedListener::class,
+        ],
     ];
 
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
         //
     }
 
-    /**
-     * Determine if events and listeners should be automatically discovered.
-     *
-     * @return bool
-     */
-    public function shouldDiscoverEvents()
+    public function shouldDiscoverEvents(): bool
     {
         return false;
     }
 }
+
+
