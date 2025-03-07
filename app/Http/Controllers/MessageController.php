@@ -14,14 +14,10 @@ class MessageController extends Controller
      */
     public function showMessages()
     {
-        // Récupérer toutes les questions posées par l'étudiant connecté
-        $questions = Question::where('id_user', Auth::id())->latest()->get();
+        // Récupérer toutes les questions triées par date
+        $questions = Question::with('reponses', 'user')->latest()->get();
 
-        // Récupérer toutes les réponses associées aux questions
-        $reponses = Reponse::whereIn('id_question', $questions->pluck('id_question'))->get();
-
-        // Retourner la vue avec les données
-        return view('Messages', compact('questions', 'reponses'));
+        return view('Messages', compact('questions'));
     }
 
     /**
@@ -34,11 +30,11 @@ class MessageController extends Controller
             'contenue' => 'required|string',
         ]);
 
-        // Enregistrer la question dans la base de données
+        // Création de la question
         Question::create([
             'titre' => $request->titre,
             'contenue' => $request->contenue,
-            'id_user' => Auth::id(), // Associe la question à l'étudiant connecté
+            'id_user' => Auth::id(),
         ]);
 
         return redirect()->route('messages.index')->with('success', 'Votre question a été envoyée.');
@@ -49,20 +45,20 @@ class MessageController extends Controller
      */
     public function edit($id_question)
     {
-        // Trouver la question en fonction de son ID
+        // Trouver la question
         $question = Question::where('id_question', $id_question)->first();
 
+        // Vérifier si la question existe
         if (!$question) {
             return redirect()->route('messages.index')->with('error', 'Question non trouvée.');
         }
 
-        // Vérifier que la question appartient à l'utilisateur connecté
+        // Vérifier si l'utilisateur connecté est l'auteur de la question
         if ($question->id_user != Auth::id()) {
             return redirect()->route('messages.index')->with('error', 'Vous ne pouvez pas modifier cette question.');
         }
 
-        // Retourner la vue d'édition avec la question
-        return view('messages.edit', compact('question'));
+        return view('Messages', compact('question'));
     }
 
     /**
@@ -70,25 +66,25 @@ class MessageController extends Controller
      */
     public function update(Request $request, $id_question)
     {
-        // Valider les données envoyées
         $request->validate([
             'titre' => 'required|string|max:255',
             'contenue' => 'required|string',
         ]);
 
-        // Trouver la question en fonction de son ID
+        // Trouver la question
         $question = Question::where('id_question', $id_question)->first();
 
+        // Vérifier si la question existe
         if (!$question) {
             return redirect()->route('messages.index')->with('error', 'Question non trouvée.');
         }
 
-        // Vérifier que la question appartient à l'utilisateur connecté
+        // Vérifier si l'utilisateur connecté est l'auteur de la question
         if ($question->id_user != Auth::id()) {
             return redirect()->route('messages.index')->with('error', 'Vous ne pouvez pas modifier cette question.');
         }
 
-        // Mettre à jour la question
+        // Mise à jour de la question
         $question->update([
             'titre' => $request->titre,
             'contenue' => $request->contenue,
@@ -102,21 +98,65 @@ class MessageController extends Controller
      */
     public function destroy($id_question)
     {
-        // Trouver la question en fonction de son ID
+        // Trouver la question
         $question = Question::where('id_question', $id_question)->first();
 
+        // Vérifier si la question existe
         if (!$question) {
             return redirect()->route('messages.index')->with('error', 'Question non trouvée.');
         }
 
-        // Vérifier que la question appartient à l'utilisateur connecté
+        // Vérifier si l'utilisateur connecté est l'auteur de la question
         if ($question->id_user != Auth::id()) {
             return redirect()->route('messages.index')->with('error', 'Vous ne pouvez pas supprimer cette question.');
         }
 
-        // Supprimer la question
+        // Suppression de la question
         $question->delete();
 
         return redirect()->route('messages.index')->with('success', 'Votre question a été supprimée.');
+    }
+
+    /**
+     * Enregistrer une réponse à une question
+     */
+    public function storeReponse(Request $request, $id_question)
+    {
+        $request->validate([
+            'contenu' => 'required|string',
+        ]);
+
+        // Création de la réponse
+        Reponse::create([
+            'contenu' => $request->contenu,
+            'id_user' => Auth::id(),
+            'id_question' => $id_question,
+        ]);
+
+        return redirect()->route('messages.index')->with('success', 'Votre réponse a été ajoutée.');
+    }
+
+    /**
+     * Supprimer une réponse
+     */
+    public function destroyReponse($id_reponse)
+    {
+        // Trouver la réponse
+        $reponse = Reponse::find($id_reponse); // Utilisation de find() pour récupérer la réponse
+
+        // Vérifier si la réponse existe
+        if (!$reponse) {
+            return redirect()->route('messages.index')->with('error', 'Réponse non trouvée.');
+        }
+
+        // Vérifier si l'utilisateur connecté est l'auteur de la réponse
+        if ($reponse->id_user != Auth::id()) {
+            return redirect()->route('messages.index')->with('error', 'Vous ne pouvez pas supprimer cette réponse.');
+        }
+
+        // Suppression de la réponse
+        $reponse->delete();
+
+        return redirect()->route('messages.index')->with('success', 'Votre réponse a été supprimée.');
     }
 }

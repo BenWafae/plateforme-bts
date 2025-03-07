@@ -48,9 +48,10 @@ Route::middleware(['auth', 'etudiant.auth'])->get('/etudiant/dashboard', [Etudia
  // Routes pour les MESSAGES
 Route::middleware(['auth'])->get('/messages', [MessageController::class, 'showMessages'])->name('messages.index');
 Route::middleware(['auth'])->post('/questions', [MessageController::class, 'storeQuestion'])->name('questions.store');
-Route::get('/messages/{id}/edit', [MessageController::class, 'edit'])->name('questions.edit');
 Route::put('/messages/{id}', [MessageController::class, 'update'])->name('questions.update');
 Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('questions.destroy');
+Route::post('/messages/{id}/reponse', [MessageController::class, 'storeReponse'])->name('reponse.store');
+Route::delete('/messages/reponse/{id}', [MessageController::class, 'destroyReponse'])->name('reponse.destroy');
    });
 // Routes pour l'administrateur
 Route::middleware(['auth', 'admin.auth'])->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
