@@ -67,11 +67,7 @@ public function supportsEducatifs()
 {
     return $this->hasMany(SupportEducatif::class, 'id_user'); 
 }
-// notification recus par ceee userrr:
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class, 'id_user');
-    }
+
 
 
 

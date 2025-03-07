@@ -101,9 +101,7 @@ Route::prefix('professeur')->group(function () {
     Route::delete('/supports/{id}', [SupportController::class, 'destroy'])->name('supports.destroy');
     Route::get('/supports/{id}/edit', [SupportController::class, 'edit'])->name('supports.edit');
     Route::put('/supports/{id}', [SupportController::class, 'update'])->name('supports.update');
-    // Gestion des notifications pour les professeurs
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/notifications/{id_notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+
     
 
 });

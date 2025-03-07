@@ -43,15 +43,8 @@
                     </form>
                 </li>
 
-                <!-- Notification (meilleur code : utiliser NotificationController pour le compteur) -->
-                <li class="nav-item ms-auto">
-                    <a class="nav-link position-relative" href="{{ route('notifications.index') }}">
-                        <i class="fa-solid fa-bell"></i> 
-                        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
-                            {{ \App\Http\Controllers\NotificationController::countUnreadNotifications() }}
-                        </span>
-                    </a>
-                </li>
+               
+                
             </ul>
         </div>
     </nav>
@@ -61,5 +54,7 @@
     </div>
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

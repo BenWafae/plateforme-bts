@@ -19,6 +19,7 @@
 
         @foreach ($matieres as $matiere)
             @php
+                // Filtrage des supports par type pour chaque matière
                 $supportsParType = $supportsParMatiereEtType->filter(function ($supports, $key) use ($matiere) {
                     return Str::startsWith($key, $matiere->id_Matiere . '-');
                 });
@@ -71,7 +72,7 @@
                                          id="content-{{ $matiere->id_Matiere }}-{{ $type->id_type }}" 
                                          role="tabpanel" 
                                          aria-labelledby="tab-{{ $matiere->id_Matiere }}-{{ $type->id_type }}">
-                                        
+
                                         <div class="row mt-2 mb-2 gy-3">
                                             @foreach ($supports as $support)
                                                 <div class="col-md-4">
@@ -80,10 +81,11 @@
                                                             <h5 class="card-title">{{ $support->titre }}</h5>
                                                             <p class="card-text flex-grow-1">{{ $support->description }}</p>
                                                             <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                                {{-- Lien de téléchargement ou ouverture --}}
                                                                 <a href="{{ asset('storage/' . $support->lien_url) }}"
-                                                                    class="btn btn-sm {{ $support->format === 'pdf' ? 'btn-outline-primary' : 'btn-outline-success' }}"
-                                                                    target="{{ $support->format === 'pdf' ? '_blank' : '_self' }}"
-                                                                    @if ($support->format !== 'pdf') download @endif>
+                                                                   class="btn btn-sm {{ $support->format === 'pdf' ? 'btn-outline-primary' : 'btn-outline-success' }}"
+                                                                   target="{{ $support->format === 'pdf' ? '_blank' : '_self' }}"
+                                                                   @if ($support->format !== 'pdf') download @endif>
                                                                     @if ($support->format === 'pdf')
                                                                         📄 Ouvrir
                                                                     @else
@@ -91,11 +93,13 @@
                                                                     @endif
                                                                 </a>
 
+                                                                {{-- Bouton de modification --}}
                                                                 <a href="{{ route('supports.edit', $support->id_support) }}" 
-                                                                    class="btn btn-sm btn-outline-warning" title="Modifier">
+                                                                   class="btn btn-sm btn-outline-warning" title="Modifier">
                                                                     <i class="fas fa-edit"></i>
                                                                 </a>
 
+                                                                {{-- Formulaire de suppression --}}
                                                                 <form action="{{ route('supports.destroy', $support->id_support) }}" method="POST" class="d-inline">
                                                                     @csrf
                                                                     @method('DELETE')
