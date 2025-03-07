@@ -1,4 +1,3 @@
-<!-- resources/views/layouts/professeur.blade.php -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,7 +6,7 @@
     <title>@yield('title', 'Espace Professeur')</title> 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-    <!-- Lien Bootstrap -->
+    <!-- Lien Bootstrap 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Lien FontAwesome pour les icônes -->
@@ -15,46 +14,61 @@
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('professeur.dashboard') }}">Espace Professeur</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+
+        <!-- Bouton hamburger (pour mobile) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <!-- Liens à gauche -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('supports.index') }}">Mes Supports</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('supports.create') }}">Ajouter un Support</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('profile.edit') }}">Mon Profil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="{{ route('logout') }}"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        Déconnexion
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                </li>
+            </ul>
 
-               
-                
+            <!-- Avatar + Dropdown Profil (tout à droite) -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="rounded-circle bg-white text-white d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; font-size: 18px; font-weight: bold;">
+                            {{ strtoupper(substr(auth()->user()->first_name, 0, 1)) }}{{ strtoupper(substr(auth()->user()->last_name, 0, 1)) }}
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Modifier mon profil</a></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Déconnexion
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
-    </nav>
-
-    <div class="container mt-4">
-        @yield('content')
     </div>
+</nav>
 
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Formulaire de déconnexion caché -->
+<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+    @csrf
+</form>
+
+<div class="container mt-4">
+    @yield('content')
+</div>
+
+<!-- Scripts Bootstrap 5 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
