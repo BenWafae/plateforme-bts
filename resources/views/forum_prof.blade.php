@@ -12,20 +12,27 @@
     @foreach ($questions as $question)
     <div class="card mt-3">
         <div class="card-body">
-
-            <p><strong>Posée par : </strong>{{ $question->user->nom }} {{ $question->user->prenom }}</p>  <!-- Afficher le nom de celui qui pose la question -->
+            <p><strong>Posée par : </strong>{{ $question->user->nom }} {{ $question->user->prenom }}</p>
             <h5 class="card-title">{{ $question->titre }}</h5>
-            <p class="card-text">{{ $question->contenue }}</p>
+            <p class="card-text">{{ $question->contenu }}</p>
 
-            
             <h6>Réponses :</h6>
             @foreach ($question->reponses as $reponse)
                 <div class="alert alert-secondary">
-                    <div class="alert alert-secondary">
-                        {{ $reponse->contenu }} (par {{ $reponse->user->nom }} {{ $reponse->user->prenom }} )
-                    </div>
-                    
+                    <p>{{ $reponse->contenu }} (par {{ $reponse->user->nom }} {{ $reponse->user->prenom }})</p>
 
+                    <!-- Modification et suppression des réponses -->
+                    @if ($reponse->id_user == auth()->user()->id_user)
+                        <div>
+                            <a href="{{ route('professeur.reponse.edit', $reponse->id) }}" class="btn btn-warning">Modifier</a>
+                            
+                            <form action="{{ route('professeur.reponse.destroy', $reponse->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             @endforeach
 
@@ -34,6 +41,9 @@
                 @csrf
                 <div class="mb-3">
                     <textarea name="reponse" class="form-control" placeholder="Votre réponse"></textarea>
+                    @error('reponse')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <button type="submit" class="btn btn-primary">Répondre</button>
             </form>

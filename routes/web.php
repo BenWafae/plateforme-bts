@@ -109,6 +109,15 @@ Route::prefix('professeur')->group(function () {
     Route::get('/professeur/questions', [ForumController::class, 'index'])->name('professeur.questions.index');
 
     Route::post('/professeur/questions/{id}/repondre', [ForumController::class, 'repondre'])->name('professeur.questions.repondre');
+    // Route pour mettre à jour une réponse
+Route::put('/professeur/reponse/{id}', [ForumController::class, 'updateReponse'])->name('professeur.reponse.update');
+
+// Route pour supprimer une réponse
+Route::delete('/professeur/reponse/{id}', [ForumController::class, 'destroyReponse'])->name('professeur.reponse.destroy');
+// Route pour afficher le formulaire d'édition de la réponse
+Route::get('/professeur/reponse/{id}/edit', [ForumController::class, 'editReponse'])->name('professeur.reponse.edit');
+
+
 
 
 });
