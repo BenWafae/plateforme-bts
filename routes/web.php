@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminSupportController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\MessageController; // Ajoutez le contrôleur MessageController
 use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfesseurController;
@@ -104,7 +105,11 @@ Route::prefix('professeur')->group(function () {
     Route::get('/supports/{id}/edit', [SupportController::class, 'edit'])->name('supports.edit');
     Route::put('/supports/{id}', [SupportController::class, 'update'])->name('supports.update');
 
-    
+    // routes question&reponses
+    Route::get('/professeur/questions', [ForumController::class, 'index'])->name('professeur.questions.index');
+
+    Route::post('/professeur/questions/{id}/repondre', [ForumController::class, 'repondre'])->name('professeur.questions.repondre');
+
 
 });
 

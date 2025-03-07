@@ -33,7 +33,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('supports.create') }}">Ajouter un Support</a>
                 </li>
+                {{-- forume --}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('professeur.questions.index') }}">Questions Posées</a>
+            </li>
             </ul>
+            
 
             <!-- Avatar + Dropdown Profil (tout à droite) -->
             <ul class="navbar-nav ms-auto">

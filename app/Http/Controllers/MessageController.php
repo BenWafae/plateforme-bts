@@ -160,3 +160,4 @@ class MessageController extends Controller
         return redirect()->route('messages.index')->with('success', 'Votre réponse a été supprimée.');
     }
 }
+
