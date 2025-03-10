@@ -25,6 +25,22 @@
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             padding-top: 30px;
+            overflow-y: auto; /* Permettre le scroll */
+            max-height: 100vh; /* Empêcher le dépassement */
+        }
+
+        /* Personnalisation de la scrollbar */
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: rgb(5, 47, 75);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #f5f5f5;
         }
 
         .sidebar .nav-link {
@@ -57,76 +73,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .top-bar .welcome-message {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        /* Boutons stylisés */
-        .btn {
-            border-radius: 30px;
-            padding: 10px 25px;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background-color:rgb(5, 46, 73);
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color:rgb(9, 56, 88);
-        }
-
-        .btn-danger {
-            background-color: #e74c3c;
-            border: none;
-        }
-
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
-
-        /* Formulaires avec des champs clairs et modernes */
-        .form-control {
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            padding: 15px;
-            font-size: 14px;
-        }
-
-        .form-control:focus {
-            border-color:rgb(3, 40, 65);
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-        }
-
-        .form-label {
-            font-weight: 600;
-        }
-
-        /* Menu de navigation déroulant pour les matières et types */
-        .nav-item {
-            margin-bottom: 15px;
-        }
-
-        .nav-item .nav-link {
-            padding-left: 30px;
-        }
-
-        /* Sections de contenu bien espacées */
-        .section-header {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .sidebar .form-select {
-            font-size: 14px;
         }
 
         /* Responsive */
@@ -230,4 +176,5 @@
         @yield('content')  <!-- Le contenu spécifique à chaque page sera affiché ici -->
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap    
+</body>
+</html>
