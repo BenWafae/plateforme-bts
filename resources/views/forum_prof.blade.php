@@ -14,7 +14,7 @@
         <div class="card-body">
             <p><strong>Posée par : </strong>{{ $question->user->nom }} {{ $question->user->prenom }}</p>
             <h5 class="card-title">{{ $question->titre }}</h5>
-            <p class="card-text">{{ $question->contenu }}</p>
+            <p class="card-text">{{ $question->contenue }}</p>
 
             <h6>Réponses :</h6>
             @foreach ($question->reponses as $reponse)
