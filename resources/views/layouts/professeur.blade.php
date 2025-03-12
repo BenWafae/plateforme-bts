@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Espace Professeur')</title> 
+    <title>@yield('title', 'Espace Professeur')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <!-- Lien Bootstrap 5.3 -->
@@ -33,19 +33,30 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('supports.create') }}">Ajouter un Support</a>
                 </li>
-                {{-- forume --}}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('professeur.questions.index') }}">Forume</a>
-            </li>
+                {{-- forum --}}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('professeur.questions.index') }}">Forum</a>
+                </li>
             </ul>
-            
 
             <!-- Avatar + Dropdown Profil (tout à droite) -->
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="rounded-circle bg-white text-white d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; font-size: 18px; font-weight: bold;">
-                            {{ strtoupper(substr(auth()->user()->first_name, 0, 1)) }}{{ strtoupper(substr(auth()->user()->last_name, 0, 1)) }}
+                        <div class="rounded-circle bg-white text-dark d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; font-size: 18px; font-weight: bold;">
+                            <!-- Affichage des initiales de l'utilisateur connecté -->
+                            @if(auth()->check())
+                                <!-- Récupération des initiales -->
+                                @php
+                                    $prenom = auth()->user()->prenom;
+                                    $nom = auth()->user()->nom;
+                                    $initials = strtoupper(substr($prenom, 0, 1)) . strtoupper(substr($nom, 0, 1));
+                                @endphp
+                                <!-- Affichage des initiales -->
+                                {{ $initials }}
+                            @else
+                                <span>N/A</span>
+                            @endif
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -77,3 +88,4 @@
 
 </body>
 </html>
+
