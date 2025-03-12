@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminforumController;
 use App\Http\Controllers\AdminSupportController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\MessageController; // Ajoutez le contrôleur MessageController
@@ -92,6 +93,11 @@ Route::get('/support/{id}/edit', [AdminSupportController::class, 'edit'])->name(
 Route::put('/support/{id}', [AdminSupportController::class, 'update'])->name('admin.support.update');
 Route::delete('/support/{id}', [AdminSupportController::class, 'destroy'])->name('admin.support.destroy');
 Route::get('/support/{id}/show', [AdminSupportController::class, 'showPdf'])->name('admin.support.showPdf');
+// routes forumeAdmin;
+Route::get('/admin/questions', [AdminforumController::class, 'index'])->name('admin.questions.index');
+Route::get('/admin/questions/{id}', [AdminforumController::class, 'show'])->name('admin.questions.show');
+// Cette route utilise la méthode destroy dans le contrôleur pour supprimer une question et ses réponses
+Route::delete('/admin/questions/{id}', [AdminforumController::class, 'destroy'])->name('admin.questions.destroy');
 
 
 // Routes pour les professeurs

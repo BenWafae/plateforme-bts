@@ -35,7 +35,7 @@
                 </li>
                 {{-- forume --}}
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('professeur.questions.index') }}">Questions Posées</a>
+                <a class="nav-link" href="{{ route('professeur.questions.index') }}">Forume</a>
             </li>
             </ul>
             

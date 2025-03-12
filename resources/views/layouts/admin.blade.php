@@ -99,6 +99,7 @@
             <li><a href="{{ route('matiere.index') }}">Matiere</a></li> 
             <li><a href="{{ route('user.index') }}">Users</a></li>
             <li><a href="{{route('admin.supports.index')}}">Supports</a></li>
+            <li><a href="{{route('admin.questions.index')}}">Forume</a></li>
             <li><a href="#">Notification</a></li>
             <li>
                 {{-- button deconnexion --}}
