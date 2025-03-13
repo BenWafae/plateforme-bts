@@ -147,10 +147,10 @@
                 </li>
             @endif
 
-            <!-- Bouton Messages -->
+            <!-- Bouton Forum -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('messages.index') }}">
-                    <i class="fas fa-envelope"></i> question et réponse
+                <a class="nav-link" href="{{ route('forumetudiants.index') }}">
+                    <i class="fas fa-comments"></i> Forum
                 </a>
             </li>
 

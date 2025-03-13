@@ -6,18 +6,35 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\Reponse;
+use App\Models\Matiere;
 
-class MessageController extends Controller
+class ForumEtudiantsController extends Controller
 {
     /**
      * Afficher les messages (questions et réponses)
      */
-    public function showMessages()
+    public function showForum(Request $request)
     {
-        // Récupérer toutes les questions triées par date
-        $questions = Question::with('reponses', 'user')->latest()->get();
+        // Récupérer toutes les matières
+        $matieres = Matiere::all();
 
-        return view('Messages', compact('questions'));
+        // Construire la requête pour récupérer les questions avec leurs réponses
+        $query = Question::with('reponses', 'user', 'matiere');
+
+        // Filtrage par matière si spécifié
+        if ($request->has('id_Matiere') && $request->id_Matiere) {
+            $query->where('id_Matiere', $request->id_Matiere);
+        }
+
+        // Filtrage par recherche de titre si spécifié
+        if ($request->has('search') && $request->search) {
+            $query->where('titre', 'like', '%' . $request->search . '%');
+        }
+
+        // Récupérer les questions filtrées
+        $questions = $query->latest()->get();
+
+        return view('forumetudiants', compact('questions', 'matieres'));
     }
 
     /**
@@ -28,6 +45,7 @@ class MessageController extends Controller
         $request->validate([
             'titre' => 'required|string|max:255',
             'contenue' => 'required|string',
+            'id_Matiere' => 'required|exists:matieres,id_Matiere',
         ]);
 
         // Création de la question
@@ -35,9 +53,10 @@ class MessageController extends Controller
             'titre' => $request->titre,
             'contenue' => $request->contenue,
             'id_user' => Auth::id(),
+            'id_Matiere' => $request->id_Matiere,
         ]);
 
-        return redirect()->route('messages.index')->with('success', 'Votre question a été envoyée.');
+        return redirect()->route('forumetudiants.index')->with('success', 'Votre question a été envoyée.');
     }
 
     /**
@@ -46,19 +65,22 @@ class MessageController extends Controller
     public function edit($id_question)
     {
         // Trouver la question
-        $question = Question::where('id_question', $id_question)->first();
+        $question = Question::where('id', $id_question)->first();
 
         // Vérifier si la question existe
         if (!$question) {
-            return redirect()->route('messages.index')->with('error', 'Question non trouvée.');
+            return redirect()->route('forumetudiants.index')->with('error', 'Question non trouvée.');
         }
 
         // Vérifier si l'utilisateur connecté est l'auteur de la question
         if ($question->id_user != Auth::id()) {
-            return redirect()->route('messages.index')->with('error', 'Vous ne pouvez pas modifier cette question.');
+            return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas modifier cette question.');
         }
 
-        return view('Messages', compact('question'));
+        // Récupérer toutes les matières pour afficher dans le formulaire de modification
+        $matieres = Matiere::all();
+
+        return view('forumetudiants', compact('question', 'matieres'));
     }
 
     /**
@@ -72,16 +94,16 @@ class MessageController extends Controller
         ]);
 
         // Trouver la question
-        $question = Question::where('id_question', $id_question)->first();
+        $question = Question::where('id', $id_question)->first();
 
         // Vérifier si la question existe
         if (!$question) {
-            return redirect()->route('messages.index')->with('error', 'Question non trouvée.');
+            return redirect()->route('forumetudiants.index')->with('error', 'Question non trouvée.');
         }
 
         // Vérifier si l'utilisateur connecté est l'auteur de la question
         if ($question->id_user != Auth::id()) {
-            return redirect()->route('messages.index')->with('error', 'Vous ne pouvez pas modifier cette question.');
+            return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas modifier cette question.');
         }
 
         // Mise à jour de la question
@@ -90,31 +112,31 @@ class MessageController extends Controller
             'contenue' => $request->contenue,
         ]);
 
-        return redirect()->route('messages.index')->with('success', 'Votre question a été mise à jour.');
+        return redirect()->route('forumetudiants.index')->with('success', 'Votre question a été mise à jour.');
     }
 
     /**
      * Supprimer une question
      */
-    public function destroy($id_question)
+    public function destroyQuestion($id_question)
     {
         // Trouver la question
         $question = Question::where('id_question', $id_question)->first();
 
         // Vérifier si la question existe
         if (!$question) {
-            return redirect()->route('messages.index')->with('error', 'Question non trouvée.');
+            return redirect()->route('forumetudiants.index')->with('error', 'Question non trouvée.');
         }
 
         // Vérifier si l'utilisateur connecté est l'auteur de la question
         if ($question->id_user != Auth::id()) {
-            return redirect()->route('messages.index')->with('error', 'Vous ne pouvez pas supprimer cette question.');
+            return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas supprimer cette question.');
         }
 
         // Suppression de la question
         $question->delete();
 
-        return redirect()->route('messages.index')->with('success', 'Votre question a été supprimée.');
+        return redirect()->route('forumetudiants.index')->with('success', 'Votre question a été supprimée.');
     }
 
     /**
@@ -133,7 +155,7 @@ class MessageController extends Controller
             'id_question' => $id_question,
         ]);
 
-        return redirect()->route('messages.index')->with('success', 'Votre réponse a été ajoutée.');
+        return redirect()->route('forumetudiants.index')->with('success', 'Votre réponse a été ajoutée.');
     }
 
     /**
@@ -142,22 +164,21 @@ class MessageController extends Controller
     public function destroyReponse($id_reponse)
     {
         // Trouver la réponse
-        $reponse = Reponse::find($id_reponse); // Utilisation de find() pour récupérer la réponse
+        $reponse = Reponse::find($id_reponse);
 
         // Vérifier si la réponse existe
         if (!$reponse) {
-            return redirect()->route('messages.index')->with('error', 'Réponse non trouvée.');
+            return redirect()->route('forumetudiants.index')->with('error', 'Réponse non trouvée.');
         }
 
         // Vérifier si l'utilisateur connecté est l'auteur de la réponse
         if ($reponse->id_user != Auth::id()) {
-            return redirect()->route('messages.index')->with('error', 'Vous ne pouvez pas supprimer cette réponse.');
+            return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas supprimer cette réponse.');
         }
 
         // Suppression de la réponse
         $reponse->delete();
 
-        return redirect()->route('messages.index')->with('success', 'Votre réponse a été supprimée.');
+        return redirect()->route('forumetudiants.index')->with('success', 'Votre réponse a été supprimée.');
     }
 }
-

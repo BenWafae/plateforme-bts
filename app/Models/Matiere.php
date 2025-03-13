@@ -10,7 +10,7 @@ class Matiere extends Model
     use HasFactory;
 
     protected $table = 'matieres';
-    protected $primaryKey = 'id_Matiere';
+    protected $primaryKey = 'id_Matiere';  // Le nom de la clé primaire est id_Matiere
 
     protected $fillable = [
         'Nom',
@@ -28,5 +28,11 @@ class Matiere extends Model
     public function supportsEducatifs()
     {
         return $this->hasMany(SupportEducatif::class, 'id_Matiere');
+    }
+
+    // Relation avec Question : Une matière peut avoir plusieurs questions
+    public function questions()
+    {
+        return $this->hasMany(Question::class, 'id_Matiere');
     }
 }

@@ -18,6 +18,7 @@ class Question extends Model
         'contenue',
         'date_pub',
         'id_user',
+        'id_Matiere',  // Inclure id_Matiere ici
     ];
 
     // Relation avec l'utilisateur (chaque question appartient à un utilisateur)
@@ -30,5 +31,11 @@ class Question extends Model
     public function reponses()
     {
         return $this->hasMany(Reponse::class, 'id_question');
+    }
+
+    // Relation avec Matiere (chaque question appartient à une matière)
+    public function matiere()
+    {
+        return $this->belongsTo(Matiere::class, 'id_Matiere');
     }
 }

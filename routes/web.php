@@ -4,7 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminforumController;
 use App\Http\Controllers\AdminSupportController;
 use App\Http\Controllers\EtudiantController;
-use App\Http\Controllers\MessageController; // Ajoutez le contrôleur MessageController
+use App\Http\Controllers\forumetudiantsController; // Ajoutez le contrôleur MessageController
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\MatiereController;
@@ -48,13 +48,14 @@ Route::middleware(['auth', 'etudiant.auth'])->get('/etudiant/dashboard', [Etudia
     // route etudiant supprot:
     Route::get('/supports/{id}/ouvrir', [SupportController::class, 'showPdf'])->name('etudiant.supports.showPdf');
     Route::get('/supports/{id}/download', [SupportController::class, 'download'])->name('etudiant.supports.download');
- // Routes pour les MESSAGES
-Route::middleware(['auth'])->get('/messages', [MessageController::class, 'showMessages'])->name('messages.index');
-Route::middleware(['auth'])->post('/questions', [MessageController::class, 'storeQuestion'])->name('questions.store');
-Route::put('/messages/{id}', [MessageController::class, 'update'])->name('questions.update');
-Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('questions.destroy');
-Route::post('/messages/{id}/reponse', [MessageController::class, 'storeReponse'])->name('reponse.store');
-Route::delete('/messages/reponse/{id}', [MessageController::class, 'destroyReponse'])->name('reponse.destroy');
+ /// Routes pour les MESSAGES
+Route::middleware(['auth'])->get('/etudiant/forumetudiants', [ForumEtudiantsController::class, 'showForum'])->name('forumetudiants.index');
+Route::middleware(['auth'])->get('/etudiant/forumetudiants/questions/create', [ForumEtudiantsController::class, 'create'])->name('questions.create');
+Route::middleware(['auth'])->post('/etudiant/forumetudiants/questions', [ForumEtudiantsController::class, 'storeQuestion'])->name('questions.store');
+Route::middleware(['auth'])->delete('/etudiant/forumetudiants/{id}', [ForumEtudiantsController::class, 'destroyQuestion'])->name('questions.destroy');
+Route::middleware(['auth'])->post('/etudiant/forumetudiants/{id}/reponse', [ForumEtudiantsController::class, 'storeReponse'])->name('reponse.store');
+Route::middleware(['auth'])->delete('/etudiant/forumetudiants/reponse/{id}', [ForumEtudiantsController::class, 'destroyReponse'])->name('reponse.destroy');
+
    });
 // Routes pour l'administrateur
 Route::middleware(['auth', 'admin.auth'])->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
