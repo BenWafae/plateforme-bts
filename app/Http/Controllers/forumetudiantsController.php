@@ -31,10 +31,27 @@ class ForumEtudiantsController extends Controller
             $query->where('titre', 'like', '%' . $request->search . '%');
         }
 
+        // Filtrage par date si spécifié
+        if ($request->has('date') && $request->date) {
+            $query->whereDate('created_at', '=', $request->date);
+        }
+
         // Récupérer les questions filtrées
         $questions = $query->latest()->get();
 
         return view('forumetudiants', compact('questions', 'matieres'));
+    }
+
+    /**
+     * Afficher le formulaire pour poser une nouvelle question
+     */
+    public function create()
+    {
+        // Récupérer toutes les matières pour afficher dans le formulaire
+        $matieres = Matiere::all();
+
+        // Retourner la vue du formulaire de création de question
+        return view('createquestion', compact('matieres'));
     }
 
     /**

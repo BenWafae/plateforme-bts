@@ -6,11 +6,16 @@
     <div class="container mt-4">
         <h2 class="mb-4">Forum Etudiants (Questions & Réponses)</h2>
 
+        <!-- Bouton pour poser une nouvelle question, redirige vers la page de création -->
+        <div class="mb-4">
+            <a href="{{ route('questions.create') }}" class="btn btn-primary">Poser une nouvelle question</a>
+        </div>
+
         <!-- Formulaire de recherche -->
         <form action="{{ route('forumetudiants.index') }}" method="GET" class="mb-4">
             <div class="row">
                 <!-- Champ de recherche pour le titre -->
-                <div class="col-md-8">
+                <div class="col-md-4">
                     <input type="text" class="form-control" name="search" placeholder="Rechercher une question..." value="{{ request('search') }}">
                 </div>
                 <!-- Sélecteur pour la matière -->
@@ -24,8 +29,16 @@
                         @endforeach
                     </select>
                 </div>
+                <!-- Sélecteur pour la date -->
+                <div class="col-md-4">
+                    <input type="date" class="form-control" name="date" value="{{ request('date') }}">
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-2">Rechercher</button>
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">Rechercher</button>
+                </div>
+            </div>
         </form>
 
         <!-- Affichage des messages de succès -->
@@ -34,34 +47,6 @@
                 {{ session('success') }}
             </div>
         @endif
-
-        <!-- Formulaire pour poser une question -->
-        <div class="card mb-4">
-            <div class="card-header">Poser une nouvelle question</div>
-            <div class="card-body">
-                <form action="{{ route('questions.store') }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="titre" class="form-label">Titre de la question :</label>
-                        <input type="text" class="form-control" id="titre" name="titre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="contenue" class="form-label">Contenu :</label>
-                        <textarea class="form-control" id="contenue" name="contenue" rows="4" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_Matiere" class="form-label">Sélectionner la matière :</label>
-                        <select class="form-control" id="id_Matiere" name="id_Matiere" required>
-                            <option value="">-- Choisissez une matière --</option>
-                            @foreach($matieres as $matiere)
-                                <option value="{{ $matiere->id_Matiere }}">{{ $matiere->Nom }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Envoyer</button>
-                </form>
-            </div>
-        </div>
 
         <!-- Liste des questions et réponses -->
         <div class="card">
@@ -75,6 +60,7 @@
                             <!-- Affichage du titre de la question -->
                             <h5>{{ $question->titre }}</h5> <!-- Le titre de la question -->
                             
+
                             <!-- Affichage du contenu de la question -->
                             <p>{{ $question->contenue }}</p>
                             

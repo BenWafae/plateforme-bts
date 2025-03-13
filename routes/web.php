@@ -55,7 +55,7 @@ Route::middleware(['auth'])->post('/etudiant/forumetudiants/questions', [ForumEt
 Route::middleware(['auth'])->delete('/etudiant/forumetudiants/{id}', [ForumEtudiantsController::class, 'destroyQuestion'])->name('questions.destroy');
 Route::middleware(['auth'])->post('/etudiant/forumetudiants/{id}/reponse', [ForumEtudiantsController::class, 'storeReponse'])->name('reponse.store');
 Route::middleware(['auth'])->delete('/etudiant/forumetudiants/reponse/{id}', [ForumEtudiantsController::class, 'destroyReponse'])->name('reponse.destroy');
-
+Route::middleware(['auth'])->get('/etudiant/forumetudiants/questions/create', [ForumEtudiantsController::class, 'create'])->name('questions.create');
    });
 // Routes pour l'administrateur
 Route::middleware(['auth', 'admin.auth'])->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
