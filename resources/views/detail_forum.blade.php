@@ -7,6 +7,10 @@
         <div class="question-header mb-3">
             <h2 class="text-primary">{{ $question->titre }}</h2>
             <p><strong>Posée par :</strong> {{ $question->user->nom }} {{ $question->user->prenom }}</p>
+            <p><strong>Matière : </strong>{{ $question->matiere->Nom }}</p>
+
+
+
             <p><strong>Date :</strong> {{ \Carbon\Carbon::parse($question->date_pub)->format('d/m/Y H:i') }}</p>
         </div>
 

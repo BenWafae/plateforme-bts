@@ -9,7 +9,7 @@ class ForumController extends Controller
 {
     public function index()
     {
-        $questions = Question::with('reponses')->get();
+        $questions = Question::with('reponses', 'matiere')->get();
         return view('forum_prof', compact('questions'));
     }
 

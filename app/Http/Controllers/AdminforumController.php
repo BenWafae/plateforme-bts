@@ -14,10 +14,9 @@ class AdminforumController extends Controller
      */
     public function index()
     {
-        $questions = Question::with('user')->get(); // Récupérer les questions avec leurs auteurs
+        $questions = Question::with(['user', 'reponses.user', 'matiere'])->get();
         return view('forum_admin', compact('questions'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -47,7 +46,7 @@ class AdminforumController extends Controller
      */
     public function show($id)
     {
-        $question = Question::with(['user', 'reponses.user'])->findOrFail($id);
+        $question = Question::with(['user', 'reponses.user', 'matiere'])->findOrFail($id);
         return view('detail_forum', compact('question'));
     }
 

@@ -78,20 +78,36 @@
                                                 <div class="col-md-4">
                                                     <div class="card mb-3 shadow-sm h-100 d-flex flex-column">
                                                         <div class="card-body d-flex flex-column">
-                                                            <h5 class="card-title">{{ $support->titre }}</h5>
+                                                            
+                                                            <div class="d-flex justify-content-between">
+                                                                <h5 class="card-title">{{ $support->titre }}</h5>
+                                                                {{-- Affichage du badge si le support est une vidéo --}}
+                                                                @if($support->format === 'lien_video')
+                                                                    <span class="badge bg-info text-dark">Vidéo</span>
+                                                                @endif
+                                                            </div>
+                                                            
                                                             <p class="card-text flex-grow-1">{{ $support->description }}</p>
+
                                                             <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                                {{-- Lien de téléchargement ou ouverture --}}
-                                                                <a href="{{ asset('storage/' . $support->lien_url) }}"
-                                                                   class="btn btn-sm {{ $support->format === 'pdf' ? 'btn-outline-primary' : 'btn-outline-success' }}"
-                                                                   target="{{ $support->format === 'pdf' ? '_blank' : '_self' }}"
-                                                                   @if ($support->format !== 'pdf') download @endif>
-                                                                    @if ($support->format === 'pdf')
-                                                                        📄 Ouvrir
-                                                                    @else
-                                                                        ⬇ Télécharger
-                                                                    @endif
-                                                                </a>
+                                                                @if($support->format === 'lien_video' && filter_var($support->lien_url, FILTER_VALIDATE_URL))
+                                                                    {{-- Bouton pour rediriger vers YouTube --}}
+                                                                    <a href="{{ $support->lien_url }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                                                        Voir la vidéo sur YouTube
+                                                                    </a>
+                                                                @else
+                                                                    {{-- Lien de téléchargement ou ouverture pour les autres formats --}}
+                                                                    <a href="{{ asset('storage/' . $support->lien_url) }}"
+                                                                       class="btn btn-sm {{ $support->format === 'pdf' ? 'btn-outline-primary' : 'btn-outline-success' }} "
+                                                                       target="{{ $support->format === 'pdf' ? '_blank' : '_self' }}"
+                                                                       @if ($support->format !== 'pdf') download @endif>
+                                                                        @if ($support->format === 'pdf')
+                                                                            📄 Ouvrir
+                                                                        @else
+                                                                            ⬇ Télécharger
+                                                                        @endif
+                                                                    </a>
+                                                                @endif
 
                                                                 {{-- Bouton de modification --}}
                                                                 <a href="{{ route('supports.edit', $support->id_support) }}" 
@@ -126,6 +142,7 @@
         @endforeach
     </div>
 @endsection
+
 
 
 

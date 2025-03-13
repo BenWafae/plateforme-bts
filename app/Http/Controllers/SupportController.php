@@ -63,38 +63,55 @@ class SupportController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(Request $request)
-    {
-        // Validation des données
-        $validated = $request->validate([
-            'titre' => 'required|string|max:255',
-            'description' => 'required|string|max:1000',
-            'lien_url' => 'required|file|mimes:pdf,doc,docx,ppt,pptx',
-            'format' => 'required|string|max:50',
-            'id_Matiere' => 'required|exists:matieres,id_Matiere',
-            'id_type' => 'required|exists:types,id_type'
-        ]);
-
-        // Vérification et stockage du fichier
-        if ($request->hasFile('lien_url') && $request->file('lien_url')->isValid()) {
-            $filePath = $request->file('lien_url')->store('supports/' . auth()->id(), 'public');
-        } else {
-            return back()->withErrors(['lien_url' => 'Le fichier n\'est pas valide ou absent.']);
-        }
-
-        SupportEducatif::create([
-            'titre' => $validated['titre'],
-            'description' => $validated['description'],
-            'lien_url' => $filePath,  // Chemin du fichier téléchargé
-            'format' => $validated['format'],
-            'id_Matiere' => $validated['id_Matiere'],  // Clé étrangère dans support_educatifs
-            'id_type' => $validated['id_type'],
-            'id_user' => auth()->id(), // ID de l'utilisateur connecté (professeur)
-        ]);
-
-        // Rediriger avec un message de succès
-        return redirect()->route('supports.index')->with('success', 'Le support éducatif a été ajouté avec succès.');
-    }
+     public function store(Request $request)
+     {
+         // Validation des données
+         $validated = $request->validate([
+             'titre' => 'required|string|max:255',
+             'description' => 'required|string|max:1000',
+             'format' => 'required|string|max:50',
+             'id_Matiere' => 'required|exists:matieres,id_Matiere',
+             'id_type' => 'required|exists:types,id_type',
+         ]);
+     
+         // Vérification du format
+         if ($request->input('format') === 'lien_video') {
+             // Si le format est un lien vidéo, on valide le lien URL
+             $validated['lien_url'] = $request->validate([
+                 'video_url' => 'required|url',
+             ])['video_url'];
+     
+             // Pas besoin de traiter un fichier pour le lien vidéo
+             $lienUrl = $validated['lien_url'];
+         } else {
+             // Si le format est un fichier (pdf, ppt, etc.)
+             $validated['lien_url'] = $request->validate([
+                 'lien_url' => 'required|file|mimes:pdf,doc,docx,ppt,pptx',
+             ])['lien_url'];
+     
+             // Vérification et stockage du fichier
+             if ($request->hasFile('lien_url') && $request->file('lien_url')->isValid()) {
+                 $lienUrl = $request->file('lien_url')->store('supports/' . auth()->id(), 'public');
+             } else {
+                 return back()->withErrors(['lien_url' => 'Le fichier n\'est pas valide ou absent.']);
+             }
+         }
+     
+         // Créer le support éducatif dans la base de données
+         SupportEducatif::create([
+             'titre' => $validated['titre'],
+             'description' => $validated['description'],
+             'lien_url' => $lienUrl,  // Enregistrer le lien ou le chemin du fichier
+             'format' => $validated['format'],
+             'id_Matiere' => $validated['id_Matiere'],
+             'id_type' => $validated['id_type'],
+             'id_user' => auth()->id(), // ID de l'utilisateur connecté
+         ]);
+     
+         // Rediriger avec un message de succès
+         return redirect()->route('supports.index')->with('success', 'Le support éducatif a été ajouté avec succès.');
+     }
+     
 
     /**
      * Display the specified resource.

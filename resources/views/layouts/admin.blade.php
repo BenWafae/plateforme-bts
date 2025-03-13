@@ -5,34 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Espace Administrateur')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    {{-- lien bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    {{-- Lien CDN FontAwesome pour les icônes --}}
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <style>
         body {
             display: flex;
             margin: 0;
             font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
         }
         .sidebar {
             width: 250px;
             height: 100vh;
-            background-color: #BDC3C7;
+            background-color: #2c3e50;
             color: white;
             position: fixed;
             top: 0;
             left: 0;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            overflow-y: auto;
         }
         .sidebar h2 {
             text-align: center;
             padding: 15px;
-            background: #BDC3C7;
+            background: #34495e;
             margin: 0;
+            font-size: 20px;
+            font-weight: bold;
         }
         .sidebar ul {
             list-style: none;
@@ -40,31 +43,62 @@
             margin: 0;
         }
         .sidebar ul li {
-            padding: 15px;
-            border-bottom: 1px solid #34495e;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .sidebar ul li a {
             color: white;
             text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            font-size: 16px;
+        }
+        .sidebar ul li a i {
+            margin-right: 10px;
         }
         .sidebar ul li:hover {
-            background: #95a5a6;
+            background: #1abc9c;
         }
-        .sidebar ul li ul {
-            display: none;
-            background: #34495e;
+        .profile-section {
+            text-align: center;
+            padding: 15px;
         }
-        .sidebar ul li:hover ul {
-            display: block;
+        .profile-circle {
+            width: 50px;
+            height: 50px;
+            background-color: #1abc9c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            margin: 0 auto;
+            font-weight: bold;
         }
         .content {
             margin-left: 250px;
             padding: 20px;
             width: calc(100% - 250px);
         }
-
-        /* Responsive Design pour les petits écrans */
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background: none;
+            border: none;
+            color: white;
+            text-align: left;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn-logout i {
+            margin-right: 10px;
+        }
+        .btn-logout:hover {
+            background: #e74c3c;
+        }
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
@@ -79,47 +113,45 @@
     </style>
 </head>
 <body>
-
     <div class="sidebar">
-        <h2>Espace Admin</h2>
-        <ul>
-            <li><a href="#">Tableau de bord</a></li>
-            {{-- <li> --}}
-                {{-- <a href="#">Formulaires</a>
-                <ul> --}}
-                    {{-- <li><a href="{{ route('filiere.form') }}">Form Filière</a></li>
-                    <li><a href="{{ route('matiere.form') }}">Form Matière</a></li> --}}
-                    {{-- <li><a href="{{  route('user.form')}}">Form users</a></li> --}}
-                   
-                    {{-- <li><a href="{{route('admin.support.create')}}">Form Support</a></li>
-                    
-                </ul> --}}
-            {{-- </li> --}}
-            <li><a href="{{ route('filiere.index') }}">Filieres</a></li>
-            <li><a href="{{ route('matiere.index') }}">Matiere</a></li> 
-            <li><a href="{{ route('user.index') }}">Users</a></li>
-            <li><a href="{{route('admin.supports.index')}}">Supports</a></li>
-            <li><a href="{{route('admin.questions.index')}}">Forume</a></li>
-            <li><a href="#">Notification</a></li>
-            <li>
-                {{-- button deconnexion --}}
-                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                    @csrf
-                     <button type="submit" class="btn  btn-sm" title="Se déconnecter"> -
-                        <i class="fas fa-sign-out-alt"></i> Déconnexion
-                    </button>
-                </form>
-            </li>
-        </ul>
+        <div>
+            <h2>Espace Admin</h2>
+            <ul>
+                <li><a href="#"><i class="fas fa-home"></i> Tableau de bord</a></li>
+                <li><a href="{{ route('filiere.index') }}"><i class="fas fa-graduation-cap"></i> Filières</a></li>
+                <li><a href="{{ route('matiere.index') }}"><i class="fas fa-book"></i> Matières</a></li>
+                <li><a href="{{ route('user.index') }}"><i class="fas fa-users"></i> Utilisateurs</a></li>
+                <li><a href="{{ route('admin.supports.index') }}"><i class="fas fa-folder"></i> Supports</a></li>
+                <li><a href="{{ route('admin.questions.index') }}"><i class="fas fa-comments"></i> Forum</a></li>
+                <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+                <li><a href="{{ route('profile.edit') }}"><i class="fas fa-user-edit"></i> Modifier Profil</a></li>
+                <li>
+                    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <button type="submit" class="btn-logout">
+                            <i class="fas fa-sign-out-alt"></i> Déconnexion
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="profile-section">
+            <div class="profile-circle">
+                @php
+                    $prenom = auth()->user()->prenom;
+                    $nom = auth()->user()->nom;
+                    $initials = strtoupper(substr($prenom, 0, 1)) . strtoupper(substr($nom, 0, 1));
+                @endphp
+                {{ $initials }}
+            </div>
+            <p>{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</p>
+        </div>
     </div>
-
     <div class="content">
         @yield('content')
     </div>
-
 </body>
 </html>
-
 
 
 

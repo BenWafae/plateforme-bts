@@ -14,6 +14,10 @@
         <div class="card-body">
             <p><strong>Posée par : </strong>{{ $question->user->nom }} {{ $question->user->prenom }}</p>
             <h5 class="card-title">{{ $question->titre }}</h5>
+            
+            <!-- Afficher le nom de la matière -->
+            <p><strong>Matière : </strong>{{ $question->matiere->Nom }}</p>
+
             <p class="card-text">{{ $question->contenue }}</p>
 
             <h6>Réponses :</h6>

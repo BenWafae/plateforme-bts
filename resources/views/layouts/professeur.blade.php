@@ -11,6 +11,36 @@
 
     <!-- Lien FontAwesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        /* Ajout du style personnalisé */
+        .navbar-nav .nav-link:hover {
+            background-color: #1abc9c;  /* Couleur verte au survol des liens */
+            color: white;
+        }
+
+        .navbar-nav .nav-link {
+            color: white;
+        }
+
+        /* Pour l'avatar */
+        .navbar-nav .nav-item .nav-link .rounded-circle {
+            background-color: #1abc9c;  /* Fond vert pour le cercle */
+            color: white;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-item .nav-link .rounded-circle:hover {
+            background-color: #16a085; /* Couleur légèrement plus foncée au survol */
+        }
+
+        /* Responsive pour les petits écrans */
+        @media (max-width: 768px) {
+            .navbar-nav .nav-link {
+                font-size: 14px; /* Réduire la taille des liens dans la navbar */
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -28,14 +58,15 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('supports.index') }}">Mes Supports</a>
+                    <a class="nav-link" href="{{ route('supports.index') }}"><i class="fas fa-book"></i> Supports éducatifs</a>
+
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('supports.create') }}">Ajouter un Support</a>
+                    <a class="nav-link" href="{{ route('supports.create') }}"><i class="fas fa-plus"></i> Ajouter un Support</a>
                 </li>
                 {{-- forum --}}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('professeur.questions.index') }}">Forum</a>
+                    <a class="nav-link" href="{{ route('professeur.questions.index') }}"><i class="fas fa-comments"></i> Forum</a>
                 </li>
             </ul>
 
@@ -43,16 +74,14 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="rounded-circle bg-white text-dark d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; font-size: 18px; font-weight: bold;">
+                        <div class="rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; font-size: 18px;">
                             <!-- Affichage des initiales de l'utilisateur connecté -->
                             @if(auth()->check())
-                                <!-- Récupération des initiales -->
                                 @php
                                     $prenom = auth()->user()->prenom;
                                     $nom = auth()->user()->nom;
                                     $initials = strtoupper(substr($prenom, 0, 1)) . strtoupper(substr($nom, 0, 1));
                                 @endphp
-                                <!-- Affichage des initiales -->
                                 {{ $initials }}
                             @else
                                 <span>N/A</span>
@@ -88,4 +117,5 @@
 
 </body>
 </html>
+
 
