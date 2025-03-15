@@ -57,7 +57,7 @@
                                             role="tab" 
                                             aria-controls="content-{{ $matiere->id_Matiere }}-{{ $type->id_type }}" 
                                             aria-selected="{{ $first ? 'true' : 'false' }}">
-                                        {{ $type->nom }}
+                                        {{ ucfirst($type->nom) }}
                                     </button>
                                 </li>
                                 @php $first = false; @endphp
@@ -65,7 +65,7 @@
                         @endforeach
                     </ul>
 
-                    {{-- Contenus des onglets --}}
+                    {{-- Contenu des onglets --}}
                     <div class="tab-content mt-3" id="tabContent-{{ $matiere->id_Matiere }}">
                         @php $first = true; @endphp
                         @foreach ($types as $type)
@@ -86,27 +86,45 @@
                                             <div class="col-md-4">
                                                 <div class="card mb-3 shadow-sm h-100 d-flex flex-column">
                                                     <div class="card-body d-flex flex-column">
-                                                        <h5 class="card-title">{{ $support->titre }}</h5>
+                                                        <div class="d-flex justify-content-between">
+                                                            <h5 class="card-title">{{ $support->titre }}</h5>
+                                                            {{-- Badge indiquant que c'est une vidéo --}}
+                                                            @if($support->format === 'lien_video')
+                                                                <span class="badge bg-info text-dark">Vidéo</span>
+                                                            @endif
+                                                        </div>
                                                         <p class="card-text flex-grow-1">{{ $support->description }}</p>
                                                         <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                            <a href="{{ asset('storage/' . $support->lien_url) }}"
-                                                                class="btn btn-sm {{ $support->format === 'pdf' ? 'btn-outline-primary' : 'btn-outline-success' }}"
-                                                                target="{{ $support->format === 'pdf' ? '_blank' : '_self' }}"
-                                                                @if ($support->format !== 'pdf') download @endif>
-                                                                @if ($support->format === 'pdf')
-                                                                    📄 Ouvrir
-                                                                @else
-                                                                    ⬇ Télécharger
-                                                                @endif
-                                                            </a>
+                                                            @if($support->format === 'lien_video' && filter_var($support->lien_url, FILTER_VALIDATE_URL))
+                                                                {{-- Bouton pour rediriger vers YouTube --}}
+                                                                <a href="{{ $support->lien_url }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                                                    Voir la vidéo sur YouTube
+                                                                </a>
+                                                            @else
+                                                                {{-- Lien de téléchargement ou ouverture pour les autres formats --}}
+                                                                <a href="{{ asset('storage/' . $support->lien_url) }}"
+                                                                   class="btn btn-sm {{ $support->format === 'pdf' ? 'btn-outline-primary' : 'btn-outline-success' }} "
+                                                                   target="{{ $support->format === 'pdf' ? '_blank' : '_self' }}"
+                                                                   @if ($support->format !== 'pdf') download @endif>
+                                                                    @if ($support->format === 'pdf')
+                                                                        📄 Ouvrir
+                                                                    @else
+                                                                        ⬇ Télécharger
+                                                                    @endif
+                                                                </a>
+                                                            @endif
+
+                                                            {{-- Bouton de modification --}}
                                                             <a href="{{ route('admin.support.edit', $support->id_support) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
-                                                            <form action="{{ route('admin.support.destroy', $support->id_support) }}" method="POST">
+
+                                                            {{-- Formulaire de suppression --}}
+                                                            <form action="{{ route('admin.support.destroy', $support->id_support) }}" method="POST" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce support ?')"
+                                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce support ?')" 
                                                                     title="Supprimer">
                                                                     <i class="fas fa-trash-alt"></i>
                                                                 </button>

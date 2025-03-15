@@ -47,8 +47,7 @@
                     <label for="lien_url" class="form-label">Télécharger le fichier :</label>
                     <input type="file" name="lien_url" class="form-control" accept=".pdf,.docx,.pptx,.jpg,.png">
                 </div>
-
-                <!-- Champ pour entrer le lien vidéo (par défaut caché) -->
+      {{-- champs pour ajouter un lien vedio --}}
                 <div class="mb-3" id="videoLinkDiv" style="display: none;">
                     <label for="video_url" class="form-label">Lien Vidéo :</label>
                     <input type="url" name="video_url" class="form-control" placeholder="Ex: https://www.youtube.com/watch?v=xyz">
@@ -83,11 +82,12 @@
         </div>
     </div>
 </div>
-
-<!-- JavaScript pour gérer l'affichage dynamique -->
+{{-- javaa scrippt pourr afficher ou masque dynamiquement  --}}
 <script>
     function toggleInputFields() {
+        // ici on  va recuperer la valeur seleectionee dans select cad le format choisi on va la recupereer
         let format = document.getElementById("format").value;
+        // on recuperer les div de champs upload ou vedio        
         let fileUploadDiv = document.getElementById("fileUploadDiv");
         let videoLinkDiv = document.getElementById("videoLinkDiv");
 
