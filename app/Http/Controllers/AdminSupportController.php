@@ -14,13 +14,17 @@ class AdminSupportController extends Controller
     public function index()
     {
         $supports = SupportEducatif::with('matiere', 'type', 'user')->get();
+    
+        // Regrouper les supports par matière et type
         $supportsParMatiereEtType = $supports->groupBy(fn($support) => $support->id_Matiere . '-' . $support->id_type);
-        $matieres = Matiere::all();
+    
+        // Pagination des matières (vous pouvez ajuster la pagination selon votre besoin)
+        $matieres = Matiere::paginate(2); // Exemple avec 10 matières par page
         $types = Type::all();
-
+    
         return view('admin_support_index', compact('supportsParMatiereEtType', 'matieres', 'types'));
     }
-
+    
     public function create()
     {
         $matieres = Matiere::all();

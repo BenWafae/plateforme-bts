@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
+
 <div class="container">
     <h2 class="text-center">Gestion des Supports Éducatifs</h2>
 
@@ -80,7 +81,7 @@
                                      id="content-{{ $matiere->id_Matiere }}-{{ $type->id_type }}" 
                                      role="tabpanel" 
                                      aria-labelledby="tab-{{ $matiere->id_Matiere }}-{{ $type->id_type }}">
-                                    
+                                  
                                     <div class="row mt-2 mb-2 gy-3">
                                         @foreach ($supports as $support)
                                             <div class="col-md-4">
@@ -88,7 +89,6 @@
                                                     <div class="card-body d-flex flex-column">
                                                         <div class="d-flex justify-content-between">
                                                             <h5 class="card-title">{{ $support->titre }}</h5>
-                                                            {{-- Badge indiquant que c'est une vidéo --}}
                                                             @if($support->format === 'lien_video')
                                                                 <span class="badge bg-info text-dark">Vidéo</span>
                                                             @endif
@@ -96,15 +96,13 @@
                                                         <p class="card-text flex-grow-1">{{ $support->description }}</p>
                                                         <div class="d-flex justify-content-between align-items-center mt-auto">
                                                             @if($support->format === 'lien_video' && filter_var($support->lien_url, FILTER_VALIDATE_URL))
-                                                                {{-- Bouton pour rediriger vers YouTube --}}
                                                                 <a href="{{ $support->lien_url }}" target="_blank" class="btn btn-sm btn-outline-info">
                                                                     Voir sur YouTube
                                                                 </a>
                                                             @else
-                                                                {{-- Lien de téléchargement ou ouverture pour les autres formats --}}
                                                                 <a href="{{ asset('storage/' . $support->lien_url) }}"
                                                                    class="btn btn-sm {{ $support->format === 'pdf' ? 'btn-outline-primary' : 'btn-outline-success' }} "
-                                                                   target="{{ $support->format === 'pdf' ? '_blank' : '_self' }}"
+                                                                   target="{{ $support->format === 'pdf' ? '_blank' : '_self' }} "
                                                                    @if ($support->format !== 'pdf') download @endif>
                                                                     @if ($support->format === 'pdf')
                                                                         📄 Ouvrir
@@ -145,5 +143,18 @@
             </div>
         @endif
     @endforeach
+
+  {{-- Pagination avec marge supplémentaire pour espacement --}}
+<div class="d-flex justify-content-center mt-3 mb-5">
+    <nav>
+        <ul class="pagination pagination-sm justify-content-center">
+            {{ $matieres->links('pagination::bootstrap-4')}}
+
+        </ul>
+    </nav>
 </div>
+    
+</div>
+
 @endsection
+

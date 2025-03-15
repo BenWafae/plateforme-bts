@@ -140,6 +140,14 @@
                 </div>
             @endif
         @endforeach
+  {{-- Pagination avec marge supplémentaire pour espacement --}}
+  <div class="d-flex justify-content-center mt-3 mb-5">
+    <nav>
+        <ul class="pagination pagination-sm justify-content-center">
+            {{ $matieres->links('pagination::bootstrap-4') }}
+        </ul>
+    </nav>
+</div>
     </div>
 @endsection
 

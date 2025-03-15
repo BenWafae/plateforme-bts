@@ -17,27 +17,37 @@ class SupportController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+{
+    // Récupérer les supports créés par l'utilisateur (professeur) actuellement connecté
+    
+    
         // Récupérer les supports créés par l'utilisateur (professeur) actuellement connecté
         $supports = SupportEducatif::with('matiere', 'type', 'user')
             ->where('id_user', auth()->id()) // Filtrer par l'ID de l'utilisateur connecté
             ->get();
-
+        
         // Organiser les supports par matière et type
         $supportsParMatiereEtType = $supports->groupBy(function ($support) {
             return $support->id_Matiere . '-' . $support->id_type;
         });
-    
-        // Récupérer toutes les matières
-        $matieres = Matiere::all();
-        $types = Type::all(); // Récupérer les types pour affichage correct
 
-        // Récupérer toutes les matières
-        // $matieres = Matiere::all();
+        // Récupérer uniquement les matières associées à l'utilisateur connecté
+        //  récupère les matières qui sont associées à des supports éducatifs créés par
+        //  l'utilisateur connecté. La méthode whereHas permet de filtrer les matières en fonction des supports éducatifs qui leur sont associés, en filtrant uniquement ceux de l'utilisateur connecté.
+        $matieres = Matiere::whereHas('supportsEducatifs', function($query) {
+            $query->where('id_user', auth()->id()); // Filtrer par l'utilisateur connecté
+        })->paginate(1); // Pagination avec 2 matières par page
 
+        // Récupérer les types pour affichage correct
+        $types = Type::all(); 
+        
         // Passer les données à la vue
         return view('support_index', compact('supportsParMatiereEtType', 'matieres', 'types'));
     }
+
+
+    
+    
 
 
     /**
