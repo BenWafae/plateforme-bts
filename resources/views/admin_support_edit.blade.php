@@ -35,7 +35,7 @@
 
                 <div class="mb-3">
                     <label for="format" class="form-label">Format :</label>
-                    <select name="format" class="form-select" required>
+                    <select name="format" class="form-select" required id="formatSelect">
                         <option value="pdf" {{ $support->format == 'pdf' ? 'selected' : '' }}>PDF</option>
                         <option value="ppt" {{ $support->format == 'ppt' ? 'selected' : '' }}>PPT</option>
                         <option value="word" {{ $support->format == 'word' ? 'selected' : '' }}>Word</option>
@@ -43,15 +43,22 @@
                     </select>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3" id="fileUploadContainer" style="{{ $support->format == 'lien_video' ? 'display:none;' : '' }}">
                     <label for="lien_url" class="form-label">Fichier actuel :</label>
                     <p>
-                        <a href="{{ asset('storage/' . $support->lien_url) }}" target="_blank" class="btn btn-outline-primary">
-                            📂 Voir le fichier
-                        </a>
+                        @if($support->format != 'lien_video')
+                            <a href="{{ asset('storage/' . $support->lien_url) }}" target="_blank" class="btn btn-outline-primary">
+                                📂 Voir le fichier
+                            </a>
+                        @endif
                     </p>
                     <label for="lien_url" class="form-label">Télécharger un nouveau fichier :</label>
                     <input type="file" name="lien_url" class="form-control" accept=".pdf,.docx,.pptx,.jpg,.png">
+                </div>
+
+                <div class="mb-3" id="videoLinkContainer" style="{{ $support->format == 'lien_video' ? 'display:block;' : 'display:none;' }}">
+                    <label for="video_url" class="form-label">Lien Vidéo :</label>
+                    <input type="url" name="video_url" class="form-control" value="{{ $support->format == 'lien_video' ? $support->lien_url : '' }}" placeholder="Ex: https://www.youtube.com/watch?v=xyz">
                 </div>
 
                 <div class="mb-3">
@@ -88,10 +95,37 @@
                 </div>
 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-warning w-100">Mettre à jour</button>
+                    <button type="submit" class="btn btn-warning w-100">Modifier</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const formatSelect = document.getElementById('formatSelect');
+        const fileUploadContainer = document.getElementById('fileUploadContainer');
+        const videoLinkContainer = document.getElementById('videoLinkContainer');
+
+        if (formatSelect.value === 'lien_video') {
+            fileUploadContainer.style.display = 'none';
+            videoLinkContainer.style.display = 'block';
+        } else {
+            fileUploadContainer.style.display = 'block';
+            videoLinkContainer.style.display = 'none';
+        }
+
+        formatSelect.addEventListener('change', function() {
+            if (this.value === 'lien_video') {
+                fileUploadContainer.style.display = 'none';
+                videoLinkContainer.style.display = 'block';
+            } else {
+                fileUploadContainer.style.display = 'block';
+                videoLinkContainer.style.display = 'none';
+            }
+        });
+    });
+</script>
 @endsection
+

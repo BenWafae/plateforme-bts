@@ -171,49 +171,40 @@ class SupportController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Vérifier si le support existe et appartient au professeur connecté
         $support = SupportEducatif::findOrFail($id);
-
-        if ($support->id_user != auth()->id()) {
-            return redirect()->route('supports.index')->with('error', 'Vous ne pouvez pas modifier ce support.');
-        }
-
-        // Validation des données mises à jour
+    
+        // Validation des données
         $validated = $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'lien_url' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
             'format' => 'required|string|max:50',
             'id_Matiere' => 'required|exists:matieres,id_Matiere',
-            'id_type' => 'required|exists:types,id_type'
+            'id_type' => 'required|exists:types,id_type',
         ]);
-
-        // Vérifier si un nouveau fichier a été téléchargé
-        if ($request->hasFile('lien_url') && $request->file('lien_url')->isValid()) {
-            // Supprimer l'ancien fichier s'il existe
-            if (Storage::disk('public')->exists($support->lien_url)) {
-                Storage::disk('public')->delete($support->lien_url);
+    
+        // Vérification du format et traitement du lien vidéo ou fichier
+        if ($request->input('format') === 'lien_video') {
+            $validated['lien_url'] = $request->validate([
+                'video_url' => 'required|url',
+            ])['video_url'];
+        } else {
+            if ($request->hasFile('lien_url')) {
+                // Supprimer l'ancien fichier si un nouveau est téléchargé
+                if ($support->lien_url && Storage::exists($support->lien_url)) {
+                    Storage::delete($support->lien_url);
+                }
+    
+                // Enregistrer le nouveau fichier
+                $validated['lien_url'] = $request->file('lien_url')->store('supports');
             }
-
-            // Sauvegarder le nouveau fichier
-            $filePath = $request->file('lien_url')->store('supports/' . auth()->id(), 'public');
-            $support->lien_url = $filePath;
         }
-
-        // Mise à jour des autres champs
-        $support->titre = $validated['titre'];
-        $support->description = $validated['description'];
-        $support->format = $validated['format'];
-        $support->id_Matiere = $validated['id_Matiere'];
-        $support->id_type = $validated['id_type'];
-
-        // Enregistrer les modifications
-        $support->save();
-
-        // Rediriger avec un message de succès
-        return redirect()->route('supports.index')->with('success', 'Le support éducatif a été mis à jour avec succès.');
+    
+        // Mettre à jour les informations du support
+        $support->update($validated);
+    
+        return redirect()->route('supports.index')->with('success', 'Support mis à jour avec succès.');
     }
-
+    
 
     /**
      * Remove the specified resource from storage.

@@ -93,7 +93,7 @@
                                                                 @if($support->format === 'lien_video' && filter_var($support->lien_url, FILTER_VALIDATE_URL))
                                                                     {{-- Bouton pour rediriger vers YouTube --}}
                                                                     <a href="{{ $support->lien_url }}" target="_blank" class="btn btn-sm btn-outline-info">
-                                                                        Voir la vidéo sur YouTube
+                                                                        Voir sur YouTube
                                                                     </a>
                                                                 @else
                                                                     {{-- Lien de téléchargement ou ouverture pour les autres formats --}}
@@ -142,7 +142,6 @@
         @endforeach
     </div>
 @endsection
-
 
 
 
