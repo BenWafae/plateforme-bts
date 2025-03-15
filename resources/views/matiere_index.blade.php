@@ -14,23 +14,35 @@
 
     {{-- Barre de recherche et filtre --}}
     <div class="row mb-4">
+        {{-- Formulaire de recherche --}}
         <div class="col-md-6">
-            <input type="text" id="searchInput" class="form-control" placeholder="Rechercher une matière...">
+            <form action="{{ route('matiere.index') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" name="search" id="searchInput" class="form-control" placeholder="Rechercher une matière..." value="{{ request('search') }}">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
         </div>
+
+        {{-- Filtre par filière --}}
         <div class="col-md-4">
-            <select id="filterFiliere" class="form-control" onchange="location = this.value;">
-                <option value="{{ route('matiere.index', ['filiere' => 'all']) }}" 
+            <select id="filterFiliere" class="form-control" onchange="applyFilter()">
+                <option value="{{ route('matiere.index', ['filiere' => 'all', 'search' => request('search')]) }}" 
                         @if ($filiereFilter == 'all') selected @endif>
                     Toutes les Filières
                 </option>
                 @foreach ($filieres as $filiere)
-                    <option value="{{ route('matiere.index', ['filiere' => strtolower($filiere->nom_filiere)]) }}" 
+                    <option value="{{ route('matiere.index', ['filiere' => strtolower($filiere->nom_filiere), 'search' => request('search')]) }}" 
                             @if ($filiereFilter == strtolower($filiere->nom_filiere)) selected @endif>
                         {{ $filiere->nom_filiere }}
                     </option>
                 @endforeach
             </select>
         </div>
+
+        {{-- Bouton de création --}}
         <div class="col-md-2">
             <a href="{{ route('matiere.form') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Créer
@@ -48,7 +60,7 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody id="matiereTable">
+        <tbody>
             @forelse ($matieres as $matiere)
                 <tr>
                     <td>{{ $matiere->Nom }}</td>
@@ -77,32 +89,17 @@
 
     {{-- Pagination --}}
     <div class="d-flex justify-content-center mt-3">
-        <nav aria-label="Page navigation">
-            <ul class="pagination pagination-sm">
-                {{ $matieres->links('pagination::bootstrap-4') }}
-            </ul>
-        </nav>
+        {{ $matieres->links('pagination::bootstrap-4') }}
     </div>
 </div>
 
-{{-- Script de recherche en temps réel --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{-- Script pour appliquer le filtre --}}
 <script>
-    $(document).ready(function() {
-        $('#searchInput').on('keyup', function() {
-            var searchTerm = $(this).val().toLowerCase();
-            
-            $('#matiereTable tr').each(function() {
-                var matiereName = $(this).find('td:first').text().toLowerCase(); // Récupère la 1ère colonne (Nom de la Matière)
-
-                if (matiereName.includes(searchTerm)) {
-                    $(this).show(); // Affiche la ligne si elle correspond
-                } else {
-                    $(this).hide(); // Cache la ligne sinon
-                }
-            });
-        });
-    });
+    function applyFilter() {
+        let filterFiliere = document.getElementById('filterFiliere').value;
+        window.location.href = filterFiliere;
+    }
 </script>
 
 @endsection
+

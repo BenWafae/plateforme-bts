@@ -16,28 +16,42 @@ class MatiereController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-{
-    // Récupérer le filtre de la filière
-    $filiereFilter = $request->input('filiere');
+    {
+        // ici on recupere less filteers selectionnee dans la requete geet 
+        $filiereFilter = $request->input('filiere', 'all');
+        // recupere le text saisie par lutilisateur dans la barre de recherche
+        $searchQuery = $request->input('search');
+    
+        // Requête de base
+        // unnee requeet eloquentt pour recuperer les matiere de la base de donnee
+        $matieresQuery = Matiere::query();
+    
+        // Filtrer par filière
 
-    // Appliquer le filtre sur toute la table des matières
-    $matieresQuery = Matiere::query();
-
-    // Si une filière est spécifiée, appliquer le filtre
-    if ($filiereFilter && $filiereFilter != 'all') {
-        $matieresQuery->whereHas('filiere', function($query) use ($filiereFilter) {
-            $query->whereRaw('LOWER(nom_filiere) = ?', [strtolower($filiereFilter)]);
-        });
+        if ($filiereFilter !== 'all') {
+            // wherehaass signifiee que je veuxx seulement les matieres qui ont une filiere avec un nomm de filieree deja exist
+            $matieresQuery->whereHas('filiere', function($query) use ($filiereFilter) {
+                // wherraw sert a convertir le nom de la filiere en miniscule pour comparer 
+                $query->whereRaw('LOWER(nom_filiere) = ?', [strtolower($filiereFilter)]);
+            });
+        }
+    
+        // Appliquer la recherche sur le nom de la matière
+        if (!empty($searchQuery)) {
+            $matieresQuery->where('Nom', 'LIKE', "%{$searchQuery}%");
+        }
+    
+        // Paginer les résultats après avoir appliqué les filtres et la recherche
+        $matieres = $matieresQuery->paginate(5)->appends([
+            'filiere' => $filiereFilter,
+            'search' => $searchQuery,
+        ]);
+    
+        $filieres = Filiere::all();
+    
+        return view('matiere_index', compact('matieres', 'filieres', 'filiereFilter', 'searchQuery'));
     }
-
-    // Paginer les résultats après avoir appliqué le filtre
-    $matieres = $matieresQuery->paginate(8)->appends(['filiere' => $filiereFilter]);
-
-    // Charger toutes les filières pour le filtre
-    $filieres = Filiere::all();
-
-    return view('matiere_index', compact('matieres', 'filieres', 'filiereFilter'));
-}
+    
 
     /**
      * Show the form for creating a new resource.
