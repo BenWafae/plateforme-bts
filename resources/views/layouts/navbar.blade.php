@@ -10,15 +10,17 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color:rgb(242, 244, 247);
+            background-color: rgb(242, 244, 247);
             color: #333;
             margin: 0;
             transition: background-color 0.3s, color 0.3s;
         }
+
         body.dark-mode {
             background-color: #1a1a1a;
             color: #f0f2f5;
         }
+
         .navbar {
             background-color: #004b6d;
             padding: 15px 20px;
@@ -28,6 +30,7 @@
             color: white;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
+
         .navbar a {
             color: white;
             text-decoration: none;
@@ -35,9 +38,11 @@
             font-size: 16px;
             font-weight: 600;
         }
+
         .navbar a:hover {
-            color:rgb(145, 157, 168);
+            color: rgb(145, 157, 168);
         }
+
         .navbar .mode-toggle {
             background: none;
             border: none;
@@ -50,13 +55,40 @@
         .dropdown-menu {
             display: none;
         }
+
         .dropdown:hover .dropdown-menu {
             display: block;
         }
 
-        .dropdown-item {
+        /* Changer la couleur des éléments de la liste déroulante */
+        .dropdown-menu .dropdown-item {
+            color: #004b6d;  /* Couleur du texte pour les éléments */
+        }
+
+        /* Changer la couleur au survol */
+        .dropdown-menu .dropdown-item:hover {
+            background-color: #007bff; /* Couleur de fond lors du survol */
+            color: white; /* Couleur du texte lors du survol */
+        }
+
+        /* Option sélectionnée */
+        .dropdown-menu .dropdown-item.selected {
+            background-color: #004b6d;
+            color: white;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .mode-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
             cursor: pointer;
         }
+
     </style>
 </head>
 <body>
@@ -85,7 +117,7 @@
                     <ul class="dropdown-menu" aria-labelledby="filiereDropdown">
                         @foreach($filieres as $filiere)
                             <li>
-                                <a class="dropdown-item" href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => $filiere->id_filiere]) }}">
+                                <a class="dropdown-item {{ request('filiere_id') == $filiere->id_filiere ? 'selected' : '' }}" href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => $filiere->id_filiere]) }}">
                                     {{ $filiere->nom_filiere }}
                                 </a>
                             </li>
@@ -103,7 +135,7 @@
                     <ul class="dropdown-menu" aria-labelledby="matiereDropdown">
                         @foreach($matières as $matiere)
                             <li>
-                                <a class="dropdown-item" href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => request('filiere_id'), 'matiere_id' => $matiere->id_Matiere]) }}">
+                                <a class="dropdown-item {{ request('matiere_id') == $matiere->id_Matiere ? 'selected' : '' }}" href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => request('filiere_id'), 'matiere_id' => $matiere->id_Matiere]) }}">
                                     {{ $matiere->Nom }}
                                 </a>
                             </li>
@@ -121,7 +153,7 @@
                     <ul class="dropdown-menu" aria-labelledby="typeDropdown">
                         @foreach($types as $type)
                             <li>
-                                <a class="dropdown-item" href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => request('filiere_id'), 'matiere_id' => request('matiere_id'), 'type_id' => $type->id_type]) }}">
+                                <a class="dropdown-item {{ request('type_id') == $type->id_type ? 'selected' : '' }}" href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => request('filiere_id'), 'matiere_id' => request('matiere_id'), 'type_id' => $type->id_type]) }}">
                                     {{ $type->nom }}
                                 </a>
                             </li>
