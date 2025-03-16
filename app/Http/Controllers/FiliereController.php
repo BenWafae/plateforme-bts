@@ -11,15 +11,22 @@ class FiliereController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Récupérer toutes les filières
-        $filieres = Filiere::all();
+        // Récupérer le terme de recherche depuis la requête
+        $searchTerm = $request->input('search');
 
-        // Retourner la vue avec les filières
-        return view('index', compact('filieres'));
+        // Récupérer toutes les filières en tenant compte du terme de recherche
+        $filieres = Filiere::query()
+            ->when($searchTerm, function ($query, $searchTerm) {
+                // Si un terme de recherche est fourni, filtrer par nom_filiere
+                return $query->where('nom_filiere', 'like', '%' . $searchTerm . '%');
+            })
+            ->paginate(5); // Pagination de 5 éléments par page
+
+        // Retourner la vue avec les filières et le terme de recherche
+        return view('filiere', compact('filieres', 'searchTerm'));
     }
-
     /**
      * Show the form for creating a new resource.
      *

@@ -83,8 +83,8 @@
                                                                 <h5 class="card-title">{{ $support->titre }}</h5>
                                                                 {{-- Affichage du badge si le support est une vidéo --}}
                                                                 @if($support->format === 'lien_video')
-                                                                    <span class="badge bg-info text-dark">Vidéo</span>
-                                                                @endif
+                                                                <span class="badge" style="background-color: #f0f9ff; color: #3d7ca6">Vidéo</span>
+                                                                      @endif
                                                             </div>
                                                             
                                                             <p class="card-text flex-grow-1">{{ $support->description }}</p>

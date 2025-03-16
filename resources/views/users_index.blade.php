@@ -8,45 +8,35 @@
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
 
-    {{-- Conteneur pour aligner les éléments horizontalement --}}
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        {{-- Barre de recherche à gauche --}}
-        <div class="w-50">
-            <input type="text" id="searchInput" class="form-control" placeholder="Rechercher un utilisateur par nom...">
-        </div>
+    {{-- Formulaire de recherche et filtre --}}
+    <form method="GET" action="{{ route('user.index') }}" class="mb-3" style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 30px;">
+        <div class="d-flex justify-content-between align-items-center" style="gap: 15px;">
+            {{-- Recherche --}}
+            <div class="d-flex">
+                <input type="text" name="search" id="searchInput" class="form-control me-3" placeholder="Rechercher un utilisateur..." value="{{ request('search') }}" style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px 15px; font-size: 16px; width: 280px;">
+            </div>
 
-        {{-- Filtrer par rôle au milieu --}}
-        <div>
-              <!-- Filtre par rôle -->
-    <form method="GET" action="{{ route('user.index') }}" class="mb-3">
-        <label for="roleFilter">Filtrer par rôle :</label>
+            {{-- Filtre par rôle --}}
+            <select id="roleFilter" name="role" class="form-control me-3" onchange="this.form.submit()" style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px 15px; font-size: 16px; width: 220px;">
+                <option value="">Tous les Rôles</option>
+                <option value="professeur" {{ request('role') == 'professeur' ? 'selected' : '' }}>Professeurs</option>
+                <option value="administrateur" {{ request('role') == 'administrateur' ? 'selected' : '' }}>Administrateurs</option>
+                <option value="etudiant" {{ request('role') == 'etudiant' ? 'selected' : '' }}>Étudiants</option>
+            </select>
 
-        <select id="roleFilter" name="role" class="form-control w-75 d-inline-block" onchange="this.form.submit()" placeholder="Filtrer par role">
-            <option value="">Tous les Rôles</option>
-            <option value="professeur" {{ request('role') == 'professeur' ? 'selected' : '' }}>Professeurs</option>
-            <option value="administrateur" {{ request('role') == 'administrateur' ? 'selected' : '' }}>Administrateurs</option>
-            <option value="etudiant" {{ request('role') == 'etudiant' ? 'selected' : '' }}>Étudiants</option>
-        </select>
-    </form>
-
-        </div>
-
-        {{-- Bouton Créer à droite --}}
-        <div>
-            <a href="{{ route('user.form') }}" class="btn btn-primary">
+            {{-- Bouton Créer --}}
+            <a href="{{ route('user.form') }}" class="btn btn-link" style="color: #007bff; font-size: 16px; padding: 8px 20px; text-decoration: none; border: none; transition: color 0.3s ease;">
                 <i class="fas fa-plus"></i> Créer
             </a>
         </div>
-    </div>
+    </form>
 
     {{-- Tableau des utilisateurs --}}
-    <table id="userTable" class="table table-bordered table-hover mt-3">
+    <table id="userTable" class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th>Nom</th>
@@ -64,13 +54,16 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ ucfirst($user->role) }}</td>
                     <td class="text-right">
-                        <a href="{{ route('user.edit', $user->id_user) }}" class="btn btn-info btn-sm">
+                        {{-- Bouton Modifier --}}
+                        <a href="{{ route('user.edit', $user->id_user) }}" class="btn btn-link" style="color: #17a2b8; font-size: 16px; padding: 8px 15px; text-decoration: none; border: none; transition: color 0.3s ease;">
                             <i class="fas fa-edit"></i>
                         </a>
+
+                        {{-- Bouton Supprimer --}}
                         <form action="{{ route('user.destroy', $user->id_user) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
+                            <button type="submit" class="btn btn-link" style="color: #dc3545; font-size: 16px; padding: 8px 15px; text-decoration: none; border: none; transition: color 0.3s ease;" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>
@@ -113,4 +106,5 @@
 </script>
 
 @endsection
+
 

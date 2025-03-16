@@ -18,13 +18,13 @@
         </div>
     @endif
 
-    <form method="GET" action="{{ route('admin.supports.index') }}" class="mb-3">
-        <div class="d-flex justify-content-between align-items-center">
+    <!-- Filtrage par professeur et format -->
+    <form method="GET" action="{{ route('admin.supports.index') }}" class="mb-3" style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 30px;">
+        <div class="d-flex justify-content-between align-items-center" style="gap: 15px;">
             <div class="d-flex">
-                
-    
-                {{-- Filtre par Professeur --}}
-                <select name="professeur_id" class="form-select me-3" onchange="this.form.submit()">
+                <!-- Filtrer par professeur -->
+                <select name="professeur_id" class="form-select me-3" onchange="this.form.submit()" 
+                        style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px 15px; font-size: 16px; width: 280px; margin-right: 15px;">
                     <option value="">Sélectionner un professeur</option>
                     @foreach ($professeurs as $professeur)
                         <option value="{{ $professeur->id_user }}" {{ request('professeur_id') == $professeur->id_user ? 'selected' : '' }}>
@@ -32,9 +32,9 @@
                         </option>
                     @endforeach
                 </select>
-    
-                {{-- Filtre par Format --}}
-                <select name="format" class="form-select me-3" onchange="this.form.submit()">
+
+                <!-- Filtrer par format -->
+                <select name="format" class="form-select me-3" onchange="this.form.submit()" style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px 15px; font-size: 16px; width: 220px; margin-right: 15px;">
                     <option value="">Sélectionner un format</option>
                     <option value="pdf" {{ request('format') == 'pdf' ? 'selected' : '' }}>PDF</option>
                     <option value="ppt" {{ request('format') == 'ppt' ? 'selected' : '' }}>PPT</option>
@@ -42,11 +42,9 @@
                     <option value="lien_video" {{ request('format') == 'lien_video' ? 'selected' : '' }}>Vidéo</option>
                 </select>
             </div>
-    
-          
-    
-            {{-- Bouton Créer --}}
-            <a href="{{ route('admin.support.create') }}" class="btn btn-primary">
+
+            <!-- Bouton Créer -->
+            <a href="{{ route('admin.support.create') }}" class="btn btn-link" style="color: #007bff; font-size: 16px; padding: 8px 20px; text-decoration: none; border: none; transition: color 0.3s ease;">
                 <i class="fas fa-plus"></i> Créer
             </a>
         </div>
@@ -66,7 +64,7 @@
                 </div>
                 <div class="card-body">
 
-                    {{-- Onglets (Cours, Exercices, Examens) --}}
+                    <!-- Onglets (Cours, Exercices, Examens) -->
                     <ul class="nav nav-tabs" id="tabs-{{ $matiere->id_Matiere }}" role="tablist">
                         @php $first = true; @endphp
                         @foreach ($types as $type)
@@ -94,7 +92,7 @@
                         @endforeach
                     </ul>
 
-                    {{-- Contenu des onglets --}}
+                    <!-- Contenu des onglets -->
                     <div class="tab-content mt-3" id="tabContent-{{ $matiere->id_Matiere }}">
                         @php $first = true; @endphp
                         @foreach ($types as $type)
@@ -118,40 +116,59 @@
                                                         <div class="d-flex justify-content-between">
                                                             <h5 class="card-title">{{ $support->titre }}</h5>
                                                             @if($support->format === 'lien_video')
-                                                                <span class="badge bg-info text-dark">Vidéo</span>
+                                                                <span class="badge bg-danger">Vidéo</span>
+                                                            @elseif($support->format === 'pdf')
+                                                                <!-- Badge PDF sans icône, icône "Ouvrir" dans le bouton -->
+                                                                <span class="badge" style="background-color: #87CEFA;">
+                                                                    PDF
+                                                                </span>
+                                                            @elseif($support->format === 'ppt')
+                                                                <!-- Badge PPT avec couleur spécifique -->
+                                                                <span class="badge" style="background-color: oklch(0.869 0.022 252.894);">
+                                                                    PPT
+                                                                </span>
+                                                            @elseif($support->format === 'word')
+                                                                <!-- Badge Word avec couleur spécifique -->
+                                                                <span class="badge" style="background-color: oklch(0.777 0.152 181.912);">
+                                                                    Word
+                                                                </span>
                                                             @endif
                                                         </div>
                                                         <p class="card-text flex-grow-1">{{ $support->description }}</p>
-                                                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                        <div class="d-flex justify-content-end gap-2 mt-auto">
                                                             @if($support->format === 'lien_video' && filter_var($support->lien_url, FILTER_VALIDATE_URL))
-                                                                <a href="{{ $support->lien_url }}" target="_blank" class="btn btn-sm btn-outline-info">
-                                                                    Voir sur YouTube
+                                                                <a href="{{ $support->lien_url }}" target="_blank" class="btn text-danger">
+                                                                    <i class="fab fa-youtube"></i>
                                                                 </a>
                                                             @else
                                                                 <a href="{{ asset('storage/' . $support->lien_url) }}"
-                                                                   class="btn btn-sm {{ $support->format === 'pdf' ? 'btn-outline-primary' : 'btn-outline-success' }} "
+                                                                   class="btn"
                                                                    target="{{ $support->format === 'pdf' ? '_blank' : '_self' }} "
-                                                                   @if ($support->format !== 'pdf') download @endif>
+                                                                   @if ($support->format !== 'pdf') download @endif 
+                                                                   style="color: inherit;">
                                                                     @if ($support->format === 'pdf')
-                                                                        📄 Ouvrir
-                                                                    @else
-                                                                        ⬇ Télécharger
+                                                                        <!-- Icône Ouvrir avec lien vers PDF -->
+                                                                        <i class="fas fa-eye"></i> 
+                                                                    @elseif ($support->format === 'ppt')
+                                                                        <!-- Icône de téléchargement pour PPT -->
+                                                                        <i class="fas fa-download"></i>
+                                                                    @elseif ($support->format === 'word')
+                                                                        <!-- Icône de téléchargement pour Word -->
+                                                                        <i class="fas fa-download"></i>
                                                                     @endif
                                                                 </a>
                                                             @endif
 
-                                                            {{-- Bouton de modification --}}
-                                                            <a href="{{ route('admin.support.edit', $support->id_support) }}" class="btn btn-sm btn-outline-warning" title="Modifier">
+                                                            <!-- Bouton de modification -->
+                                                            <a href="{{ route('admin.support.edit', $support->id_support) }}" class="btn text-warning">
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
 
-                                                            {{-- Formulaire de suppression --}}
+                                                            <!-- Formulaire de suppression -->
                                                             <form action="{{ route('admin.support.destroy', $support->id_support) }}" method="POST" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
-                                                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce support ?')" 
-                                                                    title="Supprimer">
+                                                                <button type="submit" class="btn text-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce support ?')">
                                                                     <i class="fas fa-trash-alt"></i>
                                                                 </button>
                                                             </form>
@@ -172,17 +189,22 @@
         @endif
     @endforeach
 
-  {{-- Pagination avec marge supplémentaire pour espacement --}}
-<div class="d-flex justify-content-center mt-3 mb-5">
-    <nav>
-        <ul class="pagination pagination-sm justify-content-center">
-            {{ $matieres->links('pagination::bootstrap-4') }}
-        </ul>
-    </nav>
-</div>
-    
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-3 mb-5">
+        <nav>
+            <ul class="pagination pagination-sm justify-content-center">
+                {{ $matieres->links('pagination::bootstrap-4') }}
+            </ul>
+        </nav>
+    </div>
 </div>
 
 @endsection
+
+
+
+
+
+
 
 
