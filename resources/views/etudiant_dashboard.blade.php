@@ -33,8 +33,7 @@
                                 @endif
                             </div>
 
-                            <!-- Ligne noire de séparation -->
-                            <hr style="border: 2px solid black; margin: 10px 0;">
+                            <!-- La ligne de séparation a été supprimée -->
 
                             <p class="card-text flex-grow-1">{{ $support->description }}</p>
 

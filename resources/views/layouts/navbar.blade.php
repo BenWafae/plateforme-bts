@@ -51,7 +51,23 @@
             cursor: pointer;
         }
 
-        /* Sélection dynamique */
+        /* Cercle pour initiale de l'étudiant */
+        .navbar .user-circle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #007bff;  /* Couleur personnalisée */
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* Dropdowns */
         .dropdown-menu {
             display: none;
         }
@@ -60,18 +76,16 @@
             display: block;
         }
 
-        /* Changer la couleur des éléments de la liste déroulante */
         .dropdown-menu .dropdown-item {
-            color: #004b6d;  /* Couleur du texte pour les éléments */
+            color: #004b6d;
+            font-size: 10px; /* Taille de police réduite pour les éléments du menu */
         }
 
-        /* Changer la couleur au survol */
         .dropdown-menu .dropdown-item:hover {
-            background-color: #007bff; /* Couleur de fond lors du survol */
-            color: white; /* Couleur du texte lors du survol */
+            background-color: #007bff;
+            color: white;
         }
 
-        /* Option sélectionnée */
         .dropdown-menu .dropdown-item.selected {
             background-color: #004b6d;
             color: white;
@@ -81,24 +95,23 @@
             padding: 20px;
         }
 
-        .mode-toggle {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
+        /* Ajout d'une marge entre le Dark Mode et le cercle */
+        .navbar .mode-toggle {
+            margin-right: 12px; /* Marge entre le Dark Mode et le cercle */
         }
-
     </style>
 </head>
 <body>
 
     <!-- Navbar -->
     <nav class="navbar">
+        <!-- Colonne de gauche avec les liens -->
         <div>
             <a href="{{ route('etudiant.dashboard') }}"><i class="fas fa-home"></i> Accueil</a>
             <a href="{{ route('forumetudiants.index') }}"><i class="fas fa-comments"></i> Forum</a>
         </div>
+
+        <!-- Sélecteurs d'année, filière, matière et type de support -->
         <div>
             <form method="GET" action="{{ route('etudiant.dashboard') }}" style="display: inline-block;">
                 <select name="annee" class="form-select" onchange="this.form.submit()" style="display: inline-block; width: auto;">
@@ -161,11 +174,30 @@
                     </ul>
                 </div>
             @endif
+        </div>
 
+        <!-- Colonne de droite avec le cercle de l'étudiant et le bouton Dark Mode -->
+        <div class="d-flex align-items-center">
+            <!-- Cercle avec initiale de l'étudiant -->
+            <div class="dropdown d-inline">
+                <button class="user-circle dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ strtoupper(auth()->user()->prenom[0]) }} <!-- Affiche la première lettre du prénom -->
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">gestion du profil</a></li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Déconnexion
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Bouton Dark Mode -->
             <button class="mode-toggle" onclick="toggleDarkMode()">🌙</button>
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fas fa-sign-out-alt"></i> Déconnexion
-            </a>
+
+            <!-- Formulaire de déconnexion -->
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>
@@ -174,17 +206,7 @@
 
     <!-- Contenu principal -->
     <div class="content">
-        @if(request('type_id'))
-            <div class="supports">
-                <h3>Supports éducatifs</h3>
-                @foreach($supports as $support)
-                    <p>{{ $support->nom }}</p>
-                @endforeach
-            </div>
-        @endif
-
         @yield('content')
-
     </div>
 
     <script>
