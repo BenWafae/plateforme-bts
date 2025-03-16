@@ -18,11 +18,39 @@
         </div>
     @endif
 
-    <div class="d-flex justify-content-end mb-3">
-        <a href="{{ route('admin.support.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Créer
-        </a>
-    </div>
+    <form method="GET" action="{{ route('admin.supports.index') }}" class="mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex">
+                
+    
+                {{-- Filtre par Professeur --}}
+                <select name="professeur_id" class="form-select me-3" onchange="this.form.submit()">
+                    <option value="">Sélectionner un professeur</option>
+                    @foreach ($professeurs as $professeur)
+                        <option value="{{ $professeur->id_user }}" {{ request('professeur_id') == $professeur->id_user ? 'selected' : '' }}>
+                            {{ $professeur->nom }} {{ $professeur->prenom }}
+                        </option>
+                    @endforeach
+                </select>
+    
+                {{-- Filtre par Format --}}
+                <select name="format" class="form-select me-3" onchange="this.form.submit()">
+                    <option value="">Sélectionner un format</option>
+                    <option value="pdf" {{ request('format') == 'pdf' ? 'selected' : '' }}>PDF</option>
+                    <option value="ppt" {{ request('format') == 'ppt' ? 'selected' : '' }}>PPT</option>
+                    <option value="word" {{ request('format') == 'word' ? 'selected' : '' }}>Word</option>
+                    <option value="lien_video" {{ request('format') == 'lien_video' ? 'selected' : '' }}>Vidéo</option>
+                </select>
+            </div>
+    
+          
+    
+            {{-- Bouton Créer --}}
+            <a href="{{ route('admin.support.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Créer
+            </a>
+        </div>
+    </form>
 
     @foreach ($matieres as $matiere)
         @php
@@ -148,8 +176,7 @@
 <div class="d-flex justify-content-center mt-3 mb-5">
     <nav>
         <ul class="pagination pagination-sm justify-content-center">
-            {{ $matieres->links('pagination::bootstrap-4')}}
-
+            {{ $matieres->links('pagination::bootstrap-4') }}
         </ul>
     </nav>
 </div>
@@ -157,4 +184,5 @@
 </div>
 
 @endsection
+
 

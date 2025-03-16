@@ -10,20 +10,59 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AdminSupportController extends Controller
-{
-    public function index()
+
+   
+
     {
-        $supports = SupportEducatif::with('matiere', 'type', 'user')->get();
-    
-        // Regrouper les supports par matière et type
-        $supportsParMatiereEtType = $supports->groupBy(fn($support) => $support->id_Matiere . '-' . $support->id_type);
-    
-        // Pagination des matières (vous pouvez ajuster la pagination selon votre besoin)
-        $matieres = Matiere::paginate(2); // Exemple avec 10 matières par page
-        $types = Type::all();
-    
-        return view('admin_support_index', compact('supportsParMatiereEtType', 'matieres', 'types'));
+        public function index(Request $request)
+{
+    $professeurId = $request->input('professeur_id');
+    $format = $request->input('format');
+
+    // Vérifier si un professeur est sélectionné
+    if ($professeurId) {
+        // Si un professeur est sélectionné, récupérer ses matières
+        $matieres = Matiere::whereHas('supportsEducatifs', function ($query) use ($professeurId) {
+            $query->where('id_user', $professeurId);
+        })->paginate(3);
+    } else {
+        // Sinon, récupérer toutes les matières paginées
+        $matieres = Matiere::paginate(2);
     }
+
+    // Récupérer les supports éducatifs en fonction du professeur et/ou du format sélectionné
+    $supportsQuery = SupportEducatif::with('matiere', 'type', 'user');
+
+    // Filtrer par professeur si sélectionné
+    if ($professeurId) {
+        $supportsQuery->where('id_user', $professeurId);
+    }
+
+    // Filtrer par format si sélectionné
+    if ($format) {
+        $supportsQuery->where('format', $format);
+    }
+
+    // Exécuter la requête pour obtenir les supports
+    $supports = $supportsQuery->get();
+
+    // Regrouper les supports par matière et type
+    $supportsParMatiereEtType = $supports->groupBy(fn($support) => $support->id_Matiere . '-' . $support->id_type);
+
+    // Récupérer tous les types et les professeurs
+    $types = Type::all();
+    $professeurs = User::where('role', 'professeur')->get();
+
+    return view('admin_support_index', compact('supportsParMatiereEtType', 'matieres', 'types', 'professeurs'));
+}
+
+
+    
+
+
+
+    
+    
     
     public function create()
     {

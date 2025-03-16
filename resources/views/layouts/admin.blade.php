@@ -118,13 +118,14 @@
             <h2>Espace Admin</h2>
             <ul>
                 <li><a href="#"><i class="fas fa-home"></i> Tableau de bord</a></li>
+                <li><a href="{{ route('admin.supports.index') }}"><i class="fas fa-folder"></i> Supports</a></li>
+                <li><a href="{{ route('admin.questions.index') }}"><i class="fas fa-comments"></i> Forum</a></li>
                 <li><a href="{{ route('filiere.index') }}"><i class="fas fa-graduation-cap"></i> Filières</a></li>
                 <li><a href="{{ route('matiere.index') }}"><i class="fas fa-book"></i> Matières</a></li>
                 <li><a href="{{ route('user.index') }}"><i class="fas fa-users"></i> Utilisateurs</a></li>
-                <li><a href="{{ route('admin.supports.index') }}"><i class="fas fa-folder"></i> Supports</a></li>
-                <li><a href="{{ route('admin.questions.index') }}"><i class="fas fa-comments"></i> Forum</a></li>
+               
                 <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
-                <li><a href="{{ route('profile.edit') }}"><i class="fas fa-user-edit"></i> Modifier Profil</a></li>
+                <li><a href="{{ route('profile.edit') }}"><i class="fas fa-user-edit"></i> Gestion Profil</a></li>
                 <li>
                     <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                         @csrf
