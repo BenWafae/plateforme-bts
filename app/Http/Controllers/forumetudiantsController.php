@@ -36,8 +36,8 @@ class ForumEtudiantsController extends Controller
             $query->whereDate('created_at', '=', $request->date);
         }
 
-        // Récupérer les questions filtrées
-        $questions = $query->latest()->get();
+        // Récupérer les questions filtrées avec pagination (3 par page)
+        $questions = $query->latest()->paginate(3);
 
         return view('forumetudiants', compact('questions', 'matieres'));
     }
@@ -97,7 +97,7 @@ class ForumEtudiantsController extends Controller
         // Récupérer toutes les matières pour afficher dans le formulaire de modification
         $matieres = Matiere::all();
 
-        return view('forumetudiants', compact('question', 'matieres'));
+        return view('editquestion', compact('question', 'matieres'));
     }
 
     /**
@@ -138,7 +138,7 @@ class ForumEtudiantsController extends Controller
     public function destroyQuestion($id_question)
     {
         // Trouver la question
-        $question = Question::where('id_question', $id_question)->first();
+        $question = Question::where('id', $id_question)->first();
 
         // Vérifier si la question existe
         if (!$question) {

@@ -1,10 +1,10 @@
-@extends('layouts.sidbar') <!-- Étendre le layout principal avec la sidebar -->
+@extends('layouts.navbar') <!-- Étendre le layout principal avec la sidebar -->
 
-@section('title', 'Poser une nouvelle question') <!-- Titre de la page -->
+@section('title', 'Poser une question') <!-- Titre de la page -->
 
 @section('content')
     <div class="container mt-4">
-        <h2 class="mb-4">Poser une nouvelle question</h2>
+        <h2 class="mb-4">Poser une question</h2>
 
         <!-- Affichage des messages de succès -->
         @if(session('success'))

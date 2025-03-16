@@ -48,7 +48,7 @@ Route::middleware(['auth', 'etudiant.auth'])->get('/etudiant/dashboard', [Etudia
     // route etudiant supprot:
     Route::get('/supports/{id}/ouvrir', [SupportController::class, 'showPdf'])->name('etudiant.supports.showPdf');
     Route::get('/supports/{id}/download', [SupportController::class, 'download'])->name('etudiant.supports.download');
- /// Routes pour les MESSAGES
+ /// Routes pour le forum
 Route::middleware(['auth'])->get('/etudiant/forumetudiants', [ForumEtudiantsController::class, 'showForum'])->name('forumetudiants.index');
 Route::middleware(['auth'])->get('/etudiant/forumetudiants/questions/create', [ForumEtudiantsController::class, 'create'])->name('questions.create');
 Route::middleware(['auth'])->post('/etudiant/forumetudiants/questions', [ForumEtudiantsController::class, 'storeQuestion'])->name('questions.store');
@@ -56,6 +56,7 @@ Route::middleware(['auth'])->delete('/etudiant/forumetudiants/{id}', [ForumEtudi
 Route::middleware(['auth'])->post('/etudiant/forumetudiants/{id}/reponse', [ForumEtudiantsController::class, 'storeReponse'])->name('reponse.store');
 Route::middleware(['auth'])->delete('/etudiant/forumetudiants/reponse/{id}', [ForumEtudiantsController::class, 'destroyReponse'])->name('reponse.destroy');
 Route::middleware(['auth'])->get('/etudiant/forumetudiants/questions/create', [ForumEtudiantsController::class, 'create'])->name('questions.create');
+
    });
 // Routes pour l'administrateur
 Route::middleware(['auth', 'admin.auth'])->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
