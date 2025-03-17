@@ -6,11 +6,16 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-// Importe correctement
+// Importation des événements et listeners
 use App\Events\SupportConsulted;
 use App\Events\SupportDownloaded;
 use App\Listeners\SupportConsultedListener;
 use App\Listeners\SupportDownloadedListener;
+
+use App\Events\QuestionPosee;
+use App\Events\QuestionSupprimee;
+use App\Listeners\NotifierQuestionPosee;
+use App\Listeners\NotifierQuestionSupprimee;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -29,6 +34,12 @@ class EventServiceProvider extends ServiceProvider
         SupportDownloaded::class => [
             SupportDownloadedListener::class,
         ],
+        QuestionPosee::class => [
+            NotifierQuestionPosee::class,
+        ],
+        QuestionSupprimee::class => [
+            NotifierQuestionSupprimee::class,
+        ],
     ];
 
     public function boot(): void
@@ -41,5 +52,3 @@ class EventServiceProvider extends ServiceProvider
         return false;
     }
 }
-
-

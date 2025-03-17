@@ -17,19 +17,21 @@ class Reponse extends Model
         'id_user'      // Clé étrangère vers la table 'users'
     ];
 
-   
-
     // Relation avec la table 'users'
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
     }
 
+    // Relation avec la table 'questions'
     public function question()
     {
-    return $this->belongsTo(Question::class, 'id_question');
+        return $this->belongsTo(Question::class, 'id_question');
+    }
 
-   }
+    // Ajout de la relation polymorphe pour les notifications
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'notifiable');
+    }
 }
-
-  

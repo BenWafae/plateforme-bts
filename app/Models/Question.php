@@ -38,4 +38,10 @@ class Question extends Model
     {
         return $this->belongsTo(Matiere::class, 'id_Matiere');
     }
+
+    // Ajout de la relation polymorphe pour les notifications
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'notifiable');
+    }
 }

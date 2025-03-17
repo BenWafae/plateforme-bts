@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\Reponse;
 use App\Models\Matiere;
+use App\Events\QuestionPosee;
+use App\Events\ReponseAjoutee;
+use App\Events\QuestionSupprimee;
 
 class ForumEtudiantsController extends Controller
 {
@@ -59,6 +62,7 @@ class ForumEtudiantsController extends Controller
      */
     public function storeQuestion(Request $request)
     {
+        // Validation des données
         $request->validate([
             'titre' => 'required|string|max:255',
             'contenue' => 'required|string',
@@ -66,13 +70,17 @@ class ForumEtudiantsController extends Controller
         ]);
 
         // Création de la question
-        Question::create([
+        $question = Question::create([
             'titre' => $request->titre,
             'contenue' => $request->contenue,
             'id_user' => Auth::id(),
             'id_Matiere' => $request->id_Matiere,
         ]);
 
+        // Déclencher l'événement QuestionPosee
+        event(new QuestionPosee($question));
+
+        // Rediriger l'utilisateur vers le forum avec un message de succès
         return redirect()->route('forumetudiants.index')->with('success', 'Votre question a été envoyée.');
     }
 
@@ -81,22 +89,14 @@ class ForumEtudiantsController extends Controller
      */
     public function edit($id_question)
     {
-        // Trouver la question
         $question = Question::where('id', $id_question)->first();
-
-        // Vérifier si la question existe
         if (!$question) {
             return redirect()->route('forumetudiants.index')->with('error', 'Question non trouvée.');
         }
-
-        // Vérifier si l'utilisateur connecté est l'auteur de la question
         if ($question->id_user != Auth::id()) {
             return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas modifier cette question.');
         }
-
-        // Récupérer toutes les matières pour afficher dans le formulaire de modification
         $matieres = Matiere::all();
-
         return view('editquestion', compact('question', 'matieres'));
     }
 
@@ -110,15 +110,10 @@ class ForumEtudiantsController extends Controller
             'contenue' => 'required|string',
         ]);
 
-        // Trouver la question
         $question = Question::where('id', $id_question)->first();
-
-        // Vérifier si la question existe
         if (!$question) {
             return redirect()->route('forumetudiants.index')->with('error', 'Question non trouvée.');
         }
-
-        // Vérifier si l'utilisateur connecté est l'auteur de la question
         if ($question->id_user != Auth::id()) {
             return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas modifier cette question.');
         }
@@ -137,21 +132,19 @@ class ForumEtudiantsController extends Controller
      */
     public function destroyQuestion($id_question)
     {
-        // Trouver la question
-        $question = Question::where('id', $id_question)->first();
-
-        // Vérifier si la question existe
+        $question = Question::where('id_question', $id_question)->first();
         if (!$question) {
             return redirect()->route('forumetudiants.index')->with('error', 'Question non trouvée.');
         }
-
-        // Vérifier si l'utilisateur connecté est l'auteur de la question
         if ($question->id_user != Auth::id()) {
             return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas supprimer cette question.');
         }
 
         // Suppression de la question
         $question->delete();
+
+        // Déclencher l'événement QuestionSupprimee
+        event(new QuestionSupprimee($question));
 
         return redirect()->route('forumetudiants.index')->with('success', 'Votre question a été supprimée.');
     }
@@ -166,11 +159,14 @@ class ForumEtudiantsController extends Controller
         ]);
 
         // Création de la réponse
-        Reponse::create([
+        $reponse = Reponse::create([
             'contenu' => $request->contenu,
             'id_user' => Auth::id(),
             'id_question' => $id_question,
         ]);
+
+        // Déclencher l'événement ReponseAjoutee
+        event(new ReponseAjoutee($reponse));
 
         return redirect()->route('forumetudiants.index')->with('success', 'Votre réponse a été ajoutée.');
     }
@@ -180,15 +176,10 @@ class ForumEtudiantsController extends Controller
      */
     public function destroyReponse($id_reponse)
     {
-        // Trouver la réponse
         $reponse = Reponse::find($id_reponse);
-
-        // Vérifier si la réponse existe
         if (!$reponse) {
             return redirect()->route('forumetudiants.index')->with('error', 'Réponse non trouvée.');
         }
-
-        // Vérifier si l'utilisateur connecté est l'auteur de la réponse
         if ($reponse->id_user != Auth::id()) {
             return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas supprimer cette réponse.');
         }

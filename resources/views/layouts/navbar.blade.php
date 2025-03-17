@@ -109,6 +109,7 @@
         <div>
             <a href="{{ route('etudiant.dashboard') }}"><i class="fas fa-home"></i> Accueil</a>
             <a href="{{ route('forumetudiants.index') }}"><i class="fas fa-comments"></i> Forum</a>
+            <a href="{{ route('notifications.index') }}"><i class="fas fa-bell"></i>notification</a>
         </div>
 
         <!-- Sélecteurs d'année, filière, matière et type de support -->
