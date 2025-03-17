@@ -116,20 +116,25 @@
                                                         <div class="d-flex justify-content-between">
                                                             <h5 class="card-title">{{ $support->titre }}</h5>
                                                             @if($support->format === 'lien_video')
-                                                                <span class="badge bg-danger">Vidéo</span>
+                                                            <span class="badge" style="display: flex; align-items: center; justify-content: center; background-color: oklch(0.971 0.013 17.38); color: oklch(0.577 0.245 27.325);  height: 30px; line-height: 30px; padding: 0 10px;">
+                                                                Vidéo
+                                                            </span>
+                                                            
                                                             @elseif($support->format === 'pdf')
                                                                 <!-- Badge PDF sans icône, icône "Ouvrir" dans le bouton -->
-                                                                <span class="badge" style="background-color: #87CEFA;">
+                                                                <span class="badge" style="display: flex; align-items: center; justify-content: center; background-color: oklch(0.984 0.019 200.873); color: oklch(0.746 0.16 232.661);  height: 30px; line-height: 30px; padding: 0 10px;">
                                                                     PDF
                                                                 </span>
                                                             @elseif($support->format === 'ppt')
                                                                 <!-- Badge PPT avec couleur spécifique -->
-                                                                <span class="badge" style="background-color: oklch(0.869 0.022 252.894);">
+                                                                <span class="badge" style="background-color:oklch(0.979 0.021 166.113); color: oklch(0.765 0.177 163.223); display: flex; align-items: center; justify-content: center; height: 30px; line-height: 35px; padding: 0 10px;">
                                                                     PPT
                                                                 </span>
+                                                                
+                                                                
                                                             @elseif($support->format === 'word')
                                                                 <!-- Badge Word avec couleur spécifique -->
-                                                                <span class="badge" style="background-color: oklch(0.777 0.152 181.912);">
+                                                                <span class="badge" style="background-color: oklch(0.967 0.001 286.375);color: oklch(0.705 0.015 286.067); display: flex; align-items: center; justify-content: center; height: 35px; line-height: 30px; padding: 0 10px;">
                                                                     Word
                                                                 </span>
                                                             @endif

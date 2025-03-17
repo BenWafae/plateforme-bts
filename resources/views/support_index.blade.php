@@ -81,51 +81,81 @@
                                                             
                                                             <div class="d-flex justify-content-between">
                                                                 <h5 class="card-title">{{ $support->titre }}</h5>
-                                                                {{-- Affichage du badge si le support est une vidéo --}}
+                                                                {{-- badge vediooo --}}
                                                                 @if($support->format === 'lien_video')
-                                                                <span class="badge" style="background-color: #f0f9ff; color: #3d7ca6">Vidéo</span>
-                                                                      @endif
+                                                            <span class="badge" style="display: flex; align-items: center; justify-content: center; background-color: oklch(0.971 0.013 17.38); color: oklch(0.577 0.245 27.325);  height: 30px; line-height: 30px; padding: 0 10px;">
+                                                                Vidéo
+                                                            </span>
+                                                            
+                                                            @elseif($support->format === 'pdf')
+                                                                <!-- Badge PDF sans icône, icône "Ouvrir" dans le bouton -->
+                                                                <span class="badge" style="display: flex; align-items: center; justify-content: center; background-color: oklch(0.984 0.019 200.873); color: oklch(0.746 0.16 232.661);  height: 30px; line-height: 30px; padding: 0 10px;">
+                                                                    PDF
+                                                                </span>
+                                                            @elseif($support->format === 'ppt')
+                                                                <!-- Badge PPT avec couleur spécifique -->
+                                                                <span class="badge" style="background-color:oklch(0.979 0.021 166.113); color: oklch(0.765 0.177 163.223); display: flex; align-items: center; justify-content: center; height: 30px; line-height: 35px; padding: 0 10px;">
+                                                                    PPT
+                                                                </span>
+                                                                
+                                                                
+                                                            @elseif($support->format === 'word')
+                                                                <!-- Badge Word avec couleur spécifique -->
+                                                                <span class="badge" style="background-color: oklch(0.967 0.001 286.375);color: oklch(0.705 0.015 286.067); display: flex; align-items: center; justify-content: center; height: 35px; line-height: 30px; padding: 0 10px;">
+                                                                    Word
+                                                                </span>
+                                                            @endif
                                                             </div>
                                                             
                                                             <p class="card-text flex-grow-1">{{ $support->description }}</p>
-
-                                                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                            <div class="d-flex justify-content-end align-items-center mt-auto">
                                                                 @if($support->format === 'lien_video' && filter_var($support->lien_url, FILTER_VALIDATE_URL))
                                                                     {{-- Bouton pour rediriger vers YouTube --}}
-                                                                    <a href="{{ $support->lien_url }}" target="_blank" class="btn btn-sm btn-outline-info">
-                                                                        Voir sur YouTube
+                                                                    <a href="{{ $support->lien_url }}" target="_blank" class="btn text-danger">
+                                                                        <i class="fab fa-youtube"></i>
                                                                     </a>
                                                                 @else
-                                                                    {{-- Lien de téléchargement ou ouverture pour les autres formats --}}
                                                                     <a href="{{ asset('storage/' . $support->lien_url) }}"
-                                                                       class="btn btn-sm {{ $support->format === 'pdf' ? 'btn-outline-primary' : 'btn-outline-success' }} "
-                                                                       target="{{ $support->format === 'pdf' ? '_blank' : '_self' }}"
-                                                                       @if ($support->format !== 'pdf') download @endif>
+                                                                       class="btn"
+                                                                       target="{{ $support->format === 'pdf' ? '_blank' : '_self' }} "
+                                                                       @if ($support->format !== 'pdf') download @endif 
+                                                                       style="color: inherit;">
                                                                         @if ($support->format === 'pdf')
-                                                                            📄 Ouvrir
-                                                                        @else
-                                                                            ⬇ Télécharger
+                                                                            <i class="fas fa-eye"></i> 
+                                                                        @elseif ($support->format === 'ppt')
+                                                                            <i class="fas fa-download"></i>
+                                                                        @elseif ($support->format === 'word')
+                                                                            <i class="fas fa-download"></i>
                                                                         @endif
                                                                     </a>
                                                                 @endif
-
-                                                                {{-- Bouton de modification --}}
-                                                                <a href="{{ route('supports.edit', $support->id_support) }}" 
-                                                                   class="btn btn-sm btn-outline-warning" title="Modifier">
-                                                                    <i class="fas fa-edit"></i>
-                                                                </a>
-
-                                                                {{-- Formulaire de suppression --}}
-                                                                <form action="{{ route('supports.destroy', $support->id_support) }}" method="POST" class="d-inline">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce support ?')" 
-                                                                        title="Supprimer">
-                                                                        <i class="fas fa-trash-alt"></i>
-                                                                    </button>
-                                                                </form>
+                                                            
+                                                                {{-- Tous les boutons (Ouvrir, Modifier, Supprimer) alignés à droite --}}
+                                                                <div class="d-flex justify-content-end gap-2">
+                                                                    {{-- Bouton de modification avec la couleur de l'icône --}}
+                                                                    <a href="{{ route('supports.edit', $support->id_support) }}" 
+                                                                       class="btn btn-sm btn-outline-warning" 
+                                                                       style="border: none; background-color: transparent;" 
+                                                                       title="Modifier">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+                                                            
+                                                                    {{-- Formulaire de suppression avec la couleur de l'icône --}}
+                                                                    <form action="{{ route('supports.destroy', $support->id_support) }}" method="POST" class="d-inline">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                                                style="border: none; background-color: transparent;"
+                                                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce support ?')" 
+                                                                                title="Supprimer">
+                                                                            <i class="fas fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
                                                             </div>
+                                                            
+                                                            
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
