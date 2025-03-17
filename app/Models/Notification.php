@@ -17,7 +17,7 @@ class Notification extends Model
         'date_notification',
         'id_user',
         'id_question',
-        'id_reponse',
+        'id',
     ];
 
     // Relation avec l'utilisateur (celui qui reçoit la notification)
@@ -35,6 +35,6 @@ class Notification extends Model
     // Relation avec la réponse (si la notification est liée à une réponse)
     public function reponse()
     {
-        return $this->belongsTo(Reponse::class, 'id_reponse');
+        return $this->belongsTo(Reponse::class, 'id');
     }
 }

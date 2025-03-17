@@ -150,6 +150,7 @@ class ForumEtudiantsController extends Controller
     }
 
     /**
+     *use App\Models\Reponse;
      * Enregistrer une réponse à une question
      */
     public function storeReponse(Request $request, $id_question)
@@ -157,6 +158,12 @@ class ForumEtudiantsController extends Controller
         $request->validate([
             'contenu' => 'required|string',
         ]);
+
+        // Vérifier si la question existe
+        $question = Question::find($id_question);
+        if (!$question) {
+            return redirect()->route('forumetudiants.index')->with('error', 'Question non trouvée.');
+        }
 
         // Création de la réponse
         $reponse = Reponse::create([
@@ -177,12 +184,10 @@ class ForumEtudiantsController extends Controller
     public function destroyReponse($id_reponse)
     {
         $reponse = Reponse::find($id_reponse);
-        if (!$reponse) {
-            return redirect()->route('forumetudiants.index')->with('error', 'Réponse non trouvée.');
-        }
-        if ($reponse->id_user != Auth::id()) {
-            return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas supprimer cette réponse.');
-        }
+
+        // Vérifier si la réponse existe et appartient à l'utilisateur
+        abort_if(!$reponse, 404, 'Réponse non trouvée.');
+        abort_if($reponse->id_user != Auth::id(), 403, 'Vous ne pouvez pas supprimer cette réponse.');
 
         // Suppression de la réponse
         $reponse->delete();

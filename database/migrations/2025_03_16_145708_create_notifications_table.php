@@ -21,7 +21,7 @@ class CreateNotificationsTable extends Migration
             $table->timestamp('date_notification')->useCurrent(); // Date de la notification
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade'); // ID de l'utilisateur (récepteur)
             $table->foreignId('id_question')->nullable()->constrained('questions')->onDelete('cascade'); // ID de la question
-            $table->foreignId('id_reponse')->nullable()->constrained('answers')->onDelete('cascade'); // ID de la réponse
+            $table->foreignId('id')->nullable()->constrained('answers')->onDelete('cascade'); // ID de la réponse
             $table->timestamps(); // created_at et updated_at
         });
     }

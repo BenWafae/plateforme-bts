@@ -14,7 +14,7 @@ class NotifierQuestionSupprimee
 
         Notification::create([
             'type' => 'Suppression',
-            'contenu' => "Votre question '{$event->question->titre}' a été supprimée par {$user->nom} ({$user->roles})",
+            'contenu' => "Votre question '{$event->question->titre}' a été supprimée par {$user->nom} ({$user->role})",
             'lue' => false,
             'id_user' => $event->question->id_user, // Envoyer la notification au propriétaire de la question
             'id_question' => $event->question->id_question,

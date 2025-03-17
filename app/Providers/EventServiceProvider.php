@@ -13,8 +13,10 @@ use App\Listeners\SupportConsultedListener;
 use App\Listeners\SupportDownloadedListener;
 
 use App\Events\QuestionPosee;
+use App\Events\ReponseAjoutee;
 use App\Events\QuestionSupprimee;
 use App\Listeners\NotifierQuestionPosee;
+use App\Listeners\NotifierReponseAjoutee;
 use App\Listeners\NotifierQuestionSupprimee;
 
 class EventServiceProvider extends ServiceProvider
@@ -39,6 +41,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         QuestionSupprimee::class => [
             NotifierQuestionSupprimee::class,
+        ],
+        ReponseAjoutee::class => [
+            NotifierReponseAjoutee::class,
         ],
     ];
 
