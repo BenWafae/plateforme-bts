@@ -34,12 +34,12 @@
                 </select>
 
                 <!-- Filtrer par format -->
-                <select name="format" class="form-select me-3" onchange="this.form.submit()" style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px 15px; font-size: 16px; width: 220px; margin-right: 15px;">
-                    <option value="">Sélectionner un format</option>
-                    <option value="pdf" {{ request('format') == 'pdf' ? 'selected' : '' }}>PDF</option>
-                    <option value="ppt" {{ request('format') == 'ppt' ? 'selected' : '' }}>PPT</option>
-                    <option value="word" {{ request('format') == 'word' ? 'selected' : '' }}>Word</option>
-                    <option value="lien_video" {{ request('format') == 'lien_video' ? 'selected' : '' }}>Vidéo</option>
+                <select name="format" class="form-select me-3" onchange="this.form.submit()" style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px 15px; font-size: 16px; width: 240px; margin-right: 15px;">
+                    <option value="">📂 Sélectionner un format</option>
+                    <option value="pdf" {{ request('format') == 'pdf' ? 'selected' : '' }}>📄 PDF</option>
+                    <option value="ppt" {{ request('format') == 'ppt' ? 'selected' : '' }}>📊 PPT</option>
+                    <option value="word" {{ request('format') == 'word' ? 'selected' : '' }}>📝 Word</option>
+                    <option value="lien_video" {{ request('format') == 'lien_video' ? 'selected' : '' }}>🎥 Vidéo</option>
                 </select>
             </div>
 

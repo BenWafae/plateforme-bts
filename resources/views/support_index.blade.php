@@ -4,6 +4,29 @@
     <div class="container">
         <h2>Mes Supports de Cours</h2>
 
+       {{-- Formulaire de filtrage --}}
+       <form method="GET" action="{{ route('supports.index') }}" class="mb-4" 
+       style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; 
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+       
+       <div class="row align-items-center">
+           <div class="col-md-4">
+               <label for="format" class="form-label" style="font-weight: bold; color: #495057;">Filtrer par Format</label>
+               <select name="format" id="format" class="form-select" onchange="this.form.submit()" 
+                   style="border-radius: 5px; border: 1px solid #ced4da; padding: 10px 15px; font-size: 16px; 
+                          background-color: white; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                   <option value="">📂 Tous les formats</option>
+                   <option value="pdf" {{ request('format') == 'pdf' ? 'selected' : '' }}>📄 PDF</option>
+                   <option value="ppt" {{ request('format') == 'ppt' ? 'selected' : '' }}>📊 PPT</option>
+                   <option value="word" {{ request('format') == 'word' ? 'selected' : '' }}>📝 Word</option>
+                   <option value="lien_video" {{ request('format') == 'lien_video' ? 'selected' : '' }}>🎥 Vidéo</option>
+               </select>
+           </div>
+       </div>
+   </form>
+   
+
+
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -170,16 +193,19 @@
                 </div>
             @endif
         @endforeach
-  {{-- Pagination avec marge supplémentaire pour espacement --}}
-  <div class="d-flex justify-content-center mt-3 mb-5">
-    <nav>
-        <ul class="pagination pagination-sm justify-content-center">
-            {{ $matieres->links('pagination::bootstrap-4') }}
-        </ul>
-    </nav>
-</div>
+
+        {{-- Pagination avec marge supplémentaire pour espacement --}}
+        <div class="d-flex justify-content-center mt-3 mb-5">
+            <nav>
+                <ul class="pagination pagination-sm justify-content-center">
+                    {{ $matieres->links('pagination::bootstrap-4') }}
+                </ul>
+            </nav>
+        </div>
     </div>
 @endsection
+
+
 
 
 

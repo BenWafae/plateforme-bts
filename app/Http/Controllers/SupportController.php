@@ -16,35 +16,55 @@ class SupportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-{
-    // Récupérer les supports créés par l'utilisateur (professeur) actuellement connecté
+    public function index(Request $request)
+    {
+        // Créer la requête de base pour récupérer les supports de l'utilisateur connecté
+        $query = SupportEducatif::with('matiere', 'type', 'user')
+            ->where('id_user', auth()->id()); // Filtrer par l'ID de l'utilisateur connecté
     
+        // Vérification si un filtre par format est appliqué
+        $format = $request->input('format', 'all'); // Par défaut 'all' si aucun format n'est sélectionné
+        if ($format !== 'all') {
+            $query->where('format', $format); // Filtrer selon le format sélectionné
+        }
     
-        // Récupérer les supports créés par l'utilisateur (professeur) actuellement connecté
-        $supports = SupportEducatif::with('matiere', 'type', 'user')
-            ->where('id_user', auth()->id()) // Filtrer par l'ID de l'utilisateur connecté
-            ->get();
-        
+        // Récupérer tous les supports après application des filtres
+        $supports = $query->get();
+    
         // Organiser les supports par matière et type
         $supportsParMatiereEtType = $supports->groupBy(function ($support) {
             return $support->id_Matiere . '-' . $support->id_type;
         });
-
-        // Récupérer uniquement les matières associées à l'utilisateur connecté
-        //  récupère les matières qui sont associées à des supports éducatifs créés par
-        //  l'utilisateur connecté. La méthode whereHas permet de filtrer les matières en fonction des supports éducatifs qui leur sont associés, en filtrant uniquement ceux de l'utilisateur connecté.
-        $matieres = Matiere::whereHas('supportsEducatifs', function($query) {
-            $query->where('id_user', auth()->id()); // Filtrer par l'utilisateur connecté
-        })->paginate(1); // Pagination avec 2 matières par page
-
+    
+        // Vérification si un format est sélectionné, cela affectera la pagination des matières
+        if ($format !== 'all') {
+            // Si un format est sélectionné, récupérer les matières qui ont des supports dans ce format
+            $matieresQuery = Matiere::whereHas('supportsEducatifs', function($query) use ($format) {
+                $query->where('id_user', auth()->id()); // Filtrer par l'utilisateur connecté
+                $query->where('format', $format); // Appliquer le filtre par format
+            });
+    
+            // Pagination de 3 matières par page si un format est sélectionné
+            $matieres = $matieresQuery->paginate(3); // Pagination de 3 matières par page
+        } else {
+            // Sinon, récupérer les matières sans filtre par format et pagination de 1 matière par page
+            $matieresQuery = Matiere::whereHas('supportsEducatifs', function($query) {
+                $query->where('id_user', auth()->id()); // Filtrer par l'utilisateur connecté
+            });
+    
+            // Pagination de 1 matière par page si aucun format n'est sélectionné
+            $matieres = $matieresQuery->paginate(1); // Pagination de 1 matière par page
+        }
+    
         // Récupérer les types pour affichage correct
-        $types = Type::all(); 
-        
-        // Passer les données à la vue
-        return view('support_index', compact('supportsParMatiereEtType', 'matieres', 'types'));
+        $types = Type::all();
+    
+        // Passer les données à la vue et conserver le paramètre 'format' dans l'URL de la pagination
+        return view('support_index', compact('supportsParMatiereEtType', 'matieres', 'types', 'format'));
     }
+    
 
+    
 
     
     
