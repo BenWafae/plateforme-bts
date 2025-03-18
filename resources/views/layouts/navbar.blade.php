@@ -35,7 +35,7 @@
             color: white;
             text-decoration: none;
             margin: 0 15px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
         }
 
@@ -56,12 +56,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            background-color: #007bff;  /* Couleur personnalisée */
+            background-color:rgb(14, 122, 130);  /* Couleur personnalisée */
             color: white;
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 600;
             text-transform: uppercase;
             cursor: pointer;
@@ -78,7 +78,7 @@
 
         .dropdown-menu .dropdown-item {
             color: #004b6d;
-            font-size: 10px; /* Taille de police réduite pour les éléments du menu */
+            font-size: 14px; /* Taille de police réduite pour les éléments du menu */
         }
 
         .dropdown-menu .dropdown-item:hover {
@@ -107,7 +107,7 @@
     <nav class="navbar">
         <!-- Colonne de gauche avec les liens -->
         <div>
-            <a href="{{ route('etudiant.dashboard') }}"><i class="fas fa-home"></i> Accueil</a>
+            <a href="{{ route('etudiant.home') }}"><i class="fas fa-home"></i> home</a>
             <a href="{{ route('forumetudiants.index') }}"><i class="fas fa-comments"></i> Forum</a>
             <a href="{{ route('notifications.index') }}"><i class="fas fa-bell"></i>notification</a>
         </div>

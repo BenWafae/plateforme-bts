@@ -4,7 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminforumController;
 use App\Http\Controllers\AdminSupportController;
 use App\Http\Controllers\EtudiantController;
-use App\Http\Controllers\forumetudiantsController; // Ajoutez le contrôleur MessageController
+use App\Http\Controllers\forumetudiantsController;
+use App\Http\Controllers\EtudiantHomeController;
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\MatiereController;
@@ -58,6 +59,8 @@ Route::middleware(['auth'])->delete('/etudiant/forumetudiants/reponse/{id}', [Fo
 Route::middleware(['auth'])->get('/etudiant/forumetudiants/questions/create', [ForumEtudiantsController::class, 'create'])->name('questions.create');
 // Route pour afficher les notifications
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+
+Route::get('/etudiant/home', [EtudiantHomeController::class, 'index'])->name('etudiant.home');
 
 // Route pour marquer une notification comme lue
 Route::post('/notification/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notification.markAsRead');

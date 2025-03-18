@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Events\QuestionSupprimee;
 use Illuminate\Http\Request;
 
 class AdminforumController extends Controller
@@ -91,6 +92,7 @@ class AdminforumController extends Controller
         $question->delete();
     
         // Retourner à la liste des questions avec un message de succès
+        event(new QuestionSupprimee($question));
         return redirect()->route('admin.questions.index')->with('success', 'Question et ses réponses supprimées avec succès!');
     }
     

@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Question;
 use App\Models\Reponse;
+use App\Events\ReponseAjoutee;
 use Illuminate\Http\Request;
 
 class ForumController extends Controller
@@ -14,23 +15,25 @@ class ForumController extends Controller
     }
 
     public function repondre(Request $request, $id)
-    {
-        $request->validate([
-            'reponse' => 'required|string',
-        ]);
+{
+    $request->validate([
+        'reponse' => 'required|string',
+    ]);
 
-        $question = Question::findOrFail($id);
+    $question = Question::findOrFail($id);
 
-        // Création de la réponse
-        Reponse::create([
-            'id_question' => $question->id_question,
-            'contenu' => $request->input('reponse'),
-            'id_user' => auth()->user()->id_user,
-        ]);
+    // Création de la réponse et récupération dans une variable
+    $reponse = Reponse::create([
+        'id_question' => $question->id_question,
+        'contenu' => $request->input('reponse'),
+        'id_user' => auth()->user()->id_user,
+    ]);
 
-        return redirect()->route('professeur.questions.index')->with('success', 'Réponse envoyée avec succès.');
-    }
+    // Déclencher l'événement ReponseAjoutee avec la réponse correcte
+    event(new ReponseAjoutee($reponse));
 
+    return redirect()->route('professeur.questions.index')->with('success', 'Réponse envoyée avec succès.');
+}
     public function updateReponse(Request $request, $id)
     {
         $reponse = Reponse::findOrFail($id);

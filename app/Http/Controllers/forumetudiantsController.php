@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\Reponse;
 use App\Models\Matiere;
-use App\Events\QuestionPosee;
 use App\Events\ReponseAjoutee;
 use App\Events\QuestionSupprimee;
 
@@ -76,9 +75,6 @@ class ForumEtudiantsController extends Controller
             'id_user' => Auth::id(),
             'id_Matiere' => $request->id_Matiere,
         ]);
-
-        // Déclencher l'événement QuestionPosee
-        event(new QuestionPosee($question));
 
         // Rediriger l'utilisateur vers le forum avec un message de succès
         return redirect()->route('forumetudiants.index')->with('success', 'Votre question a été envoyée.');
