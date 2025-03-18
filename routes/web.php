@@ -59,13 +59,10 @@ Route::middleware(['auth'])->delete('/etudiant/forumetudiants/reponse/{id}', [Fo
 Route::middleware(['auth'])->get('/etudiant/forumetudiants/questions/create', [ForumEtudiantsController::class, 'create'])->name('questions.create');
 // Route pour afficher les notifications
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-
+Route::post('/notifications/lire/{id}', [NotificationController::class, 'marquerCommeLue'])->name('notifications.lire');
+Route::post('/notifications/lire-toutes', [NotificationController::class, 'marquerToutesCommeLues'])->name('notifications.lire.toutes');
 Route::get('/etudiant/home', [EtudiantHomeController::class, 'index'])->name('etudiant.home');
-
-// Route pour marquer une notification comme lue
-Route::post('/notification/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notification.markAsRead');
-
-
+Route::get('/notifications/count', [NotificationController::class, 'count'])->name('notifications.count');
    });
 // Routes pour l'administrateur
 Route::middleware(['auth', 'admin.auth'])->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');

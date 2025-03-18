@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
-        // Récupérer les notifications de l'utilisateur
+        // Récupérer les notifications non lues en priorité, puis les lues
         $notifications = Notification::where('id_user', $user->id_user)
+            ->orderBy('lue', 'asc')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -26,12 +28,40 @@ class NotificationController extends Controller
         return view('notification_etudiants', compact('notifications'));
     }
 
+
+    public function marquerCommeLue($id)
+    {
+        $notification = Notification::find($id);
+        
+        if ($notification) {
+            $notification->lue = true;
+            $notification->save();
+        }
+    
+        return redirect()->route('notifications.index');
+    }
+    
+    public function marquerToutesCommeLues()
+    {
+        Auth::user()->notificationsNonLues()->update(['lue' => true]);
+
+        return redirect()->route('notifications.index')->with('success', 'Toutes les notifications sont marquées comme lues.');
+    }
+
+    public function count()
+{
+    $user = auth()->user();
+    $count = Notification::where('id_user', $user->id_user)->where('lue', false)->count();
+    
+    return view('navbar', compact('count')); // Envoyer la variable à la navbar
+}
+
     private function getAlertClass($type)
     {
         return match ($type) {
-            'App\Notifications\EnregistrementDeQuestion' => 'alert-success',
-            'App\Notifications\SuppressionDeQuestion' => 'alert-danger',
-            'App\Notifications\ReponseAUneQuestion' => 'alert-info',
+            'EnregistrementDeQuestion' => 'alert-success',
+            'SuppressionDeQuestion' => 'alert-danger',
+            'ReponseAUneQuestion' => 'alert-info',
             default => 'alert-primary',
         };
     }
@@ -39,9 +69,9 @@ class NotificationController extends Controller
     private function getAlertTitle($type)
     {
         return match ($type) {
-            'App\Notifications\EnregistrementDeQuestion' => 'Nouvelle Question Enregistrée',
-            'App\Notifications\SuppressionDeQuestion' => 'Question Supprimée',
-            'App\Notifications\ReponseAUneQuestion' => 'Nouvelle Réponse',
+            'EnregistrementDeQuestion' => 'Nouvelle Question Enregistrée',
+            'SuppressionDeQuestion' => 'Question Supprimée',
+            'ReponseAUneQuestion' => 'Nouvelle Réponse',
             default => 'Notification',
         };
     }

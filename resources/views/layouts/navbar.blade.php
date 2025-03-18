@@ -56,10 +56,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background-color:rgb(14, 122, 130);  /* Couleur personnalisée */
+            background-color: rgb(14, 122, 130);  /* Couleur personnalisée */
             color: white;
             font-size: 15px;
             font-weight: 600;
@@ -99,6 +99,13 @@
         .navbar .mode-toggle {
             margin-right: 12px; /* Marge entre le Dark Mode et le cercle */
         }
+
+        /* Ajout de l'alignement pour les éléments de la navbar */
+        .navbar .d-flex.align-items-center {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Espacement entre les éléments */
+        }
     </style>
 </head>
 <body>
@@ -109,7 +116,17 @@
         <div>
             <a href="{{ route('etudiant.home') }}"><i class="fas fa-home"></i> home</a>
             <a href="{{ route('forumetudiants.index') }}"><i class="fas fa-comments"></i> Forum</a>
-            <a href="{{ route('notifications.index') }}"><i class="fas fa-bell"></i>notification</a>
+            <a href="{{ route('notifications.index') }}" class="position-relative">
+                <i class="fas fa-bell fa-1x"></i> <!-- L'icône de notification avec une taille agrandie -->
+                @php
+                    $notif_count = App\Models\Notification::where('id_user', auth()->id())->where('lue', false)->count();
+                @endphp
+                @if($notif_count > 0)
+                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                        {{ $notif_count }}
+                    </span>
+                @endif
+            </a>
         </div>
 
         <!-- Sélecteurs d'année, filière, matière et type de support -->
@@ -178,30 +195,30 @@
         </div>
 
         <!-- Colonne de droite avec le cercle de l'étudiant et le bouton Dark Mode -->
-        <div class="d-flex align-items-center">
-            <!-- Cercle avec initiale de l'étudiant -->
-            <div class="dropdown d-inline">
-                <button class="user-circle dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    {{ strtoupper(auth()->user()->prenom[0]) }} <!-- Affiche la première lettre du prénom -->
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">gestion du profil</a></li>
-                    <li>
-                        <a class="dropdown-item text-danger" href="{{ route('logout') }}"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Déconnexion
-                        </a>
-                    </li>
-                </ul>
-            </div>
+<div class="d-flex align-items-center">
+    <!-- Cercle avec initiale de l'étudiant -->
+    <div class="dropdown d-inline position-relative">
+        <!-- Bouton: Positionner normalement à l'intérieur du cercle -->
+        <button class="user-circle dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ strtoupper(auth()->user()->prenom[0]) }} <!-- Affiche la première lettre du prénom -->
+        </button>
+        
+        <!-- Menu déroulant: Positionné à l'intérieur du bouton et à gauche -->
+        <ul class="dropdown-menu position-absolute start-0" aria-labelledby="userDropdown" style="top:100%; left:0;">
+            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Gestion du profil</a></li>
+            <li>
+                <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Déconnexion
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 
             <!-- Bouton Dark Mode -->
             <button class="mode-toggle" onclick="toggleDarkMode()">🌙</button>
-
-            <!-- Formulaire de déconnexion -->
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
         </div>
     </nav>
 

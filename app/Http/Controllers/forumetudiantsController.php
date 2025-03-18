@@ -169,8 +169,11 @@ class ForumEtudiantsController extends Controller
         ]);
 
         // Déclencher l'événement ReponseAjoutee
-        event(new ReponseAjoutee($reponse));
+        // Déclencher l'événement seulement si l'étudiant ne répond pas à sa propre question
+    
 
+        event(new ReponseAjoutee($reponse));
+    
         return redirect()->route('forumetudiants.index')->with('success', 'Votre réponse a été ajoutée.');
     }
 

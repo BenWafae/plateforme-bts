@@ -71,4 +71,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class, 'notifiable');
     }
+    public function notificationsNonLues()
+{
+    return $this->hasMany(Notification::class, 'id_user', 'id_user')->where('lue', false);
+}
 }
