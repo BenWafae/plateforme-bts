@@ -8,11 +8,13 @@ use App\Http\Controllers\forumetudiantsController;
 use App\Http\Controllers\EtudiantHomeController;
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\ForumController;
+use App\Http\Controllers\ForumEtudiantsController as ControllersForumEtudiantsController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\TableauDeBordController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -106,7 +108,8 @@ Route::get('/admin/questions', [AdminforumController::class, 'index'])->name('ad
 Route::get('/admin/questions/{id}', [AdminforumController::class, 'show'])->name('admin.questions.show');
 // Cette route utilise la méthode destroy dans le contrôleur pour supprimer une question et ses réponses
 Route::delete('/admin/questions/{id}', [AdminforumController::class, 'destroy'])->name('admin.questions.destroy');
-
+// route tableau de bord
+Route::middleware(['auth', 'admin.auth'])->get('/admin/tableau-de-bord', [TableauDeBordController::class, 'index'])->name('admin.tableau-de-bord');
 
 // Routes pour les professeurs
 Route::middleware(['auth', 'professeur.auth'])->get('/professeur/dashboard' ,[ProfesseurController::class,'dashboard'])->name('professeur.dashboard');
@@ -137,7 +140,9 @@ Route::get('/professeur/reponse/{id}/edit', [ForumController::class, 'editRepons
 });
 
 
-require __DIR__.'/auth.php';
+
+
+require __DIR__ . '/auth.php';
 
     
     
