@@ -18,47 +18,43 @@
     </div>
 
     <div class="row mt-2 mb-2 gy-3">
-        @foreach($supports as $support)
-            @if($support->id_type == request('type_id'))
-                <div class="col-md-4">
-                    <div class="card mb-3 shadow-sm h-100 d-flex flex-column position-relative" style="border: 2px solid black; border-radius: 5px;">
-                        <div class="position-absolute top-0 end-0 m-2 px-3 py-1 text-white rounded" 
-                             style="background-color: 
-                                @if(strpos($support->format, 'pdf') !== false) #dc3545 
-                                @elseif(strpos($support->format, 'ppt') !== false) #ffc107 
-                                @elseif(strpos($support->format, 'video') !== false) #17a2b8 
-                                @else #007bff @endif;">
-                            {{ strtoupper(str_replace('lien_video', 'video', $support->format)) }}
-                        </div>
-                        <div class="card-body d-flex flex-column text-center">
-                            <h5 class="card-title">{{ $support->titre }}</h5>
-                            <p class="card-text">{{ $support->description }}</p>
-                            <div class="mt-2">
-                                @if(strpos($support->format, 'pdf') !== false)
-                                    <a href="{{ route('etudiant.supports.showPdf', ['id' => $support->id_support]) }}" 
-                                       class="btn btn-outline-danger btn-sm" target="_blank">
-                                        <i class="fas fa-file-pdf"></i>
-                                    </a>
-                                @elseif(strpos($support->format, 'ppt') !== false)
-                                    <a href="{{ route('etudiant.supports.download', ['id' => $support->id_support]) }}" 
-                                       class="btn btn-outline-warning btn-sm">
-                                        <i class="fas fa-file-powerpoint"></i>
-                                    </a>
-                                @elseif(strpos($support->format, 'video') !== false && filter_var($support->lien_url, FILTER_VALIDATE_URL))
-                                    <a href="{{ $support->lien_url }}" target="_blank" class="btn btn-sm btn-outline-info">
-                                        <i class="fab fa-youtube"></i>
-                                    </a>
-                                @else
-                                    <a href="{{ route('etudiant.supports.download', ['id' => $support->id_support]) }}" 
-                                       class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-file-alt"></i>
-                                    </a>
-                                @endif
-                            </div>
+    @foreach($supports as $support)
+        @if($support->id_type == request('type_id'))
+            <div class="col-md-4">
+                <div class="card mb-3 shadow-sm h-100 d-flex flex-column position-relative border border-1 border-dark rounded-3" 
+                     style="transition: transform 0.3s ease-in-out;">
+                    
+                    <!-- Contenu de la carte -->
+                    <div class="card-body d-flex flex-column text-center">
+                        <h5 class="card-title fw-bold">{{ $support->titre }}</h5>
+                        <p class="card-text text-muted small">{{ $support->description }}</p>
+                        <div class="mt-auto">
+                            @if(strpos($support->format, 'pdf') !== false)
+                                <a href="{{ route('etudiant.supports.showPdf', ['id' => $support->id_support]) }}" 
+                                   class="btn btn-outline-danger btn-sm" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> Voir PDF
+                                </a>
+                            @elseif(strpos($support->format, 'ppt') !== false)
+                                <a href="{{ route('etudiant.supports.download', ['id' => $support->id_support]) }}" 
+                                   class="btn btn-outline-warning btn-sm">
+                                    <i class="fas fa-file-powerpoint"></i> Télécharger PPT
+                                </a>
+                            @elseif(strpos($support->format, 'video') !== false && filter_var($support->lien_url, FILTER_VALIDATE_URL))
+                                <a href="{{ $support->lien_url }}" target="_blank" class="btn btn-outline-info btn-sm">
+                                    <i class="fab fa-youtube"></i> Regarder
+                                </a>
+                            @else
+                                <a href="{{ route('etudiant.supports.download', ['id' => $support->id_support]) }}" 
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-file-alt"></i> Voir Word
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
-            @endif
-        @endforeach
-    </div>
+            </div>
+        @endif
+    @endforeach
+</div>
+
 @endsection
