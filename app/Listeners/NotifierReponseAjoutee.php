@@ -16,7 +16,7 @@ class NotifierReponseAjoutee
 
         // Vérifier si l'étudiant répond à sa propre question
         if ($question->id_user == $auteur->id_user) {
-            $contenu = "tu es répondu à votre question.";
+            $contenu = "tu as répondu à ta question.";
         } else {
             $contenu = "{$auteur->roles} {$auteur->prenom} {$auteur->nom} a répondu à votre question.";
         }
