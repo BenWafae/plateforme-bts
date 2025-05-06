@@ -65,11 +65,42 @@
         <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
             <h3 class="text-xl font-semibold mb-4 text-gray-800">Supports par matière</h3>
             <canvas id="matiereChart" style="height: 150px;"></canvas>
-            {{-- canvas::est lespace reserver pour dessiner le graphiques avec chart js --}}
         </div>
+
+        <!-- Nouveau graphique : Matières par filière -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">Matières par filière</h3>
+            <canvas id="filiereChart" style="height: 150px;"></canvas>
+        </div>
+
+      <!-- Derniers supports ajoutés -->
+<div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+    <h3 class="text-xl font-semibold mb-4 text-gray-800">Derniers supports ajoutés</h3>
+    <table class="w-full text-left table-auto">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">Matière</th>
+                <th class="py-2 px-4 border-b">Support</th>
+                <th class="py-2 px-4 border-b">Date d'ajout</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($derniersSupports as $support)
+            <tr>
+                <td class="py-2 px-4 border-b">{{ $support->matiere->Nom }}</td>
+                <td class="py-2 px-4 border-b">{{ $support->titre }}</td>
+                <td class="py-2 px-4 border-b">{{ $support->created_at->format('d/m/Y') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+
+
     </div>
 @endsection
-{{-- partieeee javaa scrippt pour laffichage des donnes avec javascript --}}
+
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -121,11 +152,6 @@
         // Graphique à barres horizontales : supports par matière
         const matiereLabels = {!! json_encode($supportsParMatiere->keys()) !!};
         const matiereData = {!! json_encode($supportsParMatiere->values()) !!};
-        // json encodeee transpform les donnee php en tableau javascript
-        // keys veut dire les noms ds matieres
-        // value les nbrs de supports
-
-        // ici on va commencer la creation des graphique
         const matiereCtx = document.getElementById('matiereChart').getContext('2d');
         new Chart(matiereCtx, {
             type: 'bar',
@@ -148,10 +174,32 @@
                 }
             }
         });
+
+        // Nouveau graphique : matières par filière
+        const filiereLabels = {!! json_encode($repartitionMatieresParFiliere->keys()) !!};
+        const filiereData = {!! json_encode($repartitionMatieresParFiliere->values()) !!};
+        const filiereCtx = document.getElementById('filiereChart').getContext('2d');
+        new Chart(filiereCtx, {
+            type: 'bar',
+            data: {
+                labels: filiereLabels,
+                datasets: [{
+                    label: 'Nombre de matières',
+                    data: filiereData,
+                    backgroundColor: '#FF6347'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        precision: 0
+                    }
+                }
+            }
+        });
     </script>
 @endsection
-{{-- withCount	Compter les supports pour chaque matière
-     mapWithKeys	Formater les données pour le graphique
-     json_encode	Envoyer les données PHP vers JavaScript
-     Chart.js	Afficher un graphique interactif (barres horizontales)
-    indexAxis: 'y'	Affiche les barres horizontalement --}}
+

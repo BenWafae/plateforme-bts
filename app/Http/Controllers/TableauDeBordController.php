@@ -39,7 +39,11 @@ class TableauDeBordController extends Controller
     $adminsCount = User::where('role', 'administrateur')->count();
 
     $supportsCount = SupportEducatif::count();
-
+    // Derniers supports éducatifs
+    $derniersSupports = SupportEducatif::with('matiere')
+        ->latest() // Trie les supports par date de publication (du plus récent au plus ancien)
+        ->take(5) // Limite à 5 derniers supports
+        ->get();
 
 
     $userRoles = [
@@ -65,6 +69,9 @@ class TableauDeBordController extends Controller
         return [$matiere->Nom => $matiere->supports_educatifs_count];
 
     });
+    $repartitionMatieresParFiliere = \App\Models\Filiere::withCount('matieres')->get()->mapWithKeys(function ($filiere) {
+        return [$filiere->nom_filiere => $filiere->matieres_count];
+    });
     
      
 
@@ -82,6 +89,10 @@ class TableauDeBordController extends Controller
         'userRoles',
 
         'supportsParMatiere',
+
+        'repartitionMatieresParFiliere',
+
+        'derniersSupports',
 
      
 
