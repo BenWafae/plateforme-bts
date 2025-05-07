@@ -40,7 +40,11 @@ class EventServiceProvider extends ServiceProvider
         ReponseAjoutee::class => [
             NotifierReponseAjoutee::class,
         ],
-    ];
+            \App\Events\NouvelUtilisateurCree::class => [
+                \App\Listeners\EnvoyerNotificationAdmin::class,
+            ],
+        ];
+
 
     public function boot(): void
     {

@@ -14,12 +14,12 @@ class NotifierReponseAjoutee
         $question = $reponse->question;
         $auteur = $reponse->user; // L'utilisateur qui a répondu
 
-        // Vérifier si l'étudiant répond à sa propre question
+        // Ne rien faire si l'utilisateur répond à sa propre question
         if ($question->id_user == $auteur->id_user) {
-            $contenu = "tu as répondu à ta question.";
-        } else {
-            $contenu = "{$auteur->roles} {$auteur->prenom} {$auteur->nom} a répondu à votre question.";
+            return;
         }
+
+        $contenu = "{$auteur->roles} {$auteur->prenom} {$auteur->nom} a répondu à votre question.";
 
         // Créer la notification pour le propriétaire de la question
         Notification::create([
