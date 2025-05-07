@@ -95,6 +95,30 @@
         </tbody>
     </table>
 </div>
+<!-- Dernières questions posées -->
+<div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+    <h3 class="text-xl font-semibold mb-4 text-gray-800">Dernières questions posées</h3>
+    <table class="w-full text-left table-auto">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">Titre</th>
+                <th class="py-2 px-4 border-b">Date</th>
+                <th class="py-2 px-4 border-b">Utilisateur</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($dernièresQuestions as $question)
+                <tr>
+                    <td class="py-2 px-4 border-b">{{ $question->titre }}</td>
+                    <td class="py-2 px-4 border-b">{{ \Carbon\Carbon::parse($question->date_pub)->format('d/m/Y') }}</td>
+                    <td class="py-2 px-4 border-b">{{ $question->user->nom }} {{ $question->user->prenom }}</td>
+
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
 
 
 
@@ -202,4 +226,3 @@
         });
     </script>
 @endsection
-

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Matiere;
-
+use App\Models\Question;
 use App\Models\User;
 
 use App\Models\SupportEducatif;
@@ -44,6 +44,11 @@ class TableauDeBordController extends Controller
         ->latest() // Trie les supports par date de publication (du plus récent au plus ancien)
         ->take(5) // Limite à 5 derniers supports
         ->get();
+          // Dernières questions posées
+          $dernièresQuestions = Question::with('user')
+          ->orderBy('date_pub', 'desc')
+          ->take(5)
+          ->get();
 
 
     $userRoles = [
@@ -94,6 +99,8 @@ class TableauDeBordController extends Controller
 
         'derniersSupports',
 
+        'dernièresQuestions',
+
      
 
     ));
@@ -101,5 +108,4 @@ class TableauDeBordController extends Controller
 }
 
 }
-
 

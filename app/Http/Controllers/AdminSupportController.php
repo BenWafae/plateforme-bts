@@ -90,7 +90,7 @@ class AdminSupportController extends Controller
             ])['video_url'];
         } else {
             $validated['lien_url'] = $request->validate([
-                'lien_url' => 'required|file|mimes:pdf,doc,docx,ppt,pptx|max:2048',
+                'lien_url' => 'required|file|mimes:pdf,doc,docx,ppt,pptx',
             ])['lien_url'];
 
             if ($request->hasFile('lien_url') && $request->file('lien_url')->isValid()) {
