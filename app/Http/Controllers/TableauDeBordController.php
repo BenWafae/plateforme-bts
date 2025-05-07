@@ -38,6 +38,11 @@ class TableauDeBordController extends Controller
 
     $adminsCount = User::where('role', 'administrateur')->count();
 
+    $derniersEtudiants = User::where('role', 'etudiant')
+    ->orderBy('created_at', 'desc')
+    ->take(5) // ou plus selon ton besoin
+    ->get();
+
     $supportsCount = SupportEducatif::count();
     // Derniers supports éducatifs
     $derniersSupports = SupportEducatif::with('matiere')
@@ -100,6 +105,8 @@ class TableauDeBordController extends Controller
         'derniersSupports',
 
         'dernièresQuestions',
+
+        'derniersEtudiants',
 
      
 

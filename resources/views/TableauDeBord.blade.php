@@ -118,6 +118,30 @@
         </tbody>
     </table>
 </div>
+<!-- Derniers étudiants inscrits -->
+<div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+    <h3 class="text-xl font-semibold mb-4 text-gray-800">Derniers étudiants inscrits</h3>
+    <table class="w-full text-left table-auto">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">Nom</th>
+                <th class="py-2 px-4 border-b">Prénom</th>
+                <th class="py-2 px-4 border-b">Email</th>
+                <th class="py-2 px-4 border-b">Date d'inscription</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($derniersEtudiants as $etudiant)
+                <tr>
+                    <td class="py-2 px-4 border-b">{{ $etudiant->nom }}</td>
+                    <td class="py-2 px-4 border-b">{{ $etudiant->prenom }}</td>
+                    <td class="py-2 px-4 border-b">{{ $etudiant->email }}</td>
+                    <td class="py-2 px-4 border-b">{{ $etudiant->created_at->format('d/m/Y') }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
 
 
