@@ -23,19 +23,27 @@
     <hr class="my-4">
 
     <h3 class="mt-4">Réponses</h3>
-    @foreach($question->reponses as $reponse)
-    <div class="border p-3 rounded mb-3 shadow-sm bg-white">
-        <div class="d-flex justify-content-between mb-2">
-            <p class="mb-0"><strong>{{ $reponse->user->nom }} {{ $reponse->user->prenom }}</strong></p>
-            <p class="mb-0 text-muted">{{ \Carbon\Carbon::parse($reponse->date_pub)->format('d/m/Y H:i') }}</p>
-        </div>
-        
-        <!-- Response Content -->
-        <div class="response-content">
-            <p>{{ $reponse->contenu }}</p>
-        </div>
+
+@if($question->reponses->isEmpty())
+    <div class="alert alert-info">
+        Personne n'a encore répondu à cette question.
     </div>
+@else
+    @foreach($question->reponses as $reponse)
+        <div class="border p-3 rounded mb-3 shadow-sm bg-white">
+            <div class="d-flex justify-content-between mb-2">
+                <p class="mb-0"><strong>{{ $reponse->user->nom }} {{ $reponse->user->prenom }}</strong></p>
+                <p class="mb-0 text-muted">{{ \Carbon\Carbon::parse($reponse->date_pub)->format('d/m/Y H:i') }}</p>
+            </div>
+            
+            <!-- Response Content -->
+            <div class="response-content">
+                <p>{{ $reponse->contenu }}</p>
+            </div>
+        </div>
     @endforeach
+@endif
+
 </div>
 
 @section('styles')
