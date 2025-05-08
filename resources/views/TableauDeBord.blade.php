@@ -46,20 +46,7 @@
             </div>
         </div>
 
-        <!-- GRAPHIQUES -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <!-- Diagramme à barres -->
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h3 class="text-xl font-semibold mb-4 text-gray-800">Répartition des utilisateurs</h3>
-                <canvas id="barChart" style="height: 150px;"></canvas>
-            </div>
-
-            <!-- Diagramme circulaire -->
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h3 class="text-xl font-semibold mb-4 text-gray-800">Pourcentage des rôles</h3>
-                <canvas id="pieChart" style="height: 100px;"></canvas>
-            </div>
-        </div>
+        
 
         <!-- Nouveau graphique : Supports par matière -->
         <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
@@ -72,29 +59,50 @@
             <h3 class="text-xl font-semibold mb-4 text-gray-800">Matières par filière</h3>
             <canvas id="filiereChart" style="height: 150px;"></canvas>
         </div>
-
-      <!-- Derniers supports ajoutés -->
+       <!-- Derniers supports éducatifs -->
 <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
-    <h3 class="text-xl font-semibold mb-4 text-gray-800">Derniers supports ajoutés</h3>
+    <h3 class="text-xl font-semibold mb-4 text-gray-800">Derniers supports éducatifs</h3>
+
     <table class="w-full text-left table-auto">
         <thead>
             <tr>
+                <th class="py-2 px-4 border-b">Titre</th>
                 <th class="py-2 px-4 border-b">Matière</th>
-                <th class="py-2 px-4 border-b">Support</th>
                 <th class="py-2 px-4 border-b">Date d'ajout</th>
+                <th class="py-2 px-4 border-b">Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach($derniersSupports as $support)
-            <tr>
-                <td class="py-2 px-4 border-b">{{ $support->matiere->Nom }}</td>
-                <td class="py-2 px-4 border-b">{{ $support->titre }}</td>
-                <td class="py-2 px-4 border-b">{{ $support->created_at->format('d/m/Y') }}</td>
-            </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">{{ $support->titre }}</td>
+                    <td class="py-2 px-4 border-b">{{ $support->matiere->Nom ?? 'Inconnue' }}</td>
+                    <td class="py-2 px-4 border-b">{{ $support->created_at->format('d/m/Y') }}</td>
+
+                    <td class="py-2 px-4 border-b">
+                        @if (strpos($support->lien_url, '.pdf') !== false)
+                            <a href="{{ route('admin.support.showPdf', $support->id_support) }}" class="text-blue-600">
+                                <i class="fas fa-file-pdf"></i> 
+                            </a>
+                        @elseif (strpos($support->lien_url, '.docx') !== false || strpos($support->lien_url, '.pptx') !== false)
+                            <a href="{{ route('admin.support.showPdf', $support->id_support) }}" class="text-blue-600">
+                                <i class="fas fa-download"></i> 
+                            </a>
+                        @elseif (strpos($support->lien_url, 'youtube.com') !== false || strpos($support->lien_url, 'youtu.be') !== false)
+                            <a href="{{ $support->lien_url }}" target="_blank" class="text-red-600">
+                                <i class="fab fa-youtube"></i> 
+                            </a>
+                       
+                        @endif
+                    </td>
+                </tr>
             @endforeach
         </tbody>
     </table>
 </div>
+
+        
+
 <!-- Dernières questions posées -->
 <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
     <h3 class="text-xl font-semibold mb-4 text-gray-800">Dernières questions posées</h3>
@@ -153,52 +161,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        const studentsCount = {{ $studentsCount }};
-        const professorsCount = {{ $professorsCount }};
-        const adminsCount = {{ $adminsCount }};
-
-        // Graphique à barres : utilisateurs
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Étudiants', 'Professeurs', 'Administrateurs'],
-                datasets: [{
-                    label: 'Nombre total',
-                    data: [studentsCount, professorsCount, adminsCount],
-                    backgroundColor: ['#3B82F6', '#10B981', '#F59E0B'],
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        precision: 0
-                    }
-                }
-            }
-        });
-
-        // Graphique circulaire : rôles
-        const pieCtx = document.getElementById('pieChart').getContext('2d');
-        new Chart(pieCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Étudiants', 'Professeurs', 'Administrateurs'],
-                datasets: [{
-                    data: [studentsCount, professorsCount, adminsCount],
-                    backgroundColor: ['#3B82F6', '#10B981', '#F59E0B']
-                }]
-            },
-            options: {
-                responsive: true
-            }
-        });
-
-        // Graphique à barres horizontales : supports par matière
-        const matiereLabels = {!! json_encode($supportsParMatiere->keys()) !!};
+           // Graphique à barres horizontales : supports par matière
+           const matiereLabels = {!! json_encode($supportsParMatiere->keys()) !!};
         const matiereData = {!! json_encode($supportsParMatiere->values()) !!};
         const matiereCtx = document.getElementById('matiereChart').getContext('2d');
         new Chart(matiereCtx, {
@@ -222,6 +186,9 @@
                 }
             }
         });
+
+
+       
 
         // Nouveau graphique : matières par filière
         const filiereLabels = {!! json_encode($repartitionMatieresParFiliere->keys()) !!};

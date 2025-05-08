@@ -105,15 +105,27 @@ class AdminSupportController extends Controller
     }
 
     public function showPdf($id)
-    {
-        $support = SupportEducatif::findOrFail($id);
+{
+    $support = SupportEducatif::findOrFail($id);
 
-        if (Storage::disk('public')->exists($support->lien_url)) {
-            return response()->file(storage_path('app/public/' . $support->lien_url));
+    // Si le support est un lien vidéo (YouTube par exemple)
+    if (filter_var($support->lien_url, FILTER_VALIDATE_URL)) {
+        // Vérifier si l'URL est un lien YouTube
+        if (strpos($support->lien_url, 'youtube.com') !== false || strpos($support->lien_url, 'youtu.be') !== false) {
+            // Rediriger vers YouTube
+            return redirect()->to($support->lien_url);
         }
-
-        return redirect()->route('admin.supports.index')->with('error', 'Le fichier n\'existe pas.');
     }
+
+    // Si le support est un fichier à afficher
+    if (Storage::disk('public')->exists($support->lien_url)) {
+        return response()->file(storage_path('app/public/' . $support->lien_url));
+    }
+
+    // Si aucun des deux cas n'est satisfait
+    return redirect()->route('admin.supports.index')->with('error', 'Le fichier ou le lien n\'existe pas.');
+}
+
 
     public function edit($id)
     {
@@ -170,4 +182,6 @@ class AdminSupportController extends Controller
         $support->delete();
         return redirect()->route('admin.supports.index')->with('success', 'Le support a été supprimé avec succès.');
     }
+  
+
 }
