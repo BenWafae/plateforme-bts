@@ -15,7 +15,7 @@ class NotifierQuestionSupprimee
 
         // Vérifier si c'est l'étudiant qui supprime sa propre question
         if ($question->id_user == $user->id_user) {
-            $contenu = "tu as supprimé ta question.";
+           return;
         } else {
             $contenu = "{$user->roles} {$user->prenom} {$user->nom} a supprimé votre question.";
         }

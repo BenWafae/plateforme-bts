@@ -142,6 +142,7 @@
             <h2>Espace Admin</h2>
             <ul>
                 <li><a href="{{ route('admin.tableau-de-bord') }}"><i class="fas fa-home"></i> Tableau de bord</a></li>
+                <li><a href="{{ route('reports.index') }}"><i class="fas fa-exclamation-triangle"></i> Signalements</a></li>
                 <li><a href="{{ route('admin.supports.index') }}"><i class="fas fa-folder"></i> Supports</a></li>
                 <li><a href="{{ route('admin.questions.index') }}"><i class="fas fa-comments"></i> Forum</a></li>
                 <li><a href="{{ route('filiere.index') }}"><i class="fas fa-graduation-cap"></i> Filières</a></li>

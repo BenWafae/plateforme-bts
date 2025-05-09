@@ -43,6 +43,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Events\NouvelUtilisateurCree::class => [
                 \App\Listeners\EnvoyerNotificationAdmin::class,
             ],
+    
         ];
 
 

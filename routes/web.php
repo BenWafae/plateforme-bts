@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReportAdminController;
 use App\Http\Controllers\AdminforumController;
 use App\Http\Controllers\AdminSupportController;
 use App\Http\Controllers\EtudiantController;
@@ -16,7 +17,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\TableauDeBordController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReportsController;
 use Illuminate\Support\Facades\Route;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +52,7 @@ Route::middleware('auth')->group(function () {
 // Routes pour l'étudiant
 Route::middleware(['auth', 'etudiant.auth'])->get('/etudiant/dashboard', [EtudiantController::class, 'dashboard'])->name('etudiant.dashboard');
    Route::prefix('etudiant')->group(function(){
+    Route::middleware(['auth'])->post('/reports', [\App\Http\Controllers\ReportsController::class, 'store'])->name('reports.store');
     // route etudiant supprot:
     Route::get('/supports/{id}/ouvrir', [SupportController::class, 'showPdf'])->name('etudiant.supports.showPdf');
     Route::get('/supports/{id}/download', [SupportController::class, 'download'])->name('etudiant.supports.download');
@@ -65,34 +70,49 @@ Route::post('/notifications/lire/{id}', [NotificationController::class, 'marquer
 Route::post('/notifications/lire-toutes', [NotificationController::class, 'marquerToutesCommeLues'])->name('notifications.lire.toutes');
 Route::get('/etudiant/home', [EtudiantHomeController::class, 'index'])->name('etudiant.home');
 Route::get('/notifications/count', [NotificationController::class, 'count'])->name('notifications.count');
+
    });
 // Routes pour l'administrateur
 Route::middleware(['auth', 'admin.auth'])->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
 // Routes pour l'ajout des filières par l'admin
 Route::prefix('admin')->group(function () {
+    // Afficher les signalements
+    Route::get('/reports', [ReportAdminController::class, 'index'])->name('reports.index');
+    
+    // Marquer un signalement comme résolu
+    Route::put('/reports/{id}/resolve', [ReportAdminController::class, 'resolve'])->name('reports.resolve');
+    
+    // Supprimer un signalement
+    Route::delete('/reports/{id}', [ReportAdminController::class, 'destroy'])->name('reports.destroy');
+    Route::put('/reports/{id}/reject', [ReportAdminController::class, 'reject'])->name('reports.reject');
+    Route::get('/reports/{id}/view-content', [ReportAdminController::class, 'viewContent'])->name('reports.viewContent');
+    Route::get('/reports/{id}/contact-author', [ReportAdminController::class, 'contactAuthor'])->name('reports.contactAuthor');
+    // Routes pour la gestion des filières
     Route::get('/filieres', [FiliereController::class, 'index'])->name('filiere.index');
     Route::get('/filiere/create', [FiliereController::class, 'create'])->name('filiere.form');
     Route::post('/filiere', [FiliereController::class, 'store'])->name('filiere.store');
     Route::get('/filiere/{filiere}/edit', [FiliereController::class, 'edit'])->name('filiere.edit');
     Route::put('/filiere/{filiere}', [FiliereController::class, 'update'])->name('filiere.update');
     Route::delete('/filiere/{filiere}', [FiliereController::class, 'destroy'])->name('filiere.destroy');
-    
-    // Gestion des matières
+
+    // Routes pour la gestion des matières
     Route::get('/matieres', [MatiereController::class, 'index'])->name('matiere.index');
     Route::get('/matiere/create', [MatiereController::class, 'create'])->name('matiere.form');
     Route::post('/matiere', [MatiereController::class, 'store'])->name('matiere.store');
     Route::get('/matiere/{matiere}/edit', [MatiereController::class, 'edit'])->name('matiere.edit');
     Route::put('/matiere/{matiere}', [MatiereController::class, 'update'])->name('matiere.update');
     Route::delete('/matiere/{matiere}', [MatiereController::class, 'destroy'])->name('matiere.destroy');
-    
-    // Gestion des utilisateurs
+
+    // Routes pour la gestion des utilisateurs
     Route::get('/users', [UserController::class, 'index'])->name('user.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('user.form');
     Route::post('/user', [UserController::class, 'store'])->name('user.store');
     Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
     Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+     
+
 });
 
 // Routes pour les supports éducatifs par l'administrateur
