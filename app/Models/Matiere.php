@@ -35,4 +35,6 @@ class Matiere extends Model
     {
         return $this->hasMany(Question::class, 'id_Matiere');
     }
+
+
 }

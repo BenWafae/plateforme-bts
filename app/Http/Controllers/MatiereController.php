@@ -80,6 +80,7 @@ class MatiereController extends Controller
         'Nom' => 'required|string|max:255|min:5',
         'description' => 'nullable|string',
         'id_filiere' => 'required|exists:filieres,id_filiere', 
+        
         // on va verifier si lid existe dejaaa dans table fileire;
     ]);
 // la creation de la matiere dans la base de donneee;
