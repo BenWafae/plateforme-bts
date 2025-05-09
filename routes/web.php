@@ -123,6 +123,8 @@ Route::get('/support/{id}/edit', [AdminSupportController::class, 'edit'])->name(
 Route::put('/support/{id}', [AdminSupportController::class, 'update'])->name('admin.support.update');
 Route::delete('/support/{id}', [AdminSupportController::class, 'destroy'])->name('admin.support.destroy');
 Route::get('/support/{id}/show', [AdminSupportController::class, 'showPdf'])->name('admin.support.showPdf');
+
+
 // routes forumeAdmin;
 Route::get('/admin/questions', [AdminforumController::class, 'index'])->name('admin.questions.index');
 Route::get('/admin/questions/{id}', [AdminforumController::class, 'show'])->name('admin.questions.show');

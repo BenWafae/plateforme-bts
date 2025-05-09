@@ -56,16 +56,6 @@ class TableauDeBordController extends Controller
           ->get();
 
 
-    $userRoles = [
-
-        'Étudiants' => $studentsCount,
-
-        'Professeurs' => $professorsCount,
-
-        'Administrateurs' => $adminsCount,
-
-    ];
-
 
 
     // Nouveauté : Répartition des supports par matière
@@ -95,8 +85,6 @@ class TableauDeBordController extends Controller
         'adminsCount',
 
         'supportsCount',
-
-        'userRoles',
 
         'supportsParMatiere',
 

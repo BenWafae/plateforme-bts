@@ -48,6 +48,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+   
     // Relation entre User et Question (Un utilisateur peut poser plusieurs questions)
     public function questions()
     {
