@@ -12,6 +12,7 @@ use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ForumEtudiantsController as ControllersForumEtudiantsController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\NotifyProfesseurController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupportController;
@@ -155,6 +156,11 @@ Route::put('/professeur/reponse/{id}', [ForumController::class, 'updateReponse']
 Route::delete('/professeur/reponse/{id}', [ForumController::class, 'destroyReponse'])->name('professeur.reponse.destroy');
 // Route pour afficher le formulaire d'édition de la réponse
 Route::get('/professeur/reponse/{id}/edit', [ForumController::class, 'editReponse'])->name('professeur.reponse.edit');
+//  route pour notification de professeur
+
+Route::get('/notifications', [NotifyProfesseurController::class, 'notifications'])->name('professeur.notifications');
+Route::post('/notifications/{id}/read', [NotifyProfesseurController::class, 'markAsRead'])->name('notifications.markAsRead');
+
 
 
 

@@ -90,6 +90,7 @@
     </div>
 </div>
 
+
 <script>
     function toggleInputFields() {
         let format = document.getElementById("format").value;
@@ -107,6 +108,7 @@
             videoLinkDiv.style.display = "none";
         }
     }
+   // partie professeur 
 
     function filterProfesseurs() {
         let selectedMatiereId = document.getElementById("id_Matiere").value;
@@ -116,7 +118,7 @@
         professeurSelect.innerHTML = '';
 
         if (selectedMatiereId === "") {
-            // Aucune matière sélectionnée → afficher tous les professeurs avec le placeholder
+            //Aucune matière sélectionnée → afficher tous les professeurs avec le placeholder
             let placeholder = document.createElement("option");
             placeholder.disabled = true;
             placeholder.selected = true;

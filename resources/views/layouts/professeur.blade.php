@@ -68,7 +68,25 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('professeur.questions.index') }}"><i class="fas fa-comments"></i> Forum</a>
                 </li>
+
+                {{-- notification --}}
+<<li class="nav-item">
+    <a class="nav-link" href="{{ route('professeur.notifications') }}">
+        <i class="fas fa-bell"></i>
+        @isset($unreadNotificationsCount)
+            @if($unreadNotificationsCount > 0)
+                <span class="badge bg-danger">{{ $unreadNotificationsCount }}</span>
+            @endif
+        @endisset
+    </a>
+</li>
+
+
+
+
             </ul>
+      
+
 
             <!-- Avatar + Dropdown Profil (tout à droite) -->
             <ul class="navbar-nav ms-auto">
