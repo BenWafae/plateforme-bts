@@ -16,6 +16,7 @@ class Matiere extends Model
         'Nom',
         'description',
         'id_filiere',
+        'id_user',
     ];
 
     // Relation avec Filiere : Une matière appartient à une seule filière
@@ -35,6 +36,11 @@ class Matiere extends Model
     {
         return $this->hasMany(Question::class, 'id_Matiere');
     }
+    // relation prof matiere
+    public function professeur()
+{
+    return $this->belongsTo(User::class, 'id_user', 'id_user');
+}
 
 
 }

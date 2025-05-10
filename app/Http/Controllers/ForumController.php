@@ -27,6 +27,7 @@ class ForumController extends Controller
         'id_question' => $question->id_question,
         'contenu' => $request->input('reponse'),
         'id_user' => auth()->user()->id_user,
+        
     ]);
 
     // Déclencher l'événement ReponseAjoutee avec la réponse correcte

@@ -20,7 +20,7 @@
         <div class="card-body">
             <form action="{{ route('admin.support.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                
+
                 <div class="mb-3">
                     <label for="titre" class="form-label">Titre :</label>
                     <input type="text" name="titre" class="form-control" required>
@@ -47,7 +47,6 @@
                     <input type="file" name="lien_url" class="form-control" accept=".pdf,.docx,.pptx,.jpg,.png" required>
                 </div>
 
-                {{-- Champ pour ajouter un lien vidéo --}}
                 <div class="mb-3" id="videoLinkDiv" style="display: none;">
                     <label for="video_url" class="form-label">Lien Vidéo :</label>
                     <input type="url" name="video_url" class="form-control" placeholder="Ex: https://www.youtube.com/watch?v=xyz">
@@ -55,12 +54,20 @@
 
                 <div class="form-group">
                     <label for="id_Matiere">Matière</label>
-                    <select class="form-control" id="id_Matiere" name="id_Matiere" required>
+                    <select class="form-control" id="id_Matiere" name="id_Matiere" required onchange="filterProfesseurs()">
                         <option value="">Sélectionner une matière</option>
                         @foreach($matieres as $matiere)
-                            <option value="{{ $matiere->id_Matiere }}" {{ old('id_Matiere') == $matiere->id_Matiere ? 'selected' : '' }}>
-                                {{ $matiere->Nom }}
-                            </option>
+                            <option value="{{ $matiere->id_Matiere }}">{{ $matiere->Nom }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3 mt-3">
+                    <label for="id_user" class="form-label">Professeur :</label>
+                    <select name="id_user" class="form-select" id="id_user" required>
+                        <option value="" disabled selected>Choisir un professeur</option>
+                        @foreach($professeurs as $prof)
+                            <option value="{{ $prof->id_user }}">{{ $prof->nom }} {{ $prof->prenom }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -75,16 +82,6 @@
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    <label for="id_user" class="form-label">Professeur :</label>
-                    <select name="id_user" class="form-select" required>
-                        <option value="" disabled selected>Choisir un professeur</option>
-                        @foreach($professeurs as $professeur)
-                            <option value="{{ $professeur->id_user }}">{{ $professeur->nom }} {{ $professeur->prenom }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary w-100">Ajouter</button>
                 </div>
@@ -93,26 +90,62 @@
     </div>
 </div>
 
-{{-- Script pour afficher ou masquer dynamiquement les champs --}}
 <script>
     function toggleInputFields() {
         let format = document.getElementById("format").value;
         let fileUploadDiv = document.getElementById("fileUploadDiv");
-        let fileInput = fileUploadDiv.querySelector('input[type=\"file\"]');
+        let fileInput = fileUploadDiv.querySelector('input[type="file"]');
         let videoLinkDiv = document.getElementById("videoLinkDiv");
 
         if (format === "lien_video") {
-            fileUploadDiv.style.display = "none";  // Cacher le champ d'upload de fichier
-            fileInput.disabled = true;              // Désactiver le champ de fichier pour éviter la validation 'required'
-            videoLinkDiv.style.display = "block";    // Afficher le champ lien vidéo
+            fileUploadDiv.style.display = "none";
+            fileInput.disabled = true;
+            videoLinkDiv.style.display = "block";
         } else {
-            fileUploadDiv.style.display = "block";   // Afficher le champ d'upload de fichier
-            fileInput.disabled = false;              // Réactiver le champ de fichier
-            videoLinkDiv.style.display = "none";       // Masquer le champ lien vidéo
+            fileUploadDiv.style.display = "block";
+            fileInput.disabled = false;
+            videoLinkDiv.style.display = "none";
+        }
+    }
+
+    function filterProfesseurs() {
+        let selectedMatiereId = document.getElementById("id_Matiere").value;
+        let professeurSelect = document.getElementById("id_user");
+        let professeurs = @json($professeurs);
+
+        professeurSelect.innerHTML = '';
+
+        if (selectedMatiereId === "") {
+            // Aucune matière sélectionnée → afficher tous les professeurs avec le placeholder
+            let placeholder = document.createElement("option");
+            placeholder.disabled = true;
+            placeholder.selected = true;
+            placeholder.textContent = "Choisir un professeur";
+            professeurSelect.appendChild(placeholder);
+
+            professeurs.forEach(professeur => {
+                let option = document.createElement("option");
+                option.value = professeur.id_user;
+                option.textContent = professeur.nom + ' ' + professeur.prenom;
+                professeurSelect.appendChild(option);
+            });
+        } else {
+            // Afficher seulement le(s) prof(s) associé(s)
+            let filtered = professeurs.filter(prof => {
+                return prof.matieres.some(m => m.id_Matiere == selectedMatiereId);
+            });
+
+            filtered.forEach(professeur => {
+                let option = document.createElement("option");
+                option.value = professeur.id_user;
+                option.textContent = professeur.nom + ' ' + professeur.prenom;
+                professeurSelect.appendChild(option);
+            });
         }
     }
 </script>
 @endsection
+
 
 
 

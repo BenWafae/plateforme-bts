@@ -89,6 +89,21 @@
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
+        {{-- prof --}}
+        <div class="mb-3">
+    <label for="id_user" class="form-label">Professeur</label>
+    <select id="id_user" name="id_user" class="form-select" required>
+        <option value="" disabled selected>Sélectionnez un professeur</option>
+        @foreach($professeurs as $prof)
+        <option value="{{ $prof->id_user }}" {{ old('id_user') == $prof->id_user ? 'selected' : '' }}>
+    {{ $prof->nom }} {{ $prof->prenom }}
+</option>
+ @endforeach
+    </select>
+    @error('id_user')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+</div>
 
         <button type="submit" class="btn btn-primary w-100 mt-4">Ajouter la matière</button>
     </form>
