@@ -53,7 +53,7 @@
                         </td>
                         <td>
                             <!-- Voir le contenu signalé -->
-                            <a href="{{ route('reports.viewContent', $report->id) }}" class="btn btn-outline-primary btn-sm" title="Voir le contenu">
+                            <a href="{{ route('reports.view_Content', $report->id) }}" class="btn btn-outline-primary btn-sm" title="Voir le contenu">
                                 <i class="fas fa-eye"></i> Voir
                             </a>
 

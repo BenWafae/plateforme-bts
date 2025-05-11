@@ -33,7 +33,7 @@ class ReportAdminController extends Controller
         $report = Report::findOrFail($id);
         
         // Suppression du contenu associé selon le type de contenu signalé
-        if ($report->content_type == 'question') {
+        if ($report->content_type == 'Question') {
             $content = Question::findOrFail($report->content_id);
             $content->delete();
         } elseif ($report->content_type == 'answer') {
@@ -67,7 +67,7 @@ class ReportAdminController extends Controller
         $content = null;
 
         // Rediriger l'admin vers le contenu concerné selon le type de contenu
-        if ($report->content_type == 'question') {
+        if ($report->content_type == 'Question') {
             $content = Question::findOrFail($report->content_id);
             return view('admin.questions.show', compact('content'));  // Page de la question
         } elseif ($report->content_type == 'answer') {
@@ -78,37 +78,8 @@ class ReportAdminController extends Controller
             return view('admin.supports.show', compact('content'));  // Page du support
         }
 
-        return redirect()->route('reports.index')->with('error', 'Contenu non trouvé.');
+        return redirect()->route('reports.view_Content');
     }
 
-    // Contacter l'auteur du contenu signalé
-    public function contactAuthor($id)
-    {
-        $report = Report::findOrFail($id);
-        $content = null;
-
-        // Récupérer l'auteur en fonction du type de contenu
-        $author = null;
-        if ($report->content_type == 'question') {
-            $content = Question::findOrFail($report->content_id);
-            $author = $content->user;
-        } elseif ($report->content_type == 'answer') {
-            $content = Answer::findOrFail($report->content_id);
-            $author = $content->user;
-        } elseif ($report->content_type == 'support') {
-            $content = Support::findOrFail($report->content_id);
-            $author = $content->user;
-        }
-
-        // Vérifier si l'auteur est trouvé
-        if ($author) {
-            // Ici, tu peux envoyer un email ou rediriger vers une page de contact
-            // Exemple : envoi d'un email à l'auteur
-            // Mail::to($author->email)->send(new ReportRejected($report));  // Exemple d'envoi d'email
-
-            return view('reports.contactAuthor', compact('report', 'author'));
-        }
-
-        return redirect()->route('reports.contactAuthor')->with('error', 'Auteur non trouvé.');
-    }
+  
 }

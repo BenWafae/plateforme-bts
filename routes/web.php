@@ -10,6 +10,7 @@ use App\Http\Controllers\EtudiantHomeController;
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ForumEtudiantsController as ControllersForumEtudiantsController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfesseurController;
@@ -53,6 +54,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'etudiant.auth'])->get('/etudiant/dashboard', [EtudiantController::class, 'dashboard'])->name('etudiant.dashboard');
    Route::prefix('etudiant')->group(function(){
     Route::middleware(['auth'])->post('/reports', [\App\Http\Controllers\ReportsController::class, 'store'])->name('reports.store');
+    Route::get('/search', [SearchController::class, 'index'])->name('search');
     // route etudiant supprot:
     Route::get('/supports/{id}/ouvrir', [SupportController::class, 'showPdf'])->name('etudiant.supports.showPdf');
     Route::get('/supports/{id}/download', [SupportController::class, 'download'])->name('etudiant.supports.download');
@@ -86,7 +88,7 @@ Route::prefix('admin')->group(function () {
     // Supprimer un signalement
     Route::delete('/reports/{id}', [ReportAdminController::class, 'destroy'])->name('reports.destroy');
     Route::put('/reports/{id}/reject', [ReportAdminController::class, 'reject'])->name('reports.reject');
-    Route::get('/reports/{id}/view-content', [ReportAdminController::class, 'viewContent'])->name('reports.viewContent');
+    Route::get('/reports/{id}/view-content', [ReportAdminController::class, 'viewContent'])->name('reports.view_Content');
     Route::get('/reports/{id}/contact-author', [ReportAdminController::class, 'contactAuthor'])->name('reports.contactAuthor');
     // Routes pour la gestion des filières
     Route::get('/filieres', [FiliereController::class, 'index'])->name('filiere.index');
