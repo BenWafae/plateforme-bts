@@ -76,6 +76,9 @@ class ForumEtudiantsController extends Controller
             'id_Matiere' => $request->id_Matiere,
         ]);
 
+         // Déclencher l'événement QuestionCreee
+                event(new \App\Events\QuestionCreee($question));
+
         // Rediriger l'utilisateur vers le forum avec un message de succès
         return redirect()->route('forumetudiants.index')->with('success', 'Votre question a été envoyée.');
     }

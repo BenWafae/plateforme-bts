@@ -30,7 +30,18 @@
                     @endforeach
                 </select>
             </div>
-
+             <!-- Ajouter un champ pour sélectionner le professeur -->
+            <div class="form-group">
+                <label for="id_user">Professeur Associé</label>
+                <select class="form-control" id="id_user" name="id_user" required>
+                    <option value="" disabled selected>Sélectionnez un professeur</option>
+                    @foreach($professeurs as $prof)
+                        <option value="{{ $prof->id }}" {{ $matiere->id_user == $prof->id ? 'selected' : '' }}>
+                            {{ $prof->nom }} {{ $prof->prenom }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary">Mettre à Jour</button>
         </form>
     </div>

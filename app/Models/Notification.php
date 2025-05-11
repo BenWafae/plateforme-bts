@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
     use HasFactory;
-
+    protected $primaryKey = 'id_notification'; // très important
+    public $incrementing = true;
+    public $timestamps = true;
     // Indiquer les champs qui sont massivement assignables
     protected $fillable = [
         'type',

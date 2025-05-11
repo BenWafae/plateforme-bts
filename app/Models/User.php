@@ -76,4 +76,11 @@ class User extends Authenticatable
 {
     return $this->hasMany(Notification::class, 'id_user', 'id_user')->where('lue', false);
 }
+
+// relation matiere prof
+ public function matieres()
+{
+    return $this->hasMany(Matiere::class, 'id_user', 'id_user');
+}
+
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Filiere;
 use App\Models\Matiere;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MatiereController extends Controller
@@ -62,9 +63,11 @@ class MatiereController extends Controller
     {
         // Récupérer les filières existantes
         $filieres = Filiere::all();
+        // Associer un professeur (id_user) à cette matière, pour dire que c’est lui qui va l’enseigner.
+         $professeurs = User::where('role', 'professeur')->get(); 
         
         // Passer les filières à la vue
-        return view('form_matiere', compact('filieres'));
+        return view('form_matiere', compact('filieres','professeurs'));
     }
     
     /**
@@ -80,6 +83,8 @@ class MatiereController extends Controller
         'Nom' => 'required|string|max:255|min:5',
         'description' => 'nullable|string',
         'id_filiere' => 'required|exists:filieres,id_filiere', 
+        'id_user' => 'required|exists:users,id',
+        
         // on va verifier si lid existe dejaaa dans table fileire;
     ]);
 // la creation de la matiere dans la base de donneee;
@@ -87,6 +92,7 @@ class MatiereController extends Controller
         'Nom' => $validated['Nom'],
         'description' => $validated['description'],
         'id_filiere' => $validated['id_filiere'],
+        'id_user' => $validated['id_user'], 
     ]);
 
     // Rediriger vers la page des filières avec un message de succès
@@ -115,9 +121,9 @@ class MatiereController extends Controller
     {
        
         $filieres = Filiere::all();
+          $professeurs = User::where('role', 'professeur')->get();
         
-        
-        return view('matiere_edit', compact('matiere', 'filieres'));
+        return view('matiere_edit', compact('matiere', 'filieres' , 'professeurs'));
         // passeee la matiere aa modiifier et ls fiilieres a la vue
     }
     
@@ -136,6 +142,7 @@ class MatiereController extends Controller
             'Nom' => 'required|string|max:255|min:5',
             'description' => 'nullable|string',
             'id_filiere' => 'required|exists:filieres,id_filiere',
+            'id_user' => 'required|exists:users,id',
         ]);
     
         // Mettre à jour les données de la matière
@@ -143,6 +150,7 @@ class MatiereController extends Controller
             'Nom' => $validated['Nom'],
             'description' => $validated['description'],
             'id_filiere' => $validated['id_filiere'],
+            'id_user' => $validated['id_user'],
         ]);
     
         // Rediriger vers la liste des matières avec un message de succès

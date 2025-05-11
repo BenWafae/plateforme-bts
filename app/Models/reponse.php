@@ -14,7 +14,8 @@ class Reponse extends Model
         'contenu',     // Contenu de la réponse
         'date_pub',    // Date de publication
         'id_question', // Clé étrangère vers la table 'questions'
-        'id_user'      // Clé étrangère vers la table 'users'
+        'id_user' ,     // Clé étrangère vers la table 'users'
+        'id_reponse_parent',
     ];
 
     // Relation avec la table 'users'
@@ -34,4 +35,5 @@ class Reponse extends Model
     {
         return $this->hasMany(Notification::class, 'notifiable');
     }
+    
 }

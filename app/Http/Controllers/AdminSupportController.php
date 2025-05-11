@@ -64,15 +64,15 @@ class AdminSupportController extends Controller
     
     
     
-    public function create()
-    {
-        $matieres = Matiere::all();
-        $types = Type::all();
-        $professeurs = User::where('role', 'professeur')->get();
+   public function create()
+{
+    $matieres = Matiere::all(); // Toutes les matières
+    $types = Type::all(); // Tous les types de support
+     $professeurs = User::with('matieres')->where('role', 'professeur')->get();
 
-        return view('create_support_admin', compact('matieres', 'types', 'professeurs'));
-    }
 
+    return view('create_support_admin', compact('matieres', 'types', 'professeurs'));
+}
     public function store(Request $request)
     {
         $validated = $request->validate([
