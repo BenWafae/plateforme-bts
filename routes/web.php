@@ -160,6 +160,9 @@ Route::get('/professeur/reponse/{id}/edit', [ForumController::class, 'editRepons
 
 Route::get('/notifications', [NotifyProfesseurController::class, 'notifications'])->name('professeur.notifications');
 Route::post('/notifications/{id}/read', [NotifyProfesseurController::class, 'markAsRead'])->name('notifications.markAsRead');
+// route dedie a la questiion de notification de pprof
+Route::get('/professeur/questions/{id}', [ForumController::class, 'show'])->name('professeur.questions.show');
+
 
 
 

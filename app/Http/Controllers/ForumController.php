@@ -77,6 +77,13 @@ class ForumController extends Controller
 
         return redirect()->route('professeur.questions.index')->with('success', 'Réponse supprimée avec succès.');
     }
+    // methode showw
+    public function show($id)
+{
+    $question = Question::with('reponses.user', 'matiere', 'user')->findOrFail($id);
+    return view('prof_forum_question_detail', compact('question'));
+}
+
 }
 
 

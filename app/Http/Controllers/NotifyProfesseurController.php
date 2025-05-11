@@ -37,7 +37,7 @@ class NotifyProfesseurController extends Controller
         $notification->lue = true;
         $notification->save();
 
-        return redirect()->route('professeur.notifications');
+           return redirect()->route('professeur.questions.show', ['id' => $notification->id_question]);
     }
 
 }
