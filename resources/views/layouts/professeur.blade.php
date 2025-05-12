@@ -41,6 +41,8 @@
             }
         }
     </style>
+     {{-- Permet à chaque vue d'ajouter son propre contenu dans le <head> --}}
+    @yield('head')
 </head>
 <body>
 
