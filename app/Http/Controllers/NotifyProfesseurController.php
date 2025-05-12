@@ -19,23 +19,25 @@ class NotifyProfesseurController extends Controller
 
         $notifications = Notification::where('id_user', $professeurId)
             ->latest('date_notification')
+            // latest utiliser pour trier les notification par date de plus recent 
             ->get();
 
-        // ❗ Compteur mis à jour correctement avec condition lue = false
+        //  Ccompter les notifications non luee
         $unreadNotificationsCount = Notification::where('id_user', $professeurId)
             ->where('lue', false)
             ->count();
-
+        //   unreadnotiifiication a pour but de trnsfer le nbr de notification non lue
         return view('professeur_notifications', compact('notifications', 'unreadNotificationsCount'));
     }
 
     public function markAsRead($id)
     {
-        //  findOrFail utilisera maintenant id_notification comme clé primaire
+        //  findOrFail utiliser pour trouvee une notiifiication par id s elle existe il est recuperer sinon envoie un erreur
         $notification = Notification::findOrFail($id);
-
+            //  on miiis  a jouur le champs lus de faalse a trueee 
         $notification->lue = true;
         $notification->save();
+        // la modification est enregistrerr dans la base de donneee
 
            return redirect()->route('professeur.questions.show', ['id' => $notification->id_question]);
     }
