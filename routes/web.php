@@ -73,6 +73,11 @@ Route::post('/notifications/lire/{id}', [NotificationController::class, 'marquer
 Route::post('/notifications/lire-toutes', [NotificationController::class, 'marquerToutesCommeLues'])->name('notifications.lire.toutes');
 Route::get('/etudiant/home', [EtudiantHomeController::class, 'index'])->name('etudiant.home');
 Route::get('/notifications/count', [NotificationController::class, 'count'])->name('notifications.count');
+Route::get('/notification/{id}', [NotificationController::class, 'detail'])->name('notifications.detail');
+Route::post('/notifications/store/{reponseId}', [NotificationController::class, 'storeNotificationForReponse'])->name('notifications.storeForReponse');
+
+
+
 
    });
 // Routes pour l'administrateur

@@ -84,49 +84,6 @@ class ForumEtudiantsController extends Controller
     }
 
     /**
-     * Modifier une question
-     */
-    public function edit($id_question)
-    {
-        $question = Question::where('id', $id_question)->first();
-        if (!$question) {
-            return redirect()->route('forumetudiants.index')->with('error', 'Question non trouvée.');
-        }
-        if ($question->id_user != Auth::id()) {
-            return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas modifier cette question.');
-        }
-        $matieres = Matiere::all();
-        return view('editquestion', compact('question', 'matieres'));
-    }
-
-    /**
-     * Mettre à jour une question
-     */
-    public function update(Request $request, $id_question)
-    {
-        $request->validate([
-            'titre' => 'required|string|max:255',
-            'contenue' => 'required|string',
-        ]);
-
-        $question = Question::where('id', $id_question)->first();
-        if (!$question) {
-            return redirect()->route('forumetudiants.index')->with('error', 'Question non trouvée.');
-        }
-        if ($question->id_user != Auth::id()) {
-            return redirect()->route('forumetudiants.index')->with('error', 'Vous ne pouvez pas modifier cette question.');
-        }
-
-        // Mise à jour de la question
-        $question->update([
-            'titre' => $request->titre,
-            'contenue' => $request->contenue,
-        ]);
-
-        return redirect()->route('forumetudiants.index')->with('success', 'Votre question a été mise à jour.');
-    }
-
-    /**
      * Supprimer une question
      */
     public function destroyQuestion($id_question)

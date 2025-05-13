@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Providers;
 
 use Illuminate\Auth\Events\Registered;
@@ -16,6 +15,9 @@ use App\Events\ReponseAjoutee;
 use App\Events\QuestionSupprimee;
 use App\Listeners\NotifierReponseAjoutee;
 use App\Listeners\NotifierQuestionSupprimee;
+
+use App\Events\ReponseCreated;  // Ajouter l'événement
+use App\Listeners\UpdateNotificationWithReponse;  // Ajouter le listener
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -40,16 +42,21 @@ class EventServiceProvider extends ServiceProvider
         ReponseAjoutee::class => [
             NotifierReponseAjoutee::class,
         ],
-            \App\Events\NouvelUtilisateurCree::class => [
-                \App\Listeners\EnvoyerNotificationAdmin::class,
-            ],
-            // listner et event:notification prof:
-                  \App\Events\QuestionCreee::class => [
-                  \App\Listeners\NotifierProfesseur::class,
-    ],
-    
-        ];
+        // Ajouter l'événement et le listener pour la réponse
+        ReponseAjoutee::class => [
+            UpdateNotificationWithReponse::class,
+        ],
+       
+        // Listener et event : notification professeur
+        \App\Events\QuestionCreee::class => [
+            \App\Listeners\NotifierProfesseur::class,
+        ],
 
+        // Ajouter l'événement et le listener pour la réponse
+        ReponseCreated::class => [
+            UpdateNotificationWithReponse::class,
+        ],
+    ];
 
     public function boot(): void
     {

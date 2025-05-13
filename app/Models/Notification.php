@@ -11,6 +11,7 @@ class Notification extends Model
     protected $primaryKey = 'id_notification'; // très important
     public $incrementing = true;
     public $timestamps = true;
+
     // Indiquer les champs qui sont massivement assignables
     protected $fillable = [
         'type',
@@ -19,7 +20,7 @@ class Notification extends Model
         'date_notification',
         'id_user',
         'id_question',
-        'id',
+        'id_reponse', // Assurez-vous que le champ id_reponse est dans $fillable
     ];
 
     // Relation avec l'utilisateur (celui qui reçoit la notification)
@@ -37,6 +38,6 @@ class Notification extends Model
     // Relation avec la réponse (si la notification est liée à une réponse)
     public function reponse()
     {
-        return $this->belongsTo(Reponse::class, 'id');
+        return $this->belongsTo(Reponse::class, 'id_reponse');
     }
 }

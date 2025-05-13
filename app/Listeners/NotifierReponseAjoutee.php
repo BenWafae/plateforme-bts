@@ -28,7 +28,7 @@ class NotifierReponseAjoutee
             'lue' => false,
             'id_user' => $question->id_user,
             'id_question' => $question->id_question,
-            'id_reponse' => $reponse->id_reponse,
+            'id_reponse' => $reponse->id,
         ]);
     }
 }
