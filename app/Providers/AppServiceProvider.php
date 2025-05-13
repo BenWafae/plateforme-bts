@@ -24,16 +24,17 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
-        View::composer('layouts.professeur', function ($view) {
-    if (Auth::check() && Auth::user()->role === 'professeur') {
-        $unreadCount = Notification::where('id_user', Auth::user()->id_user)
-            ->where('lue', false)
-            ->count();
+   public function boot()
+     {
+          View::composer('layouts.professeur', function ($view) {
+     if (Auth::check() && Auth::user()->role === 'professeur') {
+       $unreadCount = Notification::where('id_user', Auth::user()->id_user)
+             ->where('lue', false)
+             ->count();
 
-        $view->with('unreadNotificationsCount', $unreadCount);
-    }
-});
-    }
+         $view->with('unreadNotificationsCount', $unreadCount);
+     }
+  });
+    
+}
 }

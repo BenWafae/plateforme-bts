@@ -41,6 +41,8 @@
             }
         }
     </style>
+     {{-- Permet à chaque vue d'ajouter son propre contenu dans le <head> --}}
+    @yield('head')
 </head>
 <body>
 
@@ -70,7 +72,7 @@
                 </li>
 
                 {{-- notification --}}
-<<li class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="{{ route('professeur.notifications') }}">
         <i class="fas fa-bell"></i>
         @isset($unreadNotificationsCount)

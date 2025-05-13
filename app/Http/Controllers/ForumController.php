@@ -10,7 +10,9 @@ class ForumController extends Controller
 {
     public function index()
     {
-        $questions = Question::with('reponses', 'matiere')->get();
+       $questions = Question::with('reponses', 'matiere', 'user')
+                     ->orderBy('created_at', 'desc') // du plus récent au plus ancien
+                     ->get();
         return view('forum_prof', compact('questions'));
     }
 
