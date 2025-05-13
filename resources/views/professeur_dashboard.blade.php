@@ -84,5 +84,40 @@
             @endforeach
         </ul>
     @endif
+
 </div>
+
+
+
+
+
+{{-- Dernières questions posées --}}
+<div class="mt-10 max-w-5xl mx-auto bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+    <h2 class="text-2xl font-semibold text-indigo-900 mb-4">Dernières questions posées dans vos matières</h2>
+
+    @if ($dernieresQuestions->isEmpty())
+        <p class="text-gray-500">Aucune question posée récemment.</p>
+    @else
+        <ul class="divide-y divide-gray-200">
+            @foreach ($dernieresQuestions as $question)
+                <li class="py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-indigo-800">{{ $question->titre }}</h3>
+                        <p class="text-sm text-gray-600">
+                            Publiée le {{ \Carbon\Carbon::parse($question->date_pub)->format('d/m/Y à H:i') }} |
+                            Par : {{ $question->user->prenom ?? 'Utilisateur' }} {{ $question->user->nom ?? '' }} |
+                            Matière : {{ $question->matiere->Nom ?? 'Non spécifiée' }}
+                        </p>
+                    </div>
+                    <div class="mt-2 sm:mt-0">
+                        <a href="{{ route('professeur.questions.show', ['id' => $question->id_question]) }}" class="text-blue-600" title="Voir la question">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </li>
+            @endforeach
+        </ul>
+    @endif
+</div>
+
 @endsection

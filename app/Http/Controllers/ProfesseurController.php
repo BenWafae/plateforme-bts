@@ -37,8 +37,16 @@ class ProfesseurController extends Controller
 
          $derniersSupports->load('matiere');
 
+
+         // Récupérer les 5 dernières questions posées dans les matières du prof
+       $dernieresQuestions = Question::with(['user', 'matiere'])
+       ->whereIn('id_Matiere', $matieresProf->pluck('id_Matiere'))
+       ->orderBy('date_pub', 'desc')
+        ->take(5)
+        ->get();
+
          
-        return view('professeur_dashboard', compact('nombreSupports', 'nombreQuestionsDansMatieres' ,'derniersSupports'));
+        return view('professeur_dashboard', compact('nombreSupports', 'nombreQuestionsDansMatieres' ,'derniersSupports' ,  'dernieresQuestions'));
     } else {
         return redirect()->route('login');
     }
