@@ -30,22 +30,14 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        SupportConsulted::class => [
-            SupportConsultedListener::class,
-        ],
-        SupportDownloaded::class => [
-            SupportDownloadedListener::class,
-        ],
+       
         QuestionSupprimee::class => [
             NotifierQuestionSupprimee::class,
         ],
         ReponseAjoutee::class => [
             NotifierReponseAjoutee::class,
         ],
-        // Ajouter l'événement et le listener pour la réponse
-        ReponseAjoutee::class => [
-            UpdateNotificationWithReponse::class,
-        ],
+        
        
         // Listener et event : notification professeur
         \App\Events\QuestionCreee::class => [
@@ -53,9 +45,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Ajouter l'événement et le listener pour la réponse
-        ReponseCreated::class => [
-            UpdateNotificationWithReponse::class,
-        ],
+        
     ];
 
     public function boot(): void
