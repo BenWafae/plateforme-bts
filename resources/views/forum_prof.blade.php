@@ -54,4 +54,9 @@
         </div>
     </div>
     @endforeach
+
+      <!-- LIENS DE PAGINATION ICI -->
+    <div class="mt-4 d-flex justify-content-center">
+        {{ $questions->links('pagination::bootstrap-4') }}
+    </div>
 @endsection

@@ -14,7 +14,7 @@ class ForumController extends Controller
     {
        $questions = Question::with('reponses', 'matiere', 'user')
                      ->orderBy('created_at', 'desc') // du plus récent au plus ancien
-                     ->get();
+                    ->paginate(3);
         return view('forum_prof', compact('questions'));
     }
 
