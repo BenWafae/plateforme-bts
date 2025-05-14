@@ -42,7 +42,7 @@ class NotifierProfReponse
                 'date_notification' => now(),
                 'id_user' => $prof->id_user,
                 'id_question' => $question->id_question,
-                'id_reponse' => $reponse->id_reponse,
+                'id_reponse' => $reponse->id,
             ]);
     }
 }
