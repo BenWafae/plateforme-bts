@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Models\Reponse;
 use App\Events\ReponseAjoutee;
+
 use App\Events\ReponseCreee;
 use Illuminate\Http\Request;
 
