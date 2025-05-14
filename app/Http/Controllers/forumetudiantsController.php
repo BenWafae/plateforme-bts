@@ -9,6 +9,7 @@ use App\Models\Reponse;
 use App\Models\Matiere;
 use App\Events\ReponseAjoutee;
 use App\Events\QuestionSupprimee;
+use App\Events\ReponseCreee;
 
 class ForumEtudiantsController extends Controller
 {
@@ -130,7 +131,8 @@ class ForumEtudiantsController extends Controller
 
         // Déclencher l'événement ReponseAjoutee
         // Déclencher l'événement seulement si l'étudiant ne répond pas à sa propre question
-    
+        // evenement reponse creer pour les profs 
+         event(new ReponseCreee($reponse)); 
 
         event(new ReponseAjoutee($reponse));
     

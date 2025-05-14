@@ -45,6 +45,10 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Ajouter l'événement et le listener pour la réponse
+
+        \App\Events\ReponseCreee::class => [
+    \App\Listeners\NotifierProfReponse::class,
+],
         
     ];
 

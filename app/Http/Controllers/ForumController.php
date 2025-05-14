@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Models\Reponse;
 use App\Events\ReponseAjoutee;
+use App\Events\ReponseCreee;
 use Illuminate\Http\Request;
 
 class ForumController extends Controller
@@ -34,6 +35,7 @@ class ForumController extends Controller
 
     // Déclencher l'événement ReponseAjoutee avec la réponse correcte
     event(new ReponseAjoutee($reponse));
+    event(new ReponseCreee($reponse));   // Notification au professeur
 
     return redirect()->route('professeur.questions.index')->with('success', 'Réponse envoyée avec succès.');
 }
