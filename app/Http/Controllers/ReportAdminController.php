@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
-use App\Models\Question;  // Si tu veux accéder aux questions signalées
-use App\Models\Answer;    // Si tu veux accéder aux réponses signalées
-use App\Models\Support;   // Si tu veux accéder aux supports signalés
+use App\Models\Question;
+use App\Models\Support;
+use App\Models\Matiere;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 
 class ReportAdminController extends Controller
@@ -13,73 +14,110 @@ class ReportAdminController extends Controller
     // Afficher la liste des signalements
     public function index()
     {
+        // Récupérer tous les signalements
         $reports = Report::all();
         return view('reports_index', compact('reports'));
+    }
+
+    // Afficher les détails d'un signalement
+    public function show($id)
+    {
+        // Récupérer le signalement avec l'utilisateur associé
+        $report = Report::with(['user'])->findOrFail($id);
+
+        // Définir une variable pour le contenu
+        $contenu = null;
+
+        // Vérifier le type de contenu et récupérer le contenu associé
+        switch ($report->content_type) {
+            case 'Question':
+                // Récupérer la question associée
+                $contenu = Question::find($report->id_question);
+                break;
+            case 'support':
+                // Récupérer le support associé
+                $contenu = Support::find($report->id_support);
+                break;
+            case 'matiere':
+                // Récupérer la matière associée
+                $contenu = Matiere::find($report->id_Matiere);
+                break;
+            case 'notification':
+                // Récupérer la notification associée
+                $contenu = Notification::find($report->id_notification);
+                break;
+        }
+
+        // Si le contenu est null (c'est-à-dire qu'il a été supprimé), afficher un message alternatif
+        if ($contenu === null) {
+            $contenu = 'Le contenu signalé a été supprimé ou n\'existe plus.';
+        }
+
+        // Passer le signalement et le contenu à la vue
+        return view('admin_showreport', compact('report', 'contenu'));
     }
 
     // Marquer un signalement comme résolu
     public function resolve($id)
     {
+        // Récupérer le signalement
         $report = Report::findOrFail($id);
-        $report->status = 'resolved';  // Modifier le statut du signalement
+
+        // Mettre à jour le statut du signalement
+        $report->status = 'resolu';
         $report->save();
 
-        return redirect()->route('reports.index')->with('success', 'Signalement marqué comme résolu.');
-    }
-
-    // Supprimer un signalement et le contenu associé
-    public function destroy($id)
-    {
-        $report = Report::findOrFail($id);
-        
-        // Suppression du contenu associé selon le type de contenu signalé
-        if ($report->content_type == 'Question') {
-            $content = Question::findOrFail($report->content_id);
-            $content->delete();
-        } elseif ($report->content_type == 'answer') {
-            $content = Answer::findOrFail($report->content_id);
-            $content->delete();
-        } elseif ($report->content_type == 'support') {
-            $content = Support::findOrFail($report->content_id);
-            $content->delete();
-        }
-
-        // Supprimer le signalement après avoir supprimé le contenu
-        $report->delete();
-
-        return redirect()->route('reports.index')->with('success', 'Signalement et contenu supprimés.');
+        // Rediriger vers la liste des signalements avec un message de succès
+        return redirect()->route('admin.reports.index')->with('success', 'Signalement marqué comme résolu.');
     }
 
     // Rejeter un signalement
     public function reject($id)
     {
+        // Récupérer le signalement
         $report = Report::findOrFail($id);
-        $report->status = 'rejected';  // Changer le statut du signalement à rejeté
+
+        // Mettre à jour le statut du signalement
+        $report->status = 'rejete';
         $report->save();
 
-        return redirect()->route('reports.index')->with('success', 'Signalement rejeté.');
+        // Rediriger vers la liste des signalements avec un message de succès
+        return redirect()->route('admin.reports.index')->with('success', 'Signalement rejeté.');
     }
 
-    // Voir le contenu signalé
-    public function viewContent($id)
+    // Supprimer un signalement et le contenu associé
+    public function destroy($id)
     {
+        // Récupérer le signalement
         $report = Report::findOrFail($id);
-        $content = null;
 
-        // Rediriger l'admin vers le contenu concerné selon le type de contenu
-        if ($report->content_type == 'Question') {
-            $content = Question::findOrFail($report->content_id);
-            return view('admin.questions.show', compact('content'));  // Page de la question
-        } elseif ($report->content_type == 'answer') {
-            $content = Answer::findOrFail($report->content_id);
-            return view('admin.answers.show', compact('content'));  // Page de la réponse
-        } elseif ($report->content_type == 'support') {
-            $content = Support::findOrFail($report->content_id);
-            return view('admin.supports.show', compact('content'));  // Page du support
+        // Suppression du contenu associé selon le type
+        switch ($report->content_type) {
+            case 'Question':
+                $content = Question::find($report->id_question);
+                break;
+            case 'support_educatifsz':
+                $content = Support::find($report->id_support);
+                break;
+            case 'matiere':
+                $content = Matiere::find($report->id_Matiere);
+                break;
+            case 'notification':
+                $content = Notification::find($report->id_notification);
+                break;
+            default:
+                $content = null;
         }
 
-        return redirect()->route('reports.view_Content');
-    }
+        // Si le contenu existe, le supprimer
+        if ($content) {
+            $content->delete();
+        }
 
-  
+        // Supprimer le signalement
+        $report->delete();
+
+        // Rediriger vers la liste des signalements avec un message de succès
+        return redirect()->route('admin.reports.index')->with('success', 'Signalement et contenu supprimés.');
+    }
 }

@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Events\ContentReported;
+use Illuminate\Support\Facades\Auth;
 
+use App\Models\Question;
 use App\Models\Report;
 use Illuminate\Http\Request;
 
@@ -31,6 +34,12 @@ class ReportsController extends Controller
             'id_Matiere' => $request->id_Matiere,  // ID de la matière (si applicable)
             'status' => 'nouveau',  // Statut du signalement par défaut
         ]);
+              // Déclencher l'événement uniquement si c'est une question signalée
+   if ($request->id_question) {
+        $question = Question::find($request->id_question);
+        $user = Auth::user(); // ✅ ICI tu définis bien $user
+        event(new ContentReported($question, $user, $request->reason));
+ }
 
         // Retourner une réponse (par exemple, rediriger vers la page précédente avec un message de succès)
         return redirect()->back()->with('success', 'Votre signalement a été envoyé.');

@@ -14,6 +14,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotifyProfesseurController;
+use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupportController;
@@ -82,20 +83,16 @@ Route::post('/notifications/store/{reponseId}', [NotificationController::class, 
    });
 // Routes pour l'administrateur
 Route::middleware(['auth', 'admin.auth'])->get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+// Routes pour les notification d'admin
+ Route::get('/admin/notifications', [AdminNotificationController::class, 'index'])->name('admin.notifications.index');
+    Route::get('/notifications/read/{id}', [AdminNotificationController::class, 'readAndRedirect'])->name('admin.notifications.readAndRedirect');
+    Route::post('/notifications/read/{id}', [AdminNotificationController::class, 'markAsRead'])->name('admin.notifications.read');
+    Route::post('/notifications/mark-all', [AdminNotificationController::class, 'markAllAsRead'])->name('admin.notifications.markAllAsRead');
+    // Route pour afficher le comptage des notifications non lues
+     Route::get('/notifications/count', [NotificationController::class, 'count'])->name('notifications.count');
 
 // Routes pour l'ajout des filières par l'admin
 Route::prefix('admin')->group(function () {
-    // Afficher les signalements
-    Route::get('/reports', [ReportAdminController::class, 'index'])->name('reports.index');
-    
-    // Marquer un signalement comme résolu
-    Route::put('/reports/{id}/resolve', [ReportAdminController::class, 'resolve'])->name('reports.resolve');
-    
-    // Supprimer un signalement
-    Route::delete('/reports/{id}', [ReportAdminController::class, 'destroy'])->name('reports.destroy');
-    Route::put('/reports/{id}/reject', [ReportAdminController::class, 'reject'])->name('reports.reject');
-    Route::get('/reports/{id}/view-content', [ReportAdminController::class, 'viewContent'])->name('reports.view_Content');
-    Route::get('/reports/{id}/contact-author', [ReportAdminController::class, 'contactAuthor'])->name('reports.contactAuthor');
     // Routes pour la gestion des filières
     Route::get('/filieres', [FiliereController::class, 'index'])->name('filiere.index');
     Route::get('/filiere/create', [FiliereController::class, 'create'])->name('filiere.form');
@@ -138,6 +135,15 @@ Route::get('/admin/questions', [AdminforumController::class, 'index'])->name('ad
 Route::get('/admin/questions/{id}', [AdminforumController::class, 'show'])->name('admin.questions.show');
 // Cette route utilise la méthode destroy dans le contrôleur pour supprimer une question et ses réponses
 Route::delete('/admin/questions/{id}', [AdminforumController::class, 'destroy'])->name('admin.questions.destroy');
+Route::prefix('admin/reports')->name('admin.reports.')->group(function () {
+    Route::get('/', [ReportAdminController::class, 'index'])->name('index');
+    Route::get('/{id}/details', [ReportAdminController::class, 'show'])->name('show'); // <-- ceci
+    Route::put('/{id}/resolve', [ReportAdminController::class, 'resolve'])->name('resolve');
+    Route::put('/{id}/reject', [ReportAdminController::class, 'reject'])->name('reject');
+    Route::delete('/{id}', [ReportAdminController::class, 'destroy'])->name('destroy');
+});
+
+
 // route tableau de bord
 Route::middleware(['auth', 'admin.auth'])->get('/admin/tableau-de-bord', [TableauDeBordController::class, 'index'])->name('admin.tableau-de-bord');
 

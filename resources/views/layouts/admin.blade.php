@@ -142,14 +142,33 @@
             <h2>Espace Admin</h2>
             <ul>
                 <li><a href="{{ route('admin.tableau-de-bord') }}"><i class="fas fa-home"></i> Tableau de bord</a></li>
-                <li><a href="{{ route('reports.index') }}"><i class="fas fa-exclamation-triangle"></i> Signalements</a></li>
+                <li><a href="{{ route('admin.reports.index') }}"><i class="fas fa-exclamation-triangle"></i> Signalements</a></li>
                 <li><a href="{{ route('admin.supports.index') }}"><i class="fas fa-folder"></i> Supports</a></li>
                 <li><a href="{{ route('admin.questions.index') }}"><i class="fas fa-comments"></i> Forum</a></li>
                 <li><a href="{{ route('filiere.index') }}"><i class="fas fa-graduation-cap"></i> Filières</a></li>
                 <li><a href="{{ route('matiere.index') }}"><i class="fas fa-book"></i> Matières</a></li>
                 <li><a href="{{ route('user.index') }}"><i class="fas fa-users"></i> Utilisateurs</a></li>
                
-                <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+          <li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.notifications.index') }}">
+        <i class="fas fa-bell"></i>
+        @isset($unreadCount)
+            @if($unreadCount > 0)
+                <span class="badge bg-danger">{{ $unreadCount }}</span>
+            @endif
+        @endisset
+        Notifications
+    </a>
+</li>
+
+
+
+
+
+
+
+
+
                 <li><a href="{{ route('profile.edit') }}"><i class="fas fa-user-edit"></i> Gestion Profil</a></li>
                 <li>
                     <form action="{{ route('logout') }}" method="POST" style="margin: 0;">

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\Reponse;
 use App\Models\Matiere;
+use App\Events\NewQuestionPosted;
 use App\Events\ReponseAjoutee;
 use App\Events\QuestionSupprimee;
 
@@ -75,6 +76,8 @@ class ForumEtudiantsController extends Controller
             'id_user' => Auth::id(),
             'id_Matiere' => $request->id_Matiere,
         ]);
+       $user = Auth::user(); // ✅ on récupère l'objet User
+      event(new NewQuestionPosted($question, $user)); // 
 
          // Déclencher l'événement QuestionCreee
                 event(new \App\Events\QuestionCreee($question));

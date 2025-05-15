@@ -19,6 +19,11 @@ use App\Listeners\NotifierQuestionSupprimee;
 use App\Events\ReponseCreated;  // Ajouter l'événement
 use App\Listeners\UpdateNotificationWithReponse;  // Ajouter le listener
 
+use App\Events\NewQuestionPosted;
+use App\Listeners\SendNewQuestionNotification;
+use App\Events\ContentReported;
+use App\Listeners\SendContentReportedNotification;
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -37,7 +42,13 @@ class EventServiceProvider extends ServiceProvider
         ReponseAjoutee::class => [
             NotifierReponseAjoutee::class,
         ],
-        
+
+       \App\Events\NewQuestionPosted::class => [
+        \App\Listeners\NotifyAdminNewQuestion::class,
+    ],
+    \App\Events\ContentReported::class => [
+        \App\Listeners\NotifyAdminReportedContent::class,
+    ],
        
         // Listener et event : notification professeur
         \App\Events\QuestionCreee::class => [

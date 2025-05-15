@@ -35,6 +35,16 @@ class AppServiceProvider extends ServiceProvider
          $view->with('unreadNotificationsCount', $unreadCount);
      }
   });
-    
+   // Pour le layout admin
+    View::composer('layouts.admin', function ($view) {
+        if (Auth::check() && Auth::user()->role === 'administrateur') {
+            $unreadCount = Notification::whereIn('type', ['nouvelle_question', 'question_signalée'])
+                ->where('lue', false)
+                ->count();
+
+            $view->with('unreadCount', $unreadCount);
+        }
+    });
 }
-}
+ }   
+
