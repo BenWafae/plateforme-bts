@@ -1,182 +1,197 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Tableau de bord étudiant')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: rgb(242, 244, 247);
-            color: #333;
-            margin: 0;
-        }
-        .navbar {
-            background-color: #004b6d;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@yield('title', 'Tableau de bord étudiant')</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+      margin: 0;
+    }
 
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 14px;
-            font-weight: 600;
-        }
+    .navbar {
+      background-color: #002B5B;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
 
-        .navbar a:hover {
-            color: rgb(145, 157, 168);
-        }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 50px; /* plus d'espace entre les boutons */
+    }
 
-        .user-circle {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: rgb(14, 122, 130);
-            color: white;
-            font-size: 20px;
-            font-weight: 600;
-            text-transform: uppercase;
-            cursor: pointer;
-        }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      text-transform: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-        .notif-btn, .forum-btn {
-            font-size: 50px;
-            position: relative;
-            padding: 10px 10px;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
+    .navbar a:hover {
+      color: #ddd;
+    }
 
-        .notif-btn .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            font-size: 12px;
-            background-color: red;
-            color: white;
-            padding: 5px 8px;
-            border-radius: 50%;
-        }
+    .right-section {
+      display: flex;
+      align-items: center;
+      gap: 30px; /* espace entre dark mode et cercle */
+    }
 
-        .dropdown-menu {
-            display: none;
-        }
+    .user-circle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background-color: #C2185B; /* Gmail-like */
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      font-size: 18px;
+      cursor: pointer;
+    }
 
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
+    .dropdown-menu {
+      right: 0;
+      left: auto;
+    }
 
-        .dropdown-menu .dropdown-item {
-            color: #004b6d;
-            font-size: 14px;
-        }
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
 
-        .dropdown-menu .dropdown-item:hover {
-            background-color: #007bff;
-            color: white;
-        }
+    .dropdown-menu .dropdown-item {
+      font-size: 14px;
+      color: #002B5B;
+    }
 
-        .dropdown-menu .dropdown-item.selected {
-            background-color: #004b6d;
-            color: white;
-        }
+    .dropdown-menu .dropdown-item:hover {
+      background-color: #002B5B;
+      color: white;
+    }
 
-        .content {
-            padding: 20px;
-        }
+    .notif-btn {
+      position: relative;
+      font-size: 15px;
+    }
 
-        .navbar .right-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+    .notif-btn .badge {
+      position: absolute;
+      top: -6px;
+      right: -12px;
+      font-size: 11px;
+      background-color: red;
+      color: white;
+      padding: 3px 6px;
+      border-radius: 50%;
+    }
 
-        /* Style pour la barre de recherche */
-        .navbar .search-bar input {
-            border-radius: 25px;
-            border: none;
-            padding: 5px 15px;
-            width: 250px;
-        }
+    .dark-toggle {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+    }
 
-        .navbar .search-bar button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 6px 15px;
-            border-radius: 25px;
-            cursor: pointer;
-        }
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
 
-        .navbar .search-bar button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    .dark-mode .navbar {
+      background-color: #111827;
+    }
+
+    .dark-mode .navbar a,
+    .dark-mode .dark-toggle {
+      color: #fff;
+    }
+
+    .dark-mode .dropdown-menu .dropdown-item {
+      background-color: #1e1e1e;
+      color: #fff;
+    }
+
+    .dark-mode .dropdown-menu .dropdown-item:hover {
+      background-color: #374151;
+    }
+
+    .content {
+      padding: 20px;
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div>
-            <a href="{{ route('etudiant.home') }}"><i class="fas fa-home"></i> Home</a>
-            <a href="{{ route('etudiant.dashboard') }}"><i class="fas fa-book"></i> Cours</a>
-        </div>
-
-        <!-- Barre de recherche -->
-        <div class="search-bar">
-            <form action="{{ route('search') }}" method="GET" class="d-flex">
-                <input type="text" name="query" placeholder="Rechercher un cours..." aria-label="Search">
-                <button type="submit"><i class="fas fa-search"></i></button>
-            </form>
-        </div>
-
-        <div class="right-section">
-            <a href="{{ route('forumetudiants.index') }}" class="forum-btn">
-                <i class="fas fa-comments"></i>
-            </a>
-
-            <a href="{{ route('notifications.index') }}" class="notif-btn position-relative">
-                <i class="fas fa-bell"></i>
-                @php
-                    $notif_count = App\Models\Notification::where('id_user', auth()->id())->where('lue', false)->count();
-                @endphp
-                @if($notif_count > 0)
-                    <span class="badge bg-danger">{{ $notif_count }}</span>
-                @endif
-            </a>
-
-            <div class="dropdown">
-                <button class="user-circle dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
-                    {{ strtoupper(auth()->user()->prenom[0]) }}
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Gestion du profil</a></li>
-                    <li>
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="dropdown-item">Déconnexion</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="content">
-        @yield('content')
+  <nav class="navbar">
+    <div class="nav-links">
+      <a href="{{ route('etudiant.home') }}"><i class="fas fa-home"></i>Home</a>
+      <a href="{{ route('etudiant.dashboard') }}"><i class="fas fa-book"></i>Cours</a>
+      <a href="{{ route('forumetudiants.index') }}"><i class="fas fa-comments"></i>Forum</a>
+      <a href="{{ route('notifications.index') }}" class="notif-btn">
+        <i class="fas fa-bell"></i> Notifications
+        @php
+          $notif_count = App\Models\Notification::where('id_user', auth()->id())->where('lue', false)->count();
+        @endphp
+        @if($notif_count > 0)
+          <span class="badge">{{ $notif_count }}</span>
+        @endif
+      </a>
     </div>
 
+    <div class="right-section">
+      <button class="dark-toggle" onclick="toggleDarkMode()" title="Mode sombre">
+        <i class="fas fa-moon"></i>
+      </button>
+
+      <div class="dropdown">
+        <div class="user-circle dropdown-toggle" data-bs-toggle="dropdown">
+          {{ strtoupper(auth()->user()->prenom[0]) }}
+        </div>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <a class="dropdown-item" href="{{ route('profile.edit') }}">
+              <i class="fas fa-user-cog me-2"></i>Gestion du profil
+            </a>
+          </li>
+          <li>
+            <form action="{{ route('logout') }}" method="POST">
+              @csrf
+              <button type="submit" class="dropdown-item">
+                <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content">
+    @yield('content')
+  </div>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
