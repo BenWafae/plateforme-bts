@@ -8,6 +8,7 @@ use App\Models\Question;
 use App\Models\Reponse;
 use App\Models\Matiere;
 use App\Events\NewQuestionPosted;
+use App\Events\QuestionCreee;
 use App\Events\ReponseAjoutee;
 use App\Events\QuestionSupprimee;
 use App\Events\ReponseCreee;
@@ -77,11 +78,14 @@ class ForumEtudiantsController extends Controller
             'id_user' => Auth::id(),
             'id_Matiere' => $request->id_Matiere,
         ]);
-       $user = Auth::user(); // ✅ on récupère l'objet User
-      event(new NewQuestionPosted($question, $user)); // 
+    //    $user = Auth::user(); // on récupère l'objet User
+    //   event(new NewQuestionPosted($question, $user)); // 
 
-         // Déclencher l'événement QuestionCreee
-                event(new \App\Events\QuestionCreee($question));
+       // Recharger la question avec les relations nécessaires
+$question = Question::with('matiere.professeur', 'user')->find($question->id_question);
+
+// Déclencher l’événement (qui broadcast sur le bon canal privé)
+broadcast(new QuestionCreee($question));
 
         // Rediriger l'utilisateur vers le forum avec un message de succès
         return redirect()->route('forumetudiants.index')->with('success', 'Votre question a été envoyée.');

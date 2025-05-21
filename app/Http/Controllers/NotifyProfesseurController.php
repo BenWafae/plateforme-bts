@@ -22,6 +22,8 @@ class NotifyProfesseurController extends Controller
             // latest utiliser pour trier les notification par date de plus recent 
             ->get();
 
+           
+
         //  Ccompter les notifications non luee
         $unreadNotificationsCount = Notification::where('id_user', $professeurId)
             ->where('lue', false)

@@ -10,6 +10,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     {{-- Chart.js CDN (à ajouter dans layouts.admin)  --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
 
     

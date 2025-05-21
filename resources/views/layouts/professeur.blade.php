@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Espace Professeur')</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
 
     <!-- Lien Bootstrap 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Lien FontAwesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+
 
     <style>
         /* Ajout du style personnalisé */
@@ -70,18 +73,17 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('professeur.questions.index') }}"><i class="fas fa-comments"></i> Forum</a>
                 </li>
-
-                {{-- notification --}}
+ {{-- notification --}}
 <li class="nav-item">
     <a class="nav-link" href="{{ route('professeur.notifications') }}">
         <i class="fas fa-bell"></i>
-        @isset($unreadNotificationsCount)
-            @if($unreadNotificationsCount > 0)
-                <span class="badge bg-danger">{{ $unreadNotificationsCount }}</span>
-            @endif
-        @endisset
-    </a>
+        <span id="notification-count">
+    <span class="badge bg-danger {{ ($unreadNotificationsCount ?? 0) > 0 ? '' : 'd-none' }}">
+        {{ ($unreadNotificationsCount ?? 0) > 0 ? $unreadNotificationsCount : '0' }}
+    </span>
+</span>
 </li>
+
 
 
 
@@ -135,7 +137,18 @@
 <!-- Scripts Bootstrap 5 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 {{-- script vite pour echo --}}
-@vite('resources/js/app.js')
+
+ @if (auth()->check())
+    <script>
+        window.userId = {{ auth()->user()->id_user }};
+    </script>
+@endif 
+
+
+@vite(['resources/js/app.js'])
+
+   
+
 
 
 </body>
