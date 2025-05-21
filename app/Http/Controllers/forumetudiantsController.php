@@ -139,7 +139,8 @@ broadcast(new QuestionCreee($question));
         // Déclencher l'événement ReponseAjoutee
         // Déclencher l'événement seulement si l'étudiant ne répond pas à sa propre question
         // evenement reponse creer pour les profs 
-         event(new ReponseCreee($reponse)); 
+        broadcast(new ReponseCreee($reponse));
+
 
         event(new ReponseAjoutee($reponse));
     
