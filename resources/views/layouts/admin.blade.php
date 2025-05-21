@@ -197,6 +197,11 @@
     </div>
     @yield('scripts')
 
+
+
+    {{-- script vite pour echo --}}
+@vite('resources/js/app.js')
+
 </body>
 </html>
 
