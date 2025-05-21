@@ -82,7 +82,11 @@ class AdminSupportController extends Controller
             'id_Matiere' => 'required|exists:matieres,id_Matiere',
             'id_type' => 'required|exists:types,id_type',
             'id_user' => 'required|exists:users,id_user',
+           'prive' => 'nullable|boolean',
         ]);
+
+        // Définir la valeur de privé (0 ou 1)
+        $validated['prive'] = $request->has('prive') ? 1 : 0;
 
         if ($request->input('format') === 'lien_video') {
             $validated['lien_url'] = $request->validate([
@@ -148,8 +152,10 @@ class AdminSupportController extends Controller
             'id_Matiere' => 'required|exists:matieres,id_Matiere',
             'id_type' => 'required|exists:types,id_type',
             'id_user' => 'required|exists:users,id_user',
+           'prive' => 'nullable|boolean',
         ]);
 
+        $validated['prive'] = $request->has('prive') ? 1 : 0;
         if ($request->input('format') === 'lien_video') {
             // Si le support est un lien vidéo, on met à jour uniquement l'URL
             $validated['lien_url'] = $request->validate([

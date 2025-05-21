@@ -47,7 +47,8 @@
                     <label for="lien_url" class="form-label">Télécharger le fichier :</label>
                     <input type="file" name="lien_url" class="form-control" accept=".pdf,.docx,.pptx,.jpg,.png">
                 </div>
-      {{-- champs pour ajouter un lien vedio --}}
+
+                {{-- Champ pour ajouter un lien vidéo --}}
                 <div class="mb-3" id="videoLinkDiv" style="display: none;">
                     <label for="video_url" class="form-label">Lien Vidéo :</label>
                     <input type="url" name="video_url" class="form-control" placeholder="Ex: https://www.youtube.com/watch?v=xyz">
@@ -75,6 +76,15 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+    <label for="prive">Privé ?</label>
+    <input type="checkbox" id="prive" name="prive" value="1" {{ old('prive', isset($support) ? $support->prive : false) ? 'checked' : '' }}>
+    @error('prive')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+</div>
+
+
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary w-100">Ajouter</button>
                 </div>
@@ -82,23 +92,21 @@
         </div>
     </div>
 </div>
-{{-- javaa scrippt pourr afficher ou masque dynamiquement  --}}
+
+{{-- JavaScript pour afficher ou masquer dynamiquement les champs --}}
 <script>
     function toggleInputFields() {
-        // ici on  va recuperer la valeur seleectionee dans select cad le format choisi on va la recupereer
         let format = document.getElementById("format").value;
-        // on recuperer les div de champs upload ou vedio        
         let fileUploadDiv = document.getElementById("fileUploadDiv");
         let videoLinkDiv = document.getElementById("videoLinkDiv");
 
         if (format === "lien_video") {
-            fileUploadDiv.style.display = "none";  // Cacher l'upload de fichier
-            videoLinkDiv.style.display = "block";  // Afficher le champ lien vidéo
+            fileUploadDiv.style.display = "none";
+            videoLinkDiv.style.display = "block";
         } else {
-            fileUploadDiv.style.display = "block"; // Afficher l'upload de fichier
-            videoLinkDiv.style.display = "none";   // Cacher le champ lien vidéo
+            fileUploadDiv.style.display = "block";
+            videoLinkDiv.style.display = "none";
         }
     }
 </script>
 @endsection
-

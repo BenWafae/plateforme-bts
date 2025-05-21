@@ -7,7 +7,9 @@ use App\Http\Controllers\AdminSupportController;
 use App\Http\Controllers\EtudiantController;
 use App\Http\Controllers\forumetudiantsController;
 use App\Http\Controllers\EtudiantHomeController;
+use App\Http\Controllers\AccueilController;
 use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\FichierController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ForumEtudiantsController as ControllersForumEtudiantsController;
 use App\Http\Controllers\SearchController;
@@ -37,7 +39,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route d'accueil
-Route::get('/', [App\Http\Controllers\AccueilController::class, 'index']);
+Route::get('/', [App\Http\Controllers\AccueilController::class, 'index'])->name('accueil');
+// Routes pour les supports
+// routes/web.php
+Route::controller(FichierController::class)->group(function() {
+    Route::get('/fichiers/view/{id}', 'view')->name('fichiers.view');
+    Route::get('/fichiers/download/{id}', 'download')->name('fichiers.download');
+});
+// Routes pour gérer les supports éducatifs publics
+Route::get('/supports/{id}/pdf', [SupportEducatifController::class, 'showPdf'])->name('supports.showPdf');
+Route::get('/supports/{id}/download', [SupportEducatifController::class, 'download'])->name('supports.download');
 
 // Route vers le tableau de bord
 Route::get('/dashboard', function () {

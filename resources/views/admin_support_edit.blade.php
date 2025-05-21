@@ -82,6 +82,7 @@
                         @endforeach
                     </select>
                 </div>
+            
 
                 <div class="mb-3">
                     <label for="id_user" class="form-label">Professeur :</label>
@@ -92,6 +93,12 @@
                             </option>
                         @endforeach
                     </select>
+                </div>
+               
+                <!-- Ajout du champ Privé -->
+                <div class="form-group form-check mb-4">
+                    <input type="checkbox" class="form-check-input" id="prive" name="prive" value="1" {{ old('prive', $support->prive) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="prive">Privé</label>
                 </div>
 
                 <div class="text-center">

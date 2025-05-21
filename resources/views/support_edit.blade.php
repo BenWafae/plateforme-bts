@@ -82,6 +82,12 @@
                     </select>
                 </div>
 
+                <!-- Ajout du champ Privé -->
+                <div class="form-group form-check mb-4">
+                    <input type="checkbox" class="form-check-input" id="prive" name="prive" value="1" {{ old('prive', $support->prive) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="prive">Privé</label>
+                </div>
+
                 <div class="text-center">
                     <button type="submit" class="btn btn-warning w-100">Modifier</button>
                 </div>
@@ -96,7 +102,6 @@
         const fileUploadContainer = document.getElementById('fileUploadContainer');
         const videoLinkContainer = document.getElementById('videoLinkContainer');
 
-        // Vérifier si le format initial est 'lien_video' et masquer le champ de téléchargement de fichier
         if (formatSelect.value === 'lien_video') {
             fileUploadContainer.style.display = 'none';
             videoLinkContainer.style.display = 'block';
@@ -105,7 +110,6 @@
             videoLinkContainer.style.display = 'none';
         }
 
-        // Ajouter un événement pour masquer ou afficher le champ de téléchargement de fichier en fonction du format choisi
         formatSelect.addEventListener('change', function() {
             if (this.value === 'lien_video') {
                 fileUploadContainer.style.display = 'none';
@@ -118,4 +122,3 @@
     });
 </script>
 @endsection
-

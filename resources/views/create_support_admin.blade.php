@@ -81,6 +81,14 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="form-group">
+    <label for="prive">Privé ?</label>
+    <input type="checkbox" id="prive" name="prive" value="1" {{ old('prive', isset($support) ? $support->prive : false) ? 'checked' : '' }}>
+    @error('prive')
+        <div class="text-danger">{{ $message }}</div>
+    @enderror
+</div>
+
 
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary w-100">Ajouter</button>

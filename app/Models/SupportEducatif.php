@@ -11,7 +11,17 @@ class SupportEducatif extends Model
 
     protected $primaryKey = 'id_support';  // Spécifier la clé primaire
 
-    protected $fillable = ['titre', 'description', 'lien_url', 'format', 'id_Matiere', 'id_type','id_user']; // Permet d'assigner des valeurs en masse
+    // Ajouter 'prive' dans $fillable pour l'assignation en masse
+    protected $fillable = [
+        'titre',
+        'description',
+        'lien_url',
+        'format',
+        'id_Matiere',
+        'id_type',
+        'id_user',
+        'prive', // champ ajouté
+    ];
 
     // Relation : Un support éducatif appartient à une matière
     public function matiere()
@@ -25,13 +35,9 @@ class SupportEducatif extends Model
         return $this->belongsTo(Type::class, 'id_type');
     }
 
-//relation user suppport
-public function user()
-{
-    return $this->belongsTo(User::class, 'id_user'); 
+    // Relation : Un support éducatif appartient à un utilisateur
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }
-
-
-
- }
-   

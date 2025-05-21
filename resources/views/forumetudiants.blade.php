@@ -127,11 +127,7 @@
                                         </form>
                                     @endif
 
-                                    @if($reponse->id_user != Auth::id())
-                                        <button class="btn btn-outline-danger btn-sm mt-2 rounded-pill" data-bs-toggle="modal" data-bs-target="#reportModalReponse{{ $reponse->id }}">
-                                            <i class="fas fa-exclamation-triangle"></i> Signaler
-                                        </button>
-                                    @endif
+                    
                                 </div>
                             @endforeach
                         </div>
