@@ -548,7 +548,7 @@
                             <i class="fas fa-map-marker-alt text-2xl"></i>
                         </div>
                         <h3 class="text-lg font-semibold mb-2 text-gray-800">Adresse</h3>
-                        <p class="text-gray-600">BTS AI Idrissi, Avenue Hassan II, Agadir</p>
+                        <p class="text-gray-600">Lycée Techniques Alidrissi Bp 5097 QL AGADIR</p>
                     </div>
                     
                     <div class="bg-violet-50 rounded-xl p-6 text-center transform transition-transform hover:-translate-y-1 hover:shadow-md">
@@ -556,7 +556,7 @@
                             <i class="fas fa-phone text-2xl"></i>
                         </div>
                         <h3 class="text-lg font-semibold mb-2 text-gray-800">Téléphone</h3>
-                        <p class="text-gray-600">+212 5XX XX XX XX</p>
+                        <p class="text-gray-600">05 28 22 81 69</p>
                     </div>
                     
                     <div class="bg-violet-50 rounded-xl p-6 text-center transform transition-transform hover:-translate-y-1 hover:shadow-md">
@@ -585,7 +585,7 @@
                         <a href="https://www.instagram.com/bts_agadir?igsh=dGRrZmMwYWJiYnNp" class="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center text-violet-custom hover:bg-violet-custom hover:text-white transition-colors">
                             <i class="fab fa-instagram text-xl"></i>
                         </a>
-                        <a href="http://www.Lyceealidrissi.net" class="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center text-violet-custom hover:bg-violet-custom hover:text-white transition-colors">
+                        <a href="http://www.lyceealidrissi.net" class="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center text-violet-custom hover:bg-violet-custom hover:text-white transition-colors">
                             <i class="fas fa-globe text-xl"></i>
                         </a>
                     </div>
