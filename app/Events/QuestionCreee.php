@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class QuestionCreee implements ShouldBroadcast
+class QuestionCreee
 {
      use Dispatchable, SerializesModels;
 
@@ -29,34 +29,6 @@ class QuestionCreee implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-                
-        return new PrivateChannel('professeur.' . $this->question->matiere->professeur->id_user);
-        
+        return new PrivateChannel('channel-name');
     }
-
-    public function broadcastWith()
-{
-    return [
-        'id_question' => $this->question->id_question,
-        'titre' => $this->question->titre,
-        'contenue' => $this->question->contenue,
-        'date_pub' => $this->question->date_pub,
-        'matiere' => [
-            'id_matiere' => $this->question->matiere->id,
-            'nom' => $this->question->matiere->nom,
-        ],
-        'etudiant' => [
-            'nom' => $this->question->user->nom,
-            'prenom' => $this->question->user->prenom,
-        ]
-    ];
-}
-
-
-    // definir un nom personnalise
-
-    public function broadcastAs()
-{
-    return 'question.creee';
-}
 }
