@@ -47,8 +47,8 @@ Route::controller(FichierController::class)->group(function() {
     Route::get('/fichiers/download/{id}', 'download')->name('fichiers.download');
 });
 // Routes pour gérer les supports éducatifs publics
-Route::get('/supports/{id}/pdf', [SupportEducatifController::class, 'showPdf'])->name('supports.showPdf');
-Route::get('/supports/{id}/download', [SupportEducatifController::class, 'download'])->name('supports.download');
+Route::get('/supports/{id}/pdf', [SupportController::class, 'showPdf'])->name('supports.showPdf');
+Route::get('/supports/{id}/download', [SupportController::class, 'download'])->name('supports.download');
 
 // Route vers le tableau de bord
 Route::get('/dashboard', function () {

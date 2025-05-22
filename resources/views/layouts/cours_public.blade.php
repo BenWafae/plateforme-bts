@@ -1,105 +1,78 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BTS AI Idrissi</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f8f9fa;
-        }
-        .navbar {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .filter-container {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .filter-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        .filter-label {
-            font-weight: 600;
-            margin-right: 0.5rem;
-            white-space: nowrap;
-        }
-        .resource-card {
-            transition: all 0.3s;
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        @media (max-width: 768px) {
-            .filter-row {
-                flex-direction: column;
-                align-items: flex-start;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTS AI Idrissi</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            violet: {
+              custom: '#5E60CE'
             }
-            .filter-label {
-                margin-bottom: 0.5rem;
-            }
+          }
         }
-    </style>
+      }
+    }
+  </script>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="/">
-                <i class="fas fa-graduation-cap me-2"></i>BTS AI Idrissi
+<body class="bg-gray-100 min-h-screen flex flex-col text-gray-800">
+
+  <!-- NAVBAR -->
+  <nav class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <!-- Logo à gauche -->
+        <div class="flex items-center">
+          <a href="/" class="flex items-center text-gray-800 font-bold text-lg">
+            <i class="fas fa-graduation-cap text-violet-custom mr-2"></i>
+            BTS AI Idrissi
+          </a>
+        </div>
+
+        <!-- Liens au centre -->
+        <div class="hidden md:flex space-x-6 absolute left-1/2 transform -translate-x-1/2">
+          <a href="?type=cours" class="text-violet-custom font-semibold">Cours</a>
+          <a href="?type=exercices" class="text-gray-700 hover:text-violet-custom transition">Exercices</a>
+          <a href="?type=examens" class="text-gray-700 hover:text-violet-custom transition">Examens</a>
+        </div>
+
+        <!-- Boutons à droite -->
+        <div class="flex items-center space-x-4">
+          @auth
+            <a href="{{ route('dashboard') }}" class="bg-violet-custom text-white px-4 py-2 rounded-md text-sm shadow hover:bg-[#4F51B8] transition">
+              Dashboard
             </a>
-            <div class="navbar-nav me-auto">
-                <a class="nav-link {{ request('type') == 'cours' ? 'active fw-bold' : '' }}" 
-                   href="?type=cours">Cours</a>
-                <a class="nav-link {{ request('type') == 'exercices' ? 'active fw-bold' : '' }}" 
-                   href="?type=exercices">Exercices</a>
-                <a class="nav-link {{ request('type') == 'examens' ? 'active fw-bold' : '' }}" 
-                   href="?type=examens">Examens</a>
-            </div>
-             <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <!-- Si l'utilisateur est connecté, affichez 'Dashboard' -->
-                @auth
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
-                    </li>
-                @else
-                    <!-- Si l'utilisateur n'est pas connecté, affichez 'Login' et 'Sign Up' -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Connexion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">Inscription</a>
-                    </li>
-                @endauth
-            </ul>
+          @else
+            <a href="{{ route('login') }}" class="bg-violet-custom text-white px-4 py-2 rounded-md text-sm shadow hover:bg-[#4F51B8] transition">
+              Connexion
+            </a>
+            <a href="{{ route('register') }}" class="bg-violet-custom text-white px-4 py-2 rounded-md text-sm shadow hover:bg-[#4F51B8] transition">
+              Inscription
+            </a>
+          @endauth
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 
-        </div>
-    </nav>
+  <!-- Contenu principal -->
+  <main class="flex-1 container mx-auto px-4 py-6">
+    @yield('content')
+  </main>
 
-    <main class="container py-4">
-        @yield('content')
-    </main>
+  <!-- Pied de page -->
+  <footer class="text-center text-sm text-gray-500 py-4">
+    © 2025 Plateforme BTS AI Idrissi - Tous droits réservés
+  </footer>
 
-    <footer class="text-center py-4 text-muted">
-        © 2025 Plateforme BTS AI Idrissi - Tous droits réservés
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Font Awesome -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
 </body>
 </html>
