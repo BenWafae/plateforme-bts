@@ -120,7 +120,7 @@
                                     @else
                                         <a href="{{ route('etudiant.supports.download', ['id' => $support->id_support]) }}" 
                                            class="btn btn-outline-primary btn-sm">
-                                            <i class="fas fa-file-alt"></i> Voir Word
+                                            <i class="fas fa-file-alt"></i> Télécharger Word
                                         </a>
                                     @endif
                                 </div>

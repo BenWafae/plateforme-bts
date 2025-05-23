@@ -147,6 +147,23 @@ class SupportController extends Controller
 
         return redirect()->route('supports.index')->with('error', 'Le fichier n\'existe pas.');
     }
+    public function download($id)
+{
+    $support = SupportEducatif::findOrFail($id);
+
+    // Vérifie que l'utilisateur connecté est autorisé à télécharger ce support
+    if ($support->id_user != auth()->id() && $support->prive) {
+        return redirect()->route('supports.index')->with('error', 'Vous n\'êtes pas autorisé à télécharger ce support.');
+    }
+
+    // Vérifie si le fichier existe
+    if (Storage::disk('public')->exists($support->lien_url)) {
+        return Storage::disk('public')->download($support->lien_url);
+    }
+
+    return redirect()->route('supports.index')->with('error', 'Le fichier est introuvable.');
+}
+
 
     /**
      * Show the form for editing the specified resource.
