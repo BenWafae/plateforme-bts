@@ -124,6 +124,10 @@
                                         </a>
                                     @endif
                                 </div>
+           <a href="{{ route('etudiant.supports.showTranslateForm', ['id' => $support->id_support]) }}" 
+                class="btn btn-outline-secondary btn-sm" title="Traduire">
+          <i class="fas fa-language"></i>
+        </a>
                             </div>
                         </div>
                     </div>

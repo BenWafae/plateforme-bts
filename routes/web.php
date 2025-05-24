@@ -90,6 +90,18 @@ Route::post('/notifications/store/{reponseId}', [NotificationController::class, 
 
 
 
+// Route pour afficher la page de traduction avec formulaire
+Route::get('/supports/{id}/translate', [SupportController::class, 'showTranslateForm'])->name('etudiant.supports.showTranslateForm');
+// route pour la traduction
+Route::post('/supports/translate', [SupportController::class, 'translate'])->name('support.translate.process');
+
+
+
+
+
+
+
+
 
    });
 // Routes pour l'administrateur
