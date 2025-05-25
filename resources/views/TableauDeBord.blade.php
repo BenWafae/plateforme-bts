@@ -1,6 +1,33 @@
 @extends('layouts.admin')
 
 @section('content')
+    <style>
+        /* Configuration des couleurs personnalisées */
+        .bg-violet-custom {
+            background-color: #5E60CE;
+        }
+        .text-violet-custom {
+            color: #5E60CE;
+        }
+        .border-violet-custom {
+            border-color: #5E60CE;
+        }
+        .bg-violet-50 {
+            background-color: rgba(94, 96, 206, 0.05);
+        }
+        .hover\:text-violet-700:hover {
+            color: #4F50AD;
+        }
+        .from-violet-custom {
+            --tw-gradient-from: #5E60CE;
+            --tw-gradient-to: rgba(94, 96, 206, 0);
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+        }
+        .to-violet-custom {
+            --tw-gradient-to: #5E60CE;
+        }
+    </style>
+
     <div class="container mx-auto px-6 py-12">
         <h1 class="text-3xl font-semibold text-center text-gray-800 mb-8">Tableau de bord</h1>
 
