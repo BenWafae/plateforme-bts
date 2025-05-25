@@ -92,6 +92,26 @@
         </div>
     </div>
 </div>
+<a href="{{ route('professeur.support.form') }}" 
+   style="
+       display: inline-block;
+       background-color: #1565c0; 
+       color: white; 
+       padding: 10px 20px; 
+       border-radius: 6px; 
+       font-weight: 700; 
+       text-decoration: none; 
+       box-shadow: 0 3px 8px rgba(21, 101, 192, 0.5);
+       transition: background-color 0.3s ease;
+   "
+   onmouseover="this.style.backgroundColor='#0d3c78';"
+   onmouseout="this.style.backgroundColor='#1565c0';"
+>
+    Importer plusieurs supports via IA
+</a>
+
+
+
 
 {{-- JavaScript pour afficher ou masquer dynamiquement les champs --}}
 <script>

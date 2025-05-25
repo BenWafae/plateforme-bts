@@ -46,9 +46,6 @@ Route::controller(FichierController::class)->group(function() {
     Route::get('/fichiers/view/{id}', 'view')->name('fichiers.view');
     Route::get('/fichiers/download/{id}', 'download')->name('fichiers.download');
 });
-// Routes pour gérer les supports éducatifs publics
-Route::get('/supports/{id}/pdf', [SupportController::class, 'showPdf'])->name('supports.showPdf');
-Route::get('/supports/{id}/download', [SupportController::class, 'download'])->name('supports.download');
 
 // Route vers le tableau de bord
 Route::get('/dashboard', function () {
@@ -139,8 +136,6 @@ Route::get('/support/{id}/edit', [AdminSupportController::class, 'edit'])->name(
 Route::put('/support/{id}', [AdminSupportController::class, 'update'])->name('admin.support.update');
 Route::delete('/support/{id}', [AdminSupportController::class, 'destroy'])->name('admin.support.destroy');
 Route::get('/support/{id}/show', [AdminSupportController::class, 'showPdf'])->name('admin.support.showPdf');
-
-
 // routes forumeAdmin;
 Route::get('/admin/questions', [AdminforumController::class, 'index'])->name('admin.questions.index');
 Route::get('/admin/questions/{id}', [AdminforumController::class, 'show'])->name('admin.questions.show');
@@ -168,6 +163,14 @@ Route::prefix('professeur')->group(function () {
     Route::delete('/supports/{id}', [SupportController::class, 'destroy'])->name('supports.destroy');
     Route::get('/supports/{id}/edit', [SupportController::class, 'edit'])->name('supports.edit');
     Route::put('/supports/{id}', [SupportController::class, 'update'])->name('supports.update');
+    // Route GET pour afficher le formulaire d'import dans l'espace professeur
+Route::middleware(['auth'])->group(function () {
+    Route::get('/professeur/importer-dossier', [SupportController::class, 'showUploadFolderForm'])->name('professeur.support.form');
+    Route::post('/professeur/importer-dossier', [SupportController::class, 'importerDossierProf'])->name('professeur.support.import');
+    Route::post('/professeur/importer-dossier/valider-manuel', [SupportController::class, 'validerImportManuel'])->name('professeur.support.validerImportManuel');
+});
+
+
 
     // routes question&reponses
     Route::get('/professeur/questions', [ForumController::class, 'index'])->name('professeur.questions.index');
@@ -195,24 +198,4 @@ Route::get('/professeur/questions/{id}', [ForumController::class, 'show'])->name
 });
 
 
-
-
-require __DIR__ . '/auth.php';
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+require __DIR__ . '/auth.php'; 

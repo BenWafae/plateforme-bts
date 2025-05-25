@@ -9,9 +9,10 @@ class Type extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id_type';  // Spécifier la clé primaire
+    protected $primaryKey = 'id_type';
 
-    // Relation : Un type a plusieurs supports éducatifs
+    protected $fillable = ['nom'];
+
     public function supports()
     {
         return $this->hasMany(SupportEducatif::class, 'id_type');
