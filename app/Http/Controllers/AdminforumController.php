@@ -15,7 +15,11 @@ class AdminforumController extends Controller
      */
     public function index()
     {
-        $questions = Question::with(['user', 'reponses.user', 'matiere'])->get();
+          // Récupérer les questions les plus récentes avec pagination
+    $questions = Question::with(['user', 'reponses.user', 'matiere'])
+                         ->orderBy('created_at', 'desc')
+                         ->paginate(4);
+
         return view('forum_admin', compact('questions'));
     }
     /**

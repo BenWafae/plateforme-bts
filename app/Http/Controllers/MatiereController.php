@@ -142,7 +142,7 @@ class MatiereController extends Controller
             'Nom' => 'required|string|max:255|min:5',
             'description' => 'nullable|string',
             'id_filiere' => 'required|exists:filieres,id_filiere',
-            'id_user' => 'required|exists:users,id',
+            'id_user' => 'required|exists:users,id_user',
         ]);
     
         // Mettre à jour les données de la matière
