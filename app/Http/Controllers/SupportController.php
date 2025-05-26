@@ -253,7 +253,29 @@ public function download($id)
         $support->delete();
 
         return redirect()->route('supports.index')->with('success', 'Le support éducatif a été supprimé avec succès.');
-    }
+    } 
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 public function showUploadFolderForm()
 {
