@@ -6,9 +6,19 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+    :root {
+        --primary: #2a5298;
+        --accent: #1cc88a;
+        --bg-light: #f0f2f5;
+        --card-bg: #fff;
+        --text-dark: #2c3e50;
+        --text-light: #555;
+        --shadow: rgba(0, 0, 0, 0.08);
+    }
+
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f0f2f5;
+        background-color: var(--bg-light);
         margin: 0;
     }
 
@@ -18,31 +28,30 @@
         padding: 30px 20px;
     }
 
-     h1 {
+    h1 {
         font-size: 2.5em;
         text-align: center;
-        color: #2c3e50;
+        color: var(--text-dark);
         margin-bottom: 25px;
         font-weight: 700;
     }
 
     .alert-welcome {
-    background: linear-gradient(90deg, #4e73df, #1cc88a);
-    color: #fff;
-    padding: 8px 16px; /* Réduit la hauteur */
-    margin: 20px auto;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 0.95em; /* Réduction de la taille de police */
-    font-weight: 500;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    max-width: 800px; /* Moins large que 90% */
-}
-
+        background: linear-gradient(90deg, #4e73df, #1cc88a);
+        color: #fff;
+        padding: 8px 16px;
+        margin: 20px auto;
+        border-radius: 6px;
+        text-align: center;
+        font-size: 0.95em;
+        font-weight: 500;
+        box-shadow: 0 2px 8px var(--shadow);
+        max-width: 800px;
+    }
 
     p.intro {
         text-align: center;
-        color: #444;
+        color: var(--text-light);
         font-size: 1.05em;
         margin-bottom: 40px;
         max-width: 800px;
@@ -53,9 +62,9 @@
 
     .section-title {
         text-align: center;
-        font-size: 1.6em;
-        color: #2a5298;
-        font-weight: 600;
+        font-size: 1.8em;
+        color: var(--primary);
+        font-weight: 700;
         margin: 50px auto 20px;
         position: relative;
         padding-bottom: 8px;
@@ -66,11 +75,11 @@
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        bottom: 0;
-        width: 60px;
-        height: 4px;
-        background-color: #2a5298;
-        border-radius: 6px;
+        bottom: -10px;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(to right, #4e73df, #1cc88a);
+        border-radius: 5px;
     }
 
     .card-grid {
@@ -81,9 +90,9 @@
     }
 
     .card {
-        background-color: #fff;
+        background-color: var(--card-bg);
         border-radius: 12px;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 6px 16px var(--shadow);
         padding: 20px 15px;
         text-align: center;
         transition: 0.3s ease;
@@ -92,18 +101,32 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease forwards;
     }
 
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+    .card:nth-child(4) { animation-delay: 0.4s; }
+
     .card:hover {
-        transform: translateY(-6px);
-        background-color: #f1f6ff;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transform: translateY(-6px) scale(1.02);
+        background-color: #f0f8ff;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
     }
 
     .card-icon {
         font-size: 2.5em;
         color: #1565c0;
         margin-bottom: 14px;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .card:hover .card-icon {
+        transform: scale(1.2);
+        color: #1e88e5;
     }
 
     .card h3 {
@@ -115,42 +138,56 @@
 
     .card p {
         font-size: 0.95em;
-        color: #555;
+        color: var(--text-light);
         line-height: 1.4;
     }
 
-    @media (max-width: 768px) {
-        h1 {
-            font-size: 2em;
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
-        .section-title {
-            font-size: 1.3em;
+    @media (max-width: 992px) {
+        h1 {
+            font-size: 2.2em;
         }
 
         .card-grid {
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        }
+    }
+
+    @media (max-width: 600px) {
+        h1 {
+            font-size: 1.8em;
         }
 
-        .card-icon {
-            font-size: 2em;
+        .section-title {
+            font-size: 1.4em;
+        }
+
+        .card-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>
 
-<div class="container">
-    <h1>Plateforme BTS Al Idrissi</h1>
+<div class="card" style="margin-bottom: 30px; background: linear-gradient(135deg, #4e73df, #1cc88a); color: white; padding: 25px; text-align: center;">
+    <h2 style="font-size: 1.8em; font-weight: 700; margin-bottom: 15px;">Plateforme BTS Al Idrissi</h2>
 
     @auth
-        <div class="alert-welcome">
+        <p style="font-size: 1.1em; font-weight: 500; margin-bottom: 10px;">
             Bienvenue, {{ Auth::user()->prenom }} {{ Auth::user()->nom }} ! Vous êtes maintenant connecté(e) à la plateforme BTS.
-        </div>
+        </p>
     @endauth
 
-    <p class="intro">
+    <p style="font-size: 1em; line-height: 1.6; max-width: 700px; margin: 0 auto;">
         Explorez les matières principales enseignées dans les différentes filières BTS.<br>
-        Pour accéder aux <strong>cours détaillés correspondant à votre filière</strong>, rendez-vous dans la page dédiée aux cours.<br>
+        Pour accéder aux <strong>cours détaillés correspondant à votre filière</strong>, rendez-vous dans la page dédiée aux cours.
     </p>
+</div>
 
     @php
         $filières = [

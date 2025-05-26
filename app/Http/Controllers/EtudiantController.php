@@ -46,7 +46,10 @@ class EtudiantController extends Controller
         if ($request->has('matiere_id')) {
             $matiere = Matiere::with('supportsEducatifs')->find($request->input('matiere_id'));
             if ($matiere && $matiere->supportsEducatifs->isNotEmpty()) {
-                $supports = $matiere->supportsEducatifs;
+               $supports = $matiere->supportsEducatifs()
+    ->orderBy('created_at', 'desc')
+    ->paginate(16); // ✅ Ceci renvoie un LengthAwarePaginator
+
             }
         }
 

@@ -11,6 +11,8 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "phpoffice/phppresentation": "^0.9.0",
+        "phpoffice/phpword": "^1.3",
         "smalot/pdfparser": "^2.12"
     },
     "require-dev": {

@@ -8,6 +8,8 @@ use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Smalot\PdfParser\Parser;
+use PhpOffice\PhpWord\Element\TextRun;
+use PhpOffice\PhpWord\Element\Text;
 use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Support\Facades\Storage;
@@ -364,7 +366,7 @@ public function validerImportManuel(Request $request)
             'ppt', 'pptx' => 'ppt',
             'doc', 'docx' => 'word',
             'mp4', 'avi', 'mov' => 'lien_video',
-            default => $extension,
+            default => substr($extension, 0, 10), 
         };
 
         $support->format = $format;
@@ -379,37 +381,47 @@ public function validerImportManuel(Request $request)
 }
 
 
-    private function extraireTexteDepuisFichier(string $chemin): string
-    {
-        $extension = strtolower(pathinfo($chemin, PATHINFO_EXTENSION));
+   private function extraireTexteDepuisFichier(string $chemin): string
+{
+    $extension = strtolower(pathinfo($chemin, PATHINFO_EXTENSION));
 
-        try {
-            $texte = '';
+    try {
+        $texte = '';
 
-            if ($extension === 'docx') {
-                $phpWord = IOFactory::load($chemin);
-                foreach ($phpWord->getSections() as $section) {
-                    foreach ($section->getElements() as $element) {
-                        if (method_exists($element, 'getText')) {
-                            $texte .= $element->getText() . "\n";
+        if ($extension === 'docx') {
+            $phpWord = \PhpOffice\PhpWord\IOFactory::load($chemin);
+
+            foreach ($phpWord->getSections() as $section) {
+                foreach ($section->getElements() as $element) {
+                    if ($element instanceof Text) {
+                        $texte .= $element->getText() . "\n";
+                    } elseif ($element instanceof TextRun) {
+                        foreach ($element->getElements() as $subElement) {
+                            if (method_exists($subElement, 'getText')) {
+                                $texte .= $subElement->getText();
+                            }
                         }
+                        $texte .= "\n";
                     }
+                    // Tu peux gérer d'autres types d'éléments si besoin
                 }
-            } elseif ($extension === 'pdf') {
-                $parser = new Parser();
-                $pdf = $parser->parseFile($chemin);
-                $texte = $pdf->getText();
-            } else {
-                $texte = file_get_contents($chemin);
             }
-
-            $texte = mb_convert_encoding($texte, 'UTF-8', 'UTF-8');
-            $texte = preg_replace('/[^\PC\s]/u', '', $texte);
-            return trim($texte) ?: ' ';
-        } catch (\Exception $e) {
-            Log::error("Erreur extraction texte: " . $e->getMessage());
-            return ' ';
+        } elseif ($extension === 'pdf') {
+            $parser = new \Smalot\PdfParser\Parser();
+            $pdf = $parser->parseFile($chemin);
+            $texte = $pdf->getText();
+        } else {
+            $texte = file_get_contents($chemin);
         }
+
+        $texte = mb_convert_encoding($texte, 'UTF-8', 'UTF-8');
+        $texte = preg_replace('/[^\PC\s]/u', '', $texte);
+
+        return trim($texte) ?: ' ';
+    } catch (\Exception $e) {
+        \Log::error("Erreur extraction texte: " . $e->getMessage());
+        return ' ';
+    }
     }
 private function extraireTitreDepuisFichier(string $chemin): string
 {

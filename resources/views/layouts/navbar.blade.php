@@ -143,6 +143,9 @@
       <a href="{{ route('etudiant.home') }}"><i class="fas fa-home"></i>Home</a>
       <a href="{{ route('etudiant.dashboard') }}"><i class="fas fa-book"></i>Cours</a>
       <a href="{{ route('forumetudiants.index') }}"><i class="fas fa-comments"></i>Forum</a>
+      <a class="nav-link" href="{{ route('questions.create') }}">
+      <i class="fas fa-question-circle me-1"></i> Poser une question
+    </a>
       <a href="{{ route('notifications.index') }}" class="notif-btn">
         <i class="fas fa-bell"></i> Notifications
         @php
