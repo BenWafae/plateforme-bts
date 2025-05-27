@@ -30,7 +30,7 @@ class ProfesseurController extends Controller
        $derniersSupports = SupportEducatif::where('id_user', $prof->id_user)
          
          ->orderBy('created_at', 'desc')
-         ->take(2)
+         ->take(5)
          ->get();
 
 
@@ -42,7 +42,7 @@ class ProfesseurController extends Controller
        $dernieresQuestions = Question::with(['user', 'matiere'])
        ->whereIn('id_Matiere', $matieresProf->pluck('id_Matiere'))
        ->orderBy('date_pub', 'desc')
-        ->take(2)
+        ->take(5)
         ->get();
 
          

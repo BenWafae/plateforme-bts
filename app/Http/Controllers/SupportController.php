@@ -8,9 +8,15 @@ use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Smalot\PdfParser\Parser;
+use PhpOffice\PhpWord\Element\TextRun;
+use PhpOffice\PhpWord\Element\Text;
 use Illuminate\Support\Facades\Http;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Support\Facades\Storage;
+
+
+
+
 
 class SupportController extends Controller
 {
