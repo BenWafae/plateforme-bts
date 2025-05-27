@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consultation;
 use App\Models\Matiere;
 use App\Models\SupportEducatif;
 use App\Models\Type;
@@ -609,4 +610,39 @@ private function extraireTitreDepuisFichier(string $chemin): string
             return strtolower(trim($matiere->nom)) === strtolower(trim($nom));
         })?->id_Matiere;
     }
-} 
+
+
+
+
+public function enregistrerConsultation($id_support)
+{
+    $support = SupportEducatif::findOrFail($id_support);
+    $etudiant = auth()->user();
+
+    if (!$etudiant) {
+        return redirect()->route('login')->with('error', 'Veuillez vous connecter pour accéder au support.');
+    }
+
+    // Enregistrement de la consultation, quel que soit le format
+    Consultation::create([
+        'id_support' => $support->id_support,
+        'id_user' => $etudiant->id_user,
+        'date_consultation' => now(),
+    ]);
+
+    // Redirection selon le type de support
+    if (strpos($support->format, 'pdf') !== false) {
+        return redirect()->route('etudiant.supports.showPdf', ['id' => $support->id_support]);
+    } elseif (strpos($support->format, 'ppt') !== false) {
+        return redirect()->route('etudiant.supports.download', ['id' => $support->id_support]);
+    } elseif (strpos($support->format, 'word') !== false || strpos($support->format, 'doc') !== false) {
+        return redirect()->route('etudiant.supports.download', ['id' => $support->id_support]);
+    } elseif (strpos($support->format, 'video') !== false && filter_var($support->lien_url, FILTER_VALIDATE_URL)) {
+        // Ici on peut rediriger vers le lien vidéo externe directement
+        return redirect()->away($support->lien_url);
+    }
+
+    // Cas par défaut : téléchargement
+    return redirect()->route('etudiant.supports.download', ['id' => $support->id_support]);
+}
+}

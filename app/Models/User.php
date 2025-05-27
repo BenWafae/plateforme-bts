@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use App\Models\SupportEducatif;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -82,5 +82,10 @@ class User extends Authenticatable
 {
     return $this->hasMany(Matiere::class, 'id_user', 'id_user');
 }
+// relation consultation
 
+public function consultations()
+{
+    return $this->hasMany(Consultation::class, 'id_user', 'id_user');
+}
 }

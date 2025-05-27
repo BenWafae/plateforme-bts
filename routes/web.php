@@ -17,6 +17,7 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotifyProfesseurController;
 use App\Http\Controllers\AdminNotificationController;
+use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupportController;
@@ -92,7 +93,9 @@ Route::get('/supports/{id}/translate', [SupportController::class, 'showTranslate
 // route pour la traduction
 Route::post('/supports/translate', [SupportController::class, 'translate'])->name('support.translate.process');
 
-
+  // route pour consulter un support avec enregistrement de consultation
+    Route::get('/supports/consultation/{id_support}', [SupportController::class, 'enregistrerConsultation'])
+        ->name('etudiant.supports.consultation');
 
 
 
@@ -202,6 +205,10 @@ Route::post('/notifications/{id}/read', [NotifyProfesseurController::class, 'mar
 // route dedie a la questiion de notification de pprof
 Route::get('/professeur/questions/{id}', [ForumController::class, 'show'])->name('professeur.questions.show');
 
+
+// route pour la consultation:
+
+Route::get('/professeur/consultations', [ConsultationController::class, 'statistiquesParType'])->name('consultations.index');
 
 
 

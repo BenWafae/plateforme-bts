@@ -14,6 +14,9 @@
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    @section('head')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@endsection
     
     <script>
         tailwind.config = {
@@ -226,6 +229,13 @@
                     <i class="fas fa-comments text-sm"></i>
                     <span>Forum</span>
                 </a>
+
+
+                <a href="{{ route('consultations.index') }}" class="nav-link-modern flex items-center space-x-2 px-4 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-20 transition-all duration-200">
+        <i class="fas fa-chart-bar text-sm"></i>
+       <span>Consultations</span>
+        </a>
+
                 
                 <!-- Notifications -->
                 <a href="{{ route('professeur.notifications') }}" class="nav-link-modern relative flex items-center space-x-2 px-4 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-20 transition-all duration-200">
@@ -305,6 +315,9 @@
                     <i class="fas fa-comments"></i>
                     <span>Forum</span>
                 </a>
+
+
+
                 
                 <a href="{{ route('professeur.notifications') }}" class="flex items-center justify-between px-4 py-3 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200">
                     <div class="flex items-center space-x-3">
@@ -411,6 +424,7 @@
         // sans recharger la page
     }, 60000); // Toutes les minutes
 </script>
+@yield('scripts')
 
 </body>
 </html>

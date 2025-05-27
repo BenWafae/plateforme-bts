@@ -40,4 +40,10 @@ class SupportEducatif extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+// consultation
+
+    public function consultations()
+{
+    return $this->hasMany(Consultation::class, 'id_support', 'id_support');
+}
 }

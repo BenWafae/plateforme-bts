@@ -106,31 +106,46 @@
         <div class="row g-4">
             @forelse($supports as $support)
                 <div class="col-md-4">
-                    <div class="card h-100 rounded-lg shadow-sm transition-shadow hover:shadow-md position-relative border-2" style="border-color: #5E60CE;">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title fw-bold mb-2">{{ $support->titre }}</h5>
-                            <p class="text-muted small flex-grow-1 mb-3">{{ $support->matiere->Nom ?? 'Matière inconnue' }}</p>
-                            <div class="mt-auto d-flex gap-2 flex-wrap justify-content-center">
-                                @if(strpos($support->format, 'pdf') !== false)
-                                    <a href="{{ route('etudiant.supports.showPdf', ['id' => $support->id_support]) }}" class="btn btn-outline-danger btn-sm" target="_blank">
-                                        <i class="fas fa-file-pdf"></i> Voir PDF
-                                    </a>
-                                @elseif(strpos($support->format, 'ppt') !== false)
-                                    <a href="{{ route('etudiant.supports.download', ['id' => $support->id_support]) }}" class="btn btn-outline-warning btn-sm">
-                                        <i class="fas fa-file-powerpoint"></i> Télécharger PPT
-                                    </a>
-                                @elseif(strpos($support->format, 'video') !== false && filter_var($support->lien_url, FILTER_VALIDATE_URL))
-                                    <a href="{{ $support->lien_url }}" target="_blank" class="btn btn-outline-info btn-sm">
-                                        <i class="fab fa-youtube"></i> Regarder
-                                    </a>
-                                @else
-                                    <a href="{{ route('etudiant.supports.download', ['id' => $support->id_support]) }}" class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-file-alt"></i> Télécharger Word
-                                    </a>
-                                @endif
-                                <a href="{{ route('etudiant.supports.showTranslateForm', ['id' => $support->id_support]) }}" class="btn btn-outline-secondary btn-sm" title="Traduire">
-                                    <i class="fas fa-language"></i>
-                                </a>
+
+                    <div class="card mb-3 shadow-sm h-100 d-flex flex-column position-relative border border-1 border-dark rounded-3"
+                        style="transition: transform 0.3s ease-in-out;">
+                        
+                        <div class="card-body d-flex flex-column text-center">
+                            <h5 class="card-title fw-bold">{{ $support->titre }}</h5>
+                            <p class="card-text text-muted small">{{ $support->description }}</p>
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-center">
+    @if(strpos($support->format, 'pdf') !== false)
+    <a href="{{ route('etudiant.supports.consultation', ['id_support' => $support->id_support]) }}" 
+       class="btn btn-outline-danger btn-sm" target="_blank">
+        <i class="fas fa-file-pdf"></i> Voir PDF
+    </a>
+
+@elseif(strpos($support->format, 'ppt') !== false)
+    <a href="{{ route('etudiant.supports.consultation', ['id_support' => $support->id_support]) }}" 
+       class="btn btn-outline-warning btn-sm">
+        <i class="fas fa-file-powerpoint"></i> Télécharger PPT
+    </a>
+
+@elseif(strpos($support->format, 'word') !== false || strpos($support->format, 'doc') !== false)
+    <a href="{{ route('etudiant.supports.consultation', ['id_support' => $support->id_support]) }}" 
+       class="btn btn-outline-primary btn-sm">
+        <i class="fas fa-file-alt"></i> Télécharger Word
+    </a>
+
+@elseif(strpos($support->format, 'video') !== false && filter_var($support->lien_url, FILTER_VALIDATE_URL))
+    <a href="{{ route('etudiant.supports.consultation', ['id_support' => $support->id_support]) }}" 
+       class="btn btn-outline-info btn-sm">
+        <i class="fab fa-youtube"></i> Regarder
+    </a>
+@endif
+
+                                </div>
+           <a href="{{ route('etudiant.supports.showTranslateForm', ['id' => $support->id_support]) }}" 
+                class="btn btn-outline-secondary btn-sm" title="Traduire">
+          <i class="fas fa-language"></i>
+        </a>
+>
                             </div>
                         </div>
                     </div>
@@ -150,38 +165,3 @@
     </div>
 @endif
 
-@endsection
-
-{{-- Bootstrap JS --}}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-{{-- Styles supplémentaires pour la pagination --}}
-<style>
-    nav ul.pagination {
-        display: flex;
-        gap: 0.5rem;
-        padding-left: 0;
-        list-style: none;
-    }
-    nav ul.pagination li a,
-    nav ul.pagination li span {
-        padding: 0.5rem 0.75rem;
-        border: 2px solid #5E60CE;
-        color: #5E60CE;
-        border-radius: 0.375rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.2s, color 0.2s;
-        text-decoration: none;
-    }
-    nav ul.pagination li a:hover {
-        background-color: #5E60CE;
-        color: white;
-    }
-    nav ul.pagination li.active span {
-        background-color: #5E60CE;
-        color: white;
-        border-color: #5E60CE;
-        cursor: default;
-    }
-</style>
