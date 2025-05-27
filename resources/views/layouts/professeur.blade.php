@@ -90,20 +90,38 @@
             left: 100%;
         }
 
-        /* Badge notification animé */
+        /* Badge notification animé - Amélioré */
         .notification-badge {
             animation: pulse 2s infinite;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            min-width: 20px;
+            height: 20px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         @keyframes pulse {
             0% {
                 transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
             }
-            50% {
-                transform: scale(1.1);
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
             }
             100% {
                 transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
             }
         }
 
@@ -163,6 +181,25 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
 
+@php
+    // Récupération du nombre de notifications non lues directement dans le layout
+    $unreadCount = 0;
+    if (auth()->check()) {
+        try {
+            // Supposons que vous avez une table notifications avec une colonne 'read_at'
+            // Adaptez cette requête selon votre structure de base de données
+            $unreadCount = \DB::table('notifications')
+                ->where('notifiable_id', auth()->id())
+                ->where('notifiable_type', get_class(auth()->user()))
+                ->whereNull('read_at')
+                ->count();
+        } catch (\Exception $e) {
+            // En cas d'erreur, on garde 0
+            $unreadCount = 0;
+        }
+    }
+@endphp
+
 <!-- Navbar moderne -->
 <nav class="navbar-glass shadow-lg sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -184,10 +221,6 @@
                     <span>Supports éducatifs</span>
                 </a>
                 
-                <a href="{{ route('supports.create') }}" class="nav-link-modern flex items-center space-x-2 px-4 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-20 transition-all duration-200">
-                    <i class="fas fa-plus text-sm"></i>
-                    <span>Ajouter un Support</span>
-                </a>
                 
                 <a href="{{ route('professeur.questions.index') }}" class="nav-link-modern flex items-center space-x-2 px-4 py-2 rounded-lg text-white hover:bg-white hover:bg-opacity-20 transition-all duration-200">
                     <i class="fas fa-comments text-sm"></i>
@@ -267,10 +300,6 @@
                     <span>Supports éducatifs</span>
                 </a>
                 
-                <a href="{{ route('supports.create') }}" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200">
-                    <i class="fas fa-plus"></i>
-                    <span>Ajouter un Support</span>
-                </a>
                 
                 <a href="{{ route('professeur.questions.index') }}" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200">
                     <i class="fas fa-comments"></i>
@@ -375,8 +404,15 @@
     window.addEventListener('load', () => {
         document.body.classList.add('loaded');
     });
+
+    // Mise à jour automatique du compteur de notifications (optionnel)
+    setInterval(function() {
+        // Vous pouvez ajouter ici une requête AJAX pour mettre à jour le compteur
+        // sans recharger la page
+    }, 60000); // Toutes les minutes
 </script>
 
 </body>
 </html>
+
 

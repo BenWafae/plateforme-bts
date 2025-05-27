@@ -36,7 +36,7 @@
                 <select class="form-control" id="id_user" name="id_user" required>
                     <option value="" disabled selected>Sélectionnez un professeur</option>
                     @foreach($professeurs as $prof)
-                        <option value="{{ $prof->id }}" {{ $matiere->id_user == $prof->id ? 'selected' : '' }}>
+                        <option value="{{ $prof->id_user }}" {{ $matiere->id_user == $prof->id_user ? 'selected' : '' }}>
                             {{ $prof->nom }} {{ $prof->prenom }}
                         </option>
                     @endforeach

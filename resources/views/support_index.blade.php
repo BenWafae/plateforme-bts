@@ -1,20 +1,138 @@
 @extends('layouts.professeur')
 
+@section('head')
+    <style>
+        /* Configuration des couleurs personnalisées pour le thème violet */
+        .bg-violet-custom {
+            background-color: #5E60CE;
+        }
+        .text-violet-custom {
+            color: #5E60CE;
+        }
+        .border-violet-custom {
+            border-color: #5E60CE;
+        }
+
+        /* Style pour le titre principal avec thème violet */
+        .main-title {
+            color: #5E60CE;
+            font-weight: bold;
+            text-shadow: 0 1px 3px rgba(94, 96, 206, 0.1);
+        }
+
+        /* Style pour les en-têtes de matières avec gradient violet */
+        .matiere-header {
+            background: linear-gradient(135deg, #5E60CE 0%, #7C3AED 100%);
+        }
+
+        /* Style pour les onglets avec couleur violet */
+        .nav-tabs .nav-link {
+            color: #6c757d;
+            border: none;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: #5E60CE;
+            border-bottom-color: rgba(94, 96, 206, 0.3);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #5E60CE;
+            border-bottom-color: #5E60CE;
+            background-color: transparent;
+            font-weight: 600;
+        }
+
+        /* Style pour le formulaire de filtrage avec accent violet */
+        .filter-form {
+            border-left: 4px solid #5E60CE;
+        }
+
+        .filter-label {
+            color: #5E60CE;
+            font-weight: bold;
+        }
+
+        /* Style pour la pagination avec thème violet */
+        .pagination .page-link {
+            color: #5E60CE;
+            border-color: #dee2e6;
+            transition: all 0.2s ease;
+            border-radius: 0.375rem;
+            margin: 0 0.125rem;
+        }
+
+        .pagination .page-link:hover {
+            color: white;
+            background-color: #5E60CE;
+            border-color: #5E60CE;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(94, 96, 206, 0.3);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #5E60CE;
+            border-color: #5E60CE;
+            color: white;
+            box-shadow: 0 4px 8px rgba(94, 96, 206, 0.3);
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #9ca3af;
+            background-color: #f9fafb;
+            border-color: #e5e7eb;
+        }
+
+        /* Style pour le bouton nouveau support */
+        .btn-violet {
+            background-color: #5E60CE;
+            border-color: #5E60CE;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .btn-violet:hover {
+            background-color: #4F50AD;
+            border-color: #4F50AD;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Badge avec compteur violet */
+        .badge-count {
+            background-color: rgba(94, 96, 206, 0.1);
+            color: #5E60CE;
+            border: 1px solid rgba(94, 96, 206, 0.2);
+        }
+    </style>
+@endsection
+
+@section('breadcrumb', 'Mes Supports de Cours')
+
 @section('content')
     <div class="container">
-        <h2>Mes Supports de Cours</h2>
+        <h2 class="main-title mb-4">
+            <i class="fas fa-folder-open me-2"></i>
+            Mes Supports de Cours
+        </h2>
 
-       {{-- Formulaire de filtrage --}}
-       <form method="GET" action="{{ route('supports.index') }}" class="mb-4" 
+       {{-- Formulaire de filtrage avec accent violet --}}
+       <form method="GET" action="{{ route('supports.index') }}" class="mb-4 filter-form" 
        style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; 
               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
        
        <div class="row align-items-center">
            <div class="col-md-4">
-               <label for="format" class="form-label" style="font-weight: bold; color: #495057;">Filtrer par Format</label>
+               <label for="format" class="form-label filter-label">
+                   <i class="fas fa-filter me-1"></i>
+                   Filtrer par Format
+               </label>
                <select name="format" id="format" class="form-select" onchange="this.form.submit()" 
                    style="border-radius: 5px; border: 1px solid #ced4da; padding: 10px 15px; font-size: 16px; 
-                          background-color: white; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                          background-color: white; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;
+                          border-left: 3px solid #5E60CE;">
                    <option value="">📂 Tous les formats</option>
                    <option value="pdf" {{ request('format') == 'pdf' ? 'selected' : '' }}>📄 PDF</option>
                    <option value="ppt" {{ request('format') == 'ppt' ? 'selected' : '' }}>📊 PPT</option>
@@ -22,13 +140,18 @@
                    <option value="lien_video" {{ request('format') == 'lien_video' ? 'selected' : '' }}>🎥 Vidéo</option>
                </select>
            </div>
+           <div class="col-md-8 text-end">
+               <a href="{{ route('supports.create') }}" class="btn btn-violet">
+                   <i class="fas fa-plus me-2"></i>
+                   Nouveau Support
+               </a>
+           </div>
        </div>
    </form>
-   
-
 
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -36,6 +159,7 @@
 
         @if (session('error'))
             <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle me-2"></i>
                 {{ session('error') }}
             </div>
         @endif
@@ -50,12 +174,20 @@
 
             @if ($supportsParType->isNotEmpty())
                 <div class="card mt-5">
-                    <div class="card-header bg-dark text-white">
-                        <h3 class="mb-0">{{ $matiere->Nom }}</h3>
+                    <div class="card-header matiere-header text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="mb-0">
+                                <i class="fas fa-book me-2"></i>
+                                {{ $matiere->Nom }}
+                            </h3>
+                            <span class="badge bg-white text-violet-custom">
+                                {{ $supportsParType->flatten()->count() }} supports
+                            </span>
+                        </div>
                     </div>
                     <div class="card-body">
 
-                        {{-- Onglets pour chaque type de support --}}
+                        {{-- Onglets pour chaque type de support avec style violet --}}
                         <ul class="nav nav-tabs" id="tabsMatiere{{ $matiere->id_Matiere }}" role="tablist">
                             @foreach ($types as $index => $type)
                                 @php
@@ -74,14 +206,18 @@
                                                 role="tab" 
                                                 aria-controls="content-{{ $matiere->id_Matiere }}-{{ $type->id_type }}" 
                                                 aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
+                                            <i class="fas fa-folder me-1"></i>
                                             {{ ucfirst($type->nom) }}
+                                            <span class="badge badge-count ms-2">
+                                                {{ $supports->count() }}
+                                            </span>
                                         </button>
                                     </li>
                                 @endif
                             @endforeach
                         </ul>
 
-                        {{-- Contenu des onglets --}}
+                        {{-- Contenu des onglets - CARTES INCHANGÉES --}}
                         <div class="tab-content mt-3" id="tabsContentMatiere{{ $matiere->id_Matiere }}">
                             @foreach ($types as $index => $type)
                                 @php
@@ -176,9 +312,6 @@
                                                                     </form>
                                                                 </div>
                                                             </div>
-                                                            
-                                                            
-                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -194,17 +327,22 @@
             @endif
         @endforeach
 
-        {{-- Pagination avec marge supplémentaire pour espacement --}}
-        <div class="d-flex justify-content-center mt-3 mb-5">
-            <nav>
-                <ul class="pagination pagination-sm justify-content-center">
-                    {{ $matieres->links('pagination::bootstrap-4') }}
-                </ul>
+        {{-- Pagination stylisée avec thème violet --}}
+        <div class="d-flex justify-content-center mt-5 mb-5">
+            <nav aria-label="Navigation des supports">
+                <div class="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden p-3">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <span class="text-violet-custom me-3 fw-bold">
+                            <i class="fas fa-file-alt me-1"></i>
+                            Pages :
+                        </span>
+                        {{ $matieres->links('pagination::bootstrap-4') }}
+                    </div>
+                </div>
             </nav>
         </div>
     </div>
 @endsection
-
 
 
 

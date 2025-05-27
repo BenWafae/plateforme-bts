@@ -255,7 +255,84 @@ public function download($id)
         $support->delete();
 
         return redirect()->route('supports.index')->with('success', 'Le support éducatif a été supprimé avec succès.');
+    } 
+   // traduction
+public function showTranslateForm($id)
+{
+    $support = SupportEducatif::findOrFail($id);
+
+    return view('translation_result', compact('support'));
+}
+
+
+
+public function translate(Request $request)
+{
+    $request->validate([
+        'id_support' => 'required|exists:support_educatifs,id_support',
+        'text_to_translate' => 'required|string',
+        'target_language' => 'required|in:en,ar',
+    ]);
+
+    $support = SupportEducatif::findOrFail($request->input('id_support'));
+    $text = $request->input('text_to_translate');
+    $targetLanguage = $request->input('target_language');
+
+    $model = match($targetLanguage) {
+        'en' => 'Helsinki-NLP/opus-mt-fr-en',
+        'ar' => 'Helsinki-NLP/opus-mt-fr-ar',
+        default => 'Helsinki-NLP/opus-mt-fr-en',
+    };
+
+    // Choisir un token, par exemple alterner selon la langue
+    $token = $targetLanguage === 'en' ? env('HF_API_TOKEN_1') : env('HF_API_TOKEN_1');
+
+  $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $token,
+    ])->post("https://api-inference.huggingface.co/models/$model", [
+        'inputs' => $text,
+    ]);
+  
+
+
+    if ($response->failed()) {
+        return back()->withErrors(['error' => 'Erreur lors de la traduction — vérifiez votre token ou le texte'])->withInput();
     }
+
+    $result = $response->json();
+
+    $translated = $result[0]['translation_text'] ?? 'Traduction non disponible';
+
+    return view('translation_result', compact('support', 'translated'))
+           ->with('text_to_translate', $text)
+           ->with('target_language', $targetLanguage);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 public function showUploadFolderForm()
 {
