@@ -4,109 +4,97 @@
 
 @section('content')
 
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-{{-- Barre de filtres --}}
-<div class="container py-3 mb-4 rounded-3 text-white" style="background-color: #5E60CE;">
-    <div class="d-flex flex-wrap align-items-center justify-content-center gap-3">
-        {{-- Formulaire d’année --}}
-        <form method="GET" action="{{ route('etudiant.dashboard') }}" class="d-inline-block">
-            <select name="annee" class="form-select fw-bold" onchange="this.form.submit()" style="width: auto;">
-                <option value="">Choisissez l'année</option>
-                <option value="1" {{ request('annee') == '1' ? 'selected' : '' }}>1ère année</option>
-                <option value="2" {{ request('annee') == '2' ? 'selected' : '' }}>2ème année</option>
-            </select>
-        </form>
+    <div class="container-fluid py-3 mb-4" style="background-color: rgb(8, 45, 82); border-radius: 10px;">
+        <div class="d-flex flex-wrap align-items-center justify-content-center gap-3">
+            <form method="GET" action="{{ route('etudiant.dashboard') }}" class="d-inline-block">
+                <select name="annee" class="form-select" onchange="this.form.submit()" 
+                    style="width: auto; padding: 8px; font-weight: bold;">
+                    <option value="">Choisissez l'année</option>
+                    <option value="1" {{ request('annee') == '1' ? 'selected' : '' }}>1ère année</option>
+                    <option value="2" {{ request('annee') == '2' ? 'selected' : '' }}>2ème année</option>
+                </select>
+            </form>
 
-        {{-- Dropdowns --}}
-        @if(request('annee'))
-            <div class="dropdown">
-                <button class="btn btn-outline-light dropdown-toggle fw-bold" type="button" id="filiereDropdown" data-bs-toggle="dropdown">
-                    Filière
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="filiereDropdown">
-                    @foreach($filieres as $filiere)
-                        <li>
-                            <a class="dropdown-item {{ request('filiere_id') == $filiere->id_filiere ? 'active' : '' }}"
-                               href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => $filiere->id_filiere]) }}">
-                                {{ $filiere->nom_filiere }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+            @if(request('annee'))
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle px-4 py-2 fw-bold" type="button" 
+                        id="filiereDropdown" data-bs-toggle="dropdown">
+                        Filière
+                    </button>
+                    <ul class="dropdown-menu">
+                        @foreach($filieres as $filiere)
+                            <li>
+                                <a class="dropdown-item {{ request('filiere_id') == $filiere->id_filiere ? 'active' : '' }}"
+                                    href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => $filiere->id_filiere]) }}">
+                                    {{ $filiere->nom_filiere }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-        @if(request('filiere_id'))
-            <div class="dropdown">
-                <button class="btn btn-outline-light dropdown-toggle fw-bold" type="button" id="matiereDropdown" data-bs-toggle="dropdown">
-                    Matière
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="matiereDropdown">
-                    @foreach($matières as $matiere)
-                        <li>
-                            <a class="dropdown-item {{ request('matiere_id') == $matiere->id_Matiere ? 'active' : '' }}"
-                               href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => request('filiere_id'), 'matiere_id' => $matiere->id_Matiere]) }}">
-                                {{ $matiere->Nom }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+            @if(request('filiere_id'))
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle px-4 py-2 fw-bold" type="button" 
+                        id="matiereDropdown" data-bs-toggle="dropdown">
+                        Matière
+                    </button>
+                    <ul class="dropdown-menu">
+                        @foreach($matières as $matiere)
+                            <li>
+                                <a class="dropdown-item {{ request('matiere_id') == $matiere->id_Matiere ? 'active' : '' }}"
+                                    href="{{ route('etudiant.dashboard', [
+                                        'annee' => request('annee'),
+                                        'filiere_id' => request('filiere_id'),
+                                        'matiere_id' => $matiere->id_Matiere
+                                    ]) }}">
+                                    {{ $matiere->Nom }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-        @if(request('matiere_id'))
-            <div class="dropdown">
-                <button class="btn btn-outline-light dropdown-toggle fw-bold" type="button" id="typeDropdown" data-bs-toggle="dropdown">
-                    Type de support
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="typeDropdown">
-                    @foreach($types as $type)
-                        <li>
-                            <a class="dropdown-item {{ request('type_id') == $type->id_type ? 'active' : '' }}"
-                               href="{{ route('etudiant.dashboard', [
-                                   'annee' => request('annee'),
-                                   'filiere_id' => request('filiere_id'),
-                                   'matiere_id' => request('matiere_id'),
-                                   'type_id' => $type->id_type
-                               ]) }}">
-                                {{ $type->nom }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-    </div>
-</div>
+            @if(request('matiere_id'))
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle px-4 py-2 fw-bold" type="button" 
+                        id="typeDropdown" data-bs-toggle="dropdown">
+                        Type de support
+                    </button>
+                    <ul class="dropdown-menu">
+                        @foreach($types as $type)
+                            <li>
+                                <a class="dropdown-item {{ request('type_id') == $type->id_type ? 'active' : '' }}"
+                                    href="{{ route('etudiant.dashboard', [
+                                        'annee' => request('annee'),
+                                        'filiere_id' => request('filiere_id'),
+                                        'matiere_id' => request('matiere_id'),
+                                        'type_id' => $type->id_type
+                                    ]) }}">
+                                    {{ $type->nom }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-@if(!request('annee') || !request('filiere_id') || !request('matiere_id') || !request('type_id'))
-    {{-- Instructions --}}
-    <div class="container text-center py-5">
-        <div class="border rounded-4 p-5 shadow-sm" style="max-width: 720px; margin: auto; background-color: #E9ECFF; border-color: #5E60CE;">
-            <p class="text-dark fw-semibold fs-5 mb-4">
-                Veuillez suivre les étapes ci-dessous pour afficher les supports pédagogiques :
-            </p>
-            <ul class="text-start text-dark fw-normal fs-6 ps-3">
-                <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Sélectionnez l’<strong>année d’étude</strong></li>
-                <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Choisissez la <strong>filière</strong> correspondante</li>
-                <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Sélectionnez la <strong>matière</strong></li>
-                <li><i class="fas fa-check-circle text-primary me-2"></i> Définissez le <strong>type de support</strong></li>
-            </ul>
         </div>
     </div>
-@else
-    {{-- Affichage des supports --}}
-    <div class="container">
-        <div class="row g-4">
-            @forelse($supports as $support)
-                <div class="col-md-4">
 
+    <div class="row mt-2 mb-2 gy-3">
+        @foreach($supports as $support)
+            @if($support->id_type == request('type_id'))
+                <div class="col-md-4">
                     <div class="card mb-3 shadow-sm h-100 d-flex flex-column position-relative border border-1 border-dark rounded-3"
                         style="transition: transform 0.3s ease-in-out;">
                         
@@ -145,23 +133,15 @@
                 class="btn btn-outline-secondary btn-sm" title="Traduire">
           <i class="fas fa-language"></i>
         </a>
->
                             </div>
                         </div>
                     </div>
                 </div>
-            @empty
-                <p class="text-center text-gray-600">Aucun support trouvé pour ces critères.</p>
-            @endforelse
-        </div>
-
-        {{-- Pagination --}}
-       @if($supports instanceof \Illuminate\Pagination\LengthAwarePaginator)
-    <div class="d-flex justify-content-center mt-4">
-        {{ $supports->withQueryString()->links('pagination::bootstrap-4') }}
+            @endif
+        @endforeach
     </div>
-@endif
 
-    </div>
-@endif
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+@endsection
 
