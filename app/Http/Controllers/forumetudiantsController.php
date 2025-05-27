@@ -35,10 +35,9 @@ class ForumEtudiantsController extends Controller
             $query->where('titre', 'like', '%' . $request->search . '%');
         }
 
-        // Filtrage par date si spécifié
-        if ($request->has('date') && $request->date) {
-            $query->whereDate('created_at', '=', $request->date);
-        }
+       if ($request->has('year') && $request->year) {
+    $query->whereYear('created_at', $request->year);
+}
 
         // Récupérer les questions filtrées avec pagination (3 par page)
         $questions = $query->latest()->paginate(3);

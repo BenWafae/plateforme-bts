@@ -3,36 +3,34 @@
 @section('title', 'Poser une question') <!-- Titre de la page -->
 
 @section('content')
-    <div class="container mt-4">
-        <h2 class="mb-4">Poser une question</h2>
+<div class="container my-5">
+    <div class="bg-white p-5 shadow rounded-4 border-start border-5" style="border-color: #5E60CE;">
+        <h2 class="fw-bold mb-4 text-primary">✍️ Poser une question</h2>
 
-        <!-- Affichage des messages de succès -->
+        <!-- Message de succès -->
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success rounded-3 shadow-sm">
                 {{ session('success') }}
             </div>
         @endif
 
-        <!-- Formulaire pour poser une question -->
+        <!-- Formulaire de question -->
         <form action="{{ route('questions.store') }}" method="POST">
-            @csrf <!-- Protection CSRF -->
+            @csrf
 
-            <!-- Titre de la question -->
-            <div class="mb-3">
-                <label for="titre" class="form-label">Titre de la question :</label>
-                <input type="text" class="form-control" id="titre" name="titre" required>
+            <div class="mb-4">
+                <label for="titre" class="form-label fw-semibold">Titre de la question :</label>
+                <input type="text" class="form-control rounded-3 shadow-sm" id="titre" name="titre" placeholder="Ex: Comment résoudre cette équation ?" required>
             </div>
 
-            <!-- Contenu de la question -->
-            <div class="mb-3">
-                <label for="contenue" class="form-label">Contenu :</label>
-                <textarea class="form-control" id="contenue" name="contenue" rows="4" required></textarea>
+            <div class="mb-4">
+                <label for="contenue" class="form-label fw-semibold">Contenu :</label>
+                <textarea class="form-control rounded-3 shadow-sm" id="contenue" name="contenue" rows="5" placeholder="Décrivez votre question ou problème en détail..." required></textarea>
             </div>
 
-            <!-- Sélectionner la matière -->
-            <div class="mb-3">
-                <label for="id_Matiere" class="form-label">Sélectionner la matière :</label>
-                <select class="form-control" id="id_Matiere" name="id_Matiere" required>
+            <div class="mb-4">
+                <label for="id_Matiere" class="form-label fw-semibold">Matière concernée :</label>
+                <select class="form-select rounded-3 shadow-sm" id="id_Matiere" name="id_Matiere" required>
                     <option value="">-- Choisissez une matière --</option>
                     @foreach($matieres as $matiere)
                         <option value="{{ $matiere->id_Matiere }}">{{ $matiere->Nom }}</option>
@@ -40,13 +38,15 @@
                 </select>
             </div>
 
-            <!-- Bouton pour soumettre le formulaire -->
-            <button type="submit" class="btn btn-primary">Envoyer</button>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <a href="{{ route('forumetudiants.index') }}" class="btn btn-outline-secondary rounded-pill">
+                    <i class="bi bi-arrow-left-circle"></i> Retour au Forum
+                </a>
+                <button type="submit" class="btn btn-primary rounded-pill px-4">
+                    <i class="bi bi-send"></i> Envoyer
+                </button>
+            </div>
         </form>
-
-        <!-- Lien pour revenir à la page du forum -->
-        <div class="mt-4">
-            <a href="{{ route('forumetudiants.index') }}" class="btn btn-secondary">Retour au Forum</a>
-        </div>
     </div>
+</div>
 @endsection
