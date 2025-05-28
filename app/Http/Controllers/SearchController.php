@@ -1,19 +1,21 @@
 <?php
-// app/Http/Controllers/SearchController.php
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User; // ou autre modèle à rechercher
+use App\Models\SupportEducatif;
 
 class SearchController extends Controller
 {
     public function index(Request $request)
     {
-        $query = $request->input('query');
+        $query = $request->input('q');
 
-        // Exemple simple : recherche par nom
-        $results = User::where('nom', 'like', '%' . $query . '%')->get();
+        $supports = SupportEducatif::query()
+            ->where('titre', 'like', "%{$query}%")
+            ->orWhere('description', 'like', "%{$query}%")
+            ->orderBy('created_at', 'desc')
+            ->paginate(9);
 
-        return view('searchresults', compact('results', 'query'));
+        return view('search', compact('supports', 'query'));
     }
 }

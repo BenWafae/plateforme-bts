@@ -42,6 +42,8 @@ use Illuminate\Support\Facades\Route;
 
 // Route d'accueil
 Route::get('/', [App\Http\Controllers\AccueilController::class, 'index'])->name('accueil');
+Route::get('/search', [App\Http\Controllers\SearchController::class, 'index'])->name('search.index');
+
 // Routes pour les supports
 // routes/web.php
 Route::controller(FichierController::class)->group(function() {

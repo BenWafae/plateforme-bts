@@ -14,42 +14,46 @@ class AccueilController extends Controller
 {
     public function index(Request $request)
     {
-        // Tous les types (ex: cours, exercice, examen)
+        // Types principaux
         $types = Type::whereIn('nom', ['cours', 'exercice', 'examen'])->get();
 
-        // Filieres : on récupère toutes puis on filtre par année si donnée
+        // Filtrage des filières
         $filieres = Filiere::all();
         if ($request->filled('annee')) {
-            $annee = $request->input('annee');
-            $filieres = $filieres->filter(function ($filiere) use ($annee) {
-                return strpos($filiere->nom_filiere, $annee) !== false;
+            $filieres = $filieres->filter(function ($filiere) use ($request) {
+                return strpos($filiere->nom_filiere, $request->annee) !== false;
             });
         }
 
-        // Matières selon la filière sélectionnée
+        // Matières en fonction de la filière
         $matieres = collect();
         if ($request->filled('filiere_id')) {
-            $filiere = Filiere::find($request->input('filiere_id'));
+            $filiere = Filiere::find($request->filiere_id);
             if ($filiere) {
                 $matieres = $filiere->matieres;
             }
         }
 
-        // Supports selon la matière et le type, seulement publics
+        // Supports éducatifs avec pagination
         $supports = collect();
         if ($request->filled('matiere_id') && $request->filled('type')) {
-            $matiere = Matiere::with(['supportsEducatifs' => function ($query) use ($request) {
-                $query->whereHas('type', function ($q) use ($request) {
-                    $q->where('nom', $request->input('type'));
-                })->where('prive', 0); // Filtrer supports publics uniquement
-            }])->find($request->input('matiere_id'));
-
+            $matiere = Matiere::find($request->matiere_id);
             if ($matiere) {
-                $supports = $matiere->supportsEducatifs->each(function ($support) {
-                    // Ajoute l'URL appropriée selon le format
+                $supportsQuery = $matiere->supportsEducatifs()
+                    ->whereHas('type', function ($q) use ($request) {
+                        $q->where('nom', $request->type);
+                    })
+                    ->where('prive', 0)
+                    ->latest();
+
+                // Paginer les résultats
+                $supports = $supportsQuery->paginate(10)->appends($request->except('page'));
+
+                // Ajouter les URLs d'action
+                $supports->getCollection()->transform(function ($support) {
                     $support->action_url = $this->getActionUrl($support);
-                    // Ajoute le type d'action (view, download, video)
                     $support->action_type = $this->getActionType($support);
+                    return $support;
                 });
             }
         }
@@ -61,29 +65,24 @@ class AccueilController extends Controller
      * Détermine l'URL d'action appropriée pour un support
      */
     protected function getActionUrl(SupportEducatif $support)
-{
-    if ($support->format === 'pdf') {
-        return route('fichiers.view', $support->id_support);
-    } elseif ($support->format === 'video') {
-        return $support->lien_url; // Lien externe direct
-    } else {
-        return route('fichiers.download', $support->id_support);
+    {
+        return match ($support->format) {
+            'pdf' => route('fichiers.view', $support->id_support),
+            'video' => $support->lien_url,
+            default => route('fichiers.download', $support->id_support),
+        };
     }
-}
-
 
     /**
      * Détermine le type d'action (view, download, video)
      */
     protected function getActionType(SupportEducatif $support)
     {
-        if ($support->format === 'pdf') {
-            return 'view';
-        } elseif ($support->format === 'video') {
-            return 'video';
-        } else {
-            return 'download';
-        }
+        return match ($support->format) {
+            'pdf' => 'view',
+            'video' => 'video',
+            default => 'download',
+        };
     }
 
     /**
@@ -92,20 +91,20 @@ class AccueilController extends Controller
     public function view($id)
     {
         $support = SupportEducatif::findOrFail($id);
-        
+
         if ($support->format !== 'pdf') {
             abort(403, 'Seuls les fichiers PDF peuvent être visualisés');
         }
 
-        $filePath = storage_path('app/public/'.$support->chemin);
-        
+        $filePath = storage_path('app/public/' . $support->chemin);
+
         if (!file_exists($filePath)) {
             abort(404, 'Fichier non trouvé');
         }
 
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.Str::slug($support->titre).'.pdf"'
+            'Content-Disposition' => 'inline; filename="' . Str::slug($support->titre) . '.pdf"'
         ]);
     }
 
@@ -115,16 +114,17 @@ class AccueilController extends Controller
     public function download($id)
     {
         $support = SupportEducatif::findOrFail($id);
-        $filePath = storage_path('app/public/'.$support->chemin);
-        
+        $filePath = storage_path('app/public/' . $support->chemin);
+
         if (!file_exists($filePath)) {
             abort(404, 'Fichier non trouvé');
         }
-        
+
         $extension = pathinfo($support->chemin, PATHINFO_EXTENSION);
+
         return response()->download(
             $filePath,
-            Str::slug($support->titre).'.'.$extension,
+            Str::slug($support->titre) . '.' . $extension,
             ['Content-Type' => $this->getMimeType($extension)]
         );
     }
@@ -143,9 +143,9 @@ class AccueilController extends Controller
             'xls' => 'application/vnd.ms-excel',
             'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'zip' => 'application/zip',
-            'mp4' => 'video/mp4'
+            'mp4' => 'video/mp4',
         ];
-        
+
         return $mimeTypes[strtolower($extension)] ?? 'application/octet-stream';
     }
-} 
+}

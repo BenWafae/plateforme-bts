@@ -112,8 +112,14 @@
                 </div>
             </div>
         </div>
-        @endforelse
+       @endforelse
     </div>
+    <!-- PAGINATION -->
+    @if($supports instanceof \Illuminate\Pagination\LengthAwarePaginator)
+        <div class="mt-6">
+            {{ $supports->appends(request()->except('page'))->links('pagination::tailwind') }}
+        </div>
+    @endif
 
     @elseif(request()->has('type'))
     <!-- Filtres de sélection - affichage horizontal progressif -->
@@ -595,4 +601,5 @@
     </div>
     @endif
 </div>
+
 @endsection
