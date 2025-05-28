@@ -150,36 +150,50 @@
         </div>
 
         <!-- Modal signalement -->
-        <div class="modal fade" id="reportModal{{ $question->id_question }}" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content rounded-4">
-                    <form action="{{ route('reports.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="content_type" value="question">
-                        <input type="hidden" name="id_question" value="{{ $question->id_question }}">
-                        <div class="modal-header bg-light rounded-top">
-                            <h5 class="modal-title"><i class="bi bi-flag-fill text-danger me-2"></i>Signaler une question</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                        </div>
-                        <div class="modal-body">
-                            <label class="form-label">Motif</label>
-                            <select name="reason" class="form-select mb-3" required>
-                                <option value="">Choisir un motif</option>
-                                <option value="inapproprié">Contenu inapproprié</option>
-                                <option value="erroné">Contenu erroné</option>
-                                <option value="autre">Autre</option>
-                            </select>
-                            <label class="form-label">Détails (facultatif)</label>
-                            <textarea class="form-control" name="description" rows="3"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-danger" type="submit">Envoyer</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div class="modal fade" id="reportModal{{ $question->id_question }}" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <form action="{{ route('reports.store') }}" method="POST">
+        @csrf
+        <input type="hidden" name="content_type" value="question">
+        <input type="hidden" name="id_question" value="{{ $question->id_question }}">
+
+        <!-- Header -->
+        <div class="modal-header rounded-top" style="background-color: #7879E3;">
+          <h5 class="modal-title text-white">
+            <i class="bi bi-flag-fill me-2"></i>Signaler une question
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
         </div>
+
+        <!-- Body -->
+        <div class="modal-body bg-light">
+          <label class="form-label fw-semibold">Motif</label>
+          <select name="reason" class="form-select mb-3 border-primary" required>
+            <option value="">Choisir un motif</option>
+            <option value="inapproprié">Contenu inapproprié</option>
+            <option value="erroné">Contenu erroné</option>
+            <option value="autre">Autre</option>
+          </select>
+
+          <label class="form-label fw-semibold">Détails (facultatif)</label>
+          <textarea class="form-control border-secondary" name="description" rows="3" placeholder="Ajoutez des précisions..."></textarea>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button class="btn text-white" type="submit" style="background-color: #7879E3;">
+            Envoyer
+          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Annuler
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
     @empty
         <div class="alert alert-info text-center">Aucune question pour le moment.</div>
     @endforelse

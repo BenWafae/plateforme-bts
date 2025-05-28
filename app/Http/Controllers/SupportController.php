@@ -12,6 +12,8 @@ use Smalot\PdfParser\Parser;
 use PhpOffice\PhpWord\Element\TextRun;
 use PhpOffice\PhpWord\Element\Text;
 use Illuminate\Support\Facades\Http;
+use App\Events\CoursCree;
+
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Support\Facades\Storage;
 
@@ -128,7 +130,7 @@ class SupportController extends Controller
             }
         }
 
-        SupportEducatif::create([
+      $supportEducatif =SupportEducatif::create([
             'titre' => $validated['titre'],
             'description' => $validated['description'],
             'lien_url' => $lienUrl,
@@ -138,6 +140,8 @@ class SupportController extends Controller
             'id_user' => auth()->id(),
             'prive' => $validated['prive'],
         ]);
+        event(new CoursCree($supportEducatif));
+
 
         return redirect()->route('supports.index')->with('success', 'Le support éducatif a été ajouté avec succès.');
     }

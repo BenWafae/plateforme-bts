@@ -22,6 +22,21 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+        <!-- Filière -->
+<div class="mt-4">
+    <x-input-label for="id_filiere" :value="__('Filière')" />
+    <select id="id_filiere" name="id_filiere" required
+            class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+        <option value="">-- Sélectionnez une filière --</option>
+        @foreach($filieres as $filiere)
+            <option value="{{ $filiere->id_filiere }}" {{ old('id_filiere') == $filiere->id_filiere ? 'selected' : '' }}>
+                {{ $filiere->nom_filiere }}
+            </option>
+        @endforeach
+    </select>
+    <x-input-error :messages="$errors->get('id_filiere')" class="mt-2" />
+</div>
+
 
         <!-- Password -->
         <div class="mt-4">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Filiere;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -20,7 +21,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+         $filieres = Filiere::all(); // récupérer depuis la base
+    return view('auth.register', compact('filieres'));
+
     }
 
     /**
@@ -35,6 +38,7 @@ class RegisteredUserController extends Controller
             'prenom' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'id_filiere' => ['required', 'exists:filieres,id_filiere'],
         ]);
 
         $user = User::create([
@@ -43,7 +47,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'etudiant',  
-            // iici on a met le role par defaut etudiant ccr on veut que juste les etudiants qui peuvent s'inscrire
+           'id_filiere' => $request->id_filiere,
         ]);
 
         event(new Registered($user));

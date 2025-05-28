@@ -60,8 +60,13 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\ReponseCreee::class => [
     \App\Listeners\NotifierProfReponse::class,
 ],
+    \App\Events\CoursCree::class => [
+        \App\Listeners\NotifierEtudiantsFiliere::class,
+    ],
+];
+
         
-    ];
+   
 
     public function boot(): void
     {

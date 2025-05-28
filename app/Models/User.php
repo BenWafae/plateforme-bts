@@ -27,6 +27,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'id_filiere',
     ];
 
     /**
@@ -47,6 +48,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function filiere()
+{
+    return $this->belongsTo(Filiere::class, 'id_filiere', 'id_filiere');
+}
+
 
    
     // Relation entre User et Question (Un utilisateur peut poser plusieurs questions)

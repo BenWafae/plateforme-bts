@@ -43,7 +43,7 @@ class NotificationController extends Controller
     public function detail($id)
     {
         // Charger la notification avec ses relations (reponse.user et question.user)
-        $notification = Notification::with(['reponse.user', 'question.user'])->findOrFail($id);
+       $notification = Notification::with(['reponse.user', 'question.user', 'support'])->findOrFail($id);
 
         // Marquer la notification comme lue si elle ne l'est pas déjà
         if (!$notification->lue) {
@@ -51,10 +51,12 @@ class NotificationController extends Controller
             $notification->save();
         }
 
-        $reponse = $notification->reponse;
-        $question = $notification->question;
+       $reponse = $notification->reponse;
+     $question = $notification->question;
+     $support = $notification->support;
 
-        return view('notification_detail', compact('notification', 'reponse', 'question'));
+return view('notification_detail', compact('notification', 'reponse', 'question', 'support'));
+
     }
 
     /**
@@ -165,6 +167,7 @@ class NotificationController extends Controller
             'EnregistrementDeQuestion' => 'Nouvelle Question Enregistrée',
             'SuppressionDeQuestion' => 'Question Supprimée',
             'ReponseAUneQuestion' => 'Nouvelle Réponse',
+            'nouveau_support' => 'Nouveau Support Éducatif',
             default => 'Notification',
         };
     }

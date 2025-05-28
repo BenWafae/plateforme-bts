@@ -20,7 +20,8 @@ class Notification extends Model
         'date_notification',
         'id_user',
         'id_question',
-        'id_reponse', // Assurez-vous que le champ id_reponse est dans $fillable
+        'id_reponse',
+        'id_support',
     ];
 
     // Relation avec l'utilisateur (celui qui reçoit la notification)
@@ -40,4 +41,10 @@ class Notification extends Model
     {
         return $this->belongsTo(Reponse::class, 'id_reponse');
     }
+    // Relation avec le support éducatif (si la notification est liée à un support)
+public function support()
+{
+    return $this->belongsTo(SupportEducatif::class, 'id_support');
+}
+
 }
