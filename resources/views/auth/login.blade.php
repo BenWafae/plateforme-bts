@@ -2,49 +2,143 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <div class="flex flex-col items-center">
-        <h3 class="text-3xl font-semibold">Se connecter</h3>
-        <p class="text-gray-500">Vous n’avez pas de compte ? <a href="#" style="color: oklch(0.702 0.183 293.541);">S'inscrire</a></p>
+    <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-violet-custom to-indigo-700 text-white mb-4">
+            <i class="fas fa-user text-xl"></i>
+        </div>
+        <h3 class="text-3xl font-bold text-gray-800 mb-2">Se connecter</h3>
+        <p class="text-gray-600">
+            Vous n'avez pas de compte ? 
+            <a href="{{ route('register') }}" class="text-violet-custom hover:text-violet-700 font-semibold transition-colors duration-200">
+                S'inscrire
+            </a>
+        </p>
     </div>
 
-    <form method="POST" action="{{ route('login') }}" class="w-full sm:max-w-md mt-6 mx-auto">
+    <form method="POST" action="{{ route('login') }}" class="space-y-6">
         @csrf
 
         <!-- Email Address -->
-        <div class="mt-4">
-            <label for="email" class="text-sm font-semibold" style="color: #4B4B4B;">email</label>
-            <x-text-input id="email" class="block w-full border-gray-300 rounded-md p-3" type="email" name="email"  required autofocus autocomplete="username" style="color: #4B4B4B;" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div>
+            <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-envelope mr-2 text-violet-custom"></i>
+                Adresse email
+            </label>
+            <div class="relative">
+                <x-text-input 
+                    id="email" 
+                    class="input-focus block w-full border-2 border-gray-200 rounded-xl p-4 text-gray-700 placeholder-gray-400 transition-all duration-200 focus:outline-none" 
+                    type="email" 
+                    name="email" 
+                    placeholder="votre@email.com"
+                    required 
+                    autofocus 
+                    autocomplete="username" 
+                />
+                <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
+                    <i class="fas fa-at text-gray-400"></i>
+                </div>
+            </div>
+            <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-500 text-sm" />
         </div>
 
         <!-- Password -->
-        <div class="mt-4 relative">
-            <label for="password" class="text-sm font-semibold" style="color: #4B4B4B;">mot de passe</label>
-            <x-text-input id="password" class="block w-full border-gray-300 rounded-md p-3 pr-10" type="password" name="password" required autocomplete="current-password" style="color: #4B4B4B;" />
-            {{-- <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" onclick="togglePasswordVisibility()"> --}}
-                {{-- <svg id="password-icon" class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12c0-3-2.5-6-5-6s-5 3-5 6 2.5 6 5 6 5-3 5-6z" />
-                </svg> --}}
-            </button>
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div>
+            <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-lock mr-2 text-violet-custom"></i>
+                Mot de passe
+            </label>
+            <div class="relative">
+                <x-text-input 
+                    id="password" 
+                    class="input-focus block w-full border-2 border-gray-200 rounded-xl p-4 pr-12 text-gray-700 placeholder-gray-400 transition-all duration-200 focus:outline-none" 
+                    type="password" 
+                    name="password" 
+                    placeholder="••••••••"
+                    required 
+                    autocomplete="current-password" 
+                />
+                <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
+                   <i id="togglePassword" class="fas fa-eye cursor-pointer text-gray-400"></i>
+
+                </div>
+            </div>
+            <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-500 text-sm" />
         </div>
 
-        <!-- Forgot Password -->
-        <div class="mt-2 text-right">
+        <!-- Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between">
+            <label class="flex items-center">
+                <input type="checkbox" class="rounded border-gray-300 text-violet-custom shadow-sm focus:ring-violet-custom">
+                <span class="ml-2 text-sm text-gray-600">Se souvenir de moi</span>
+            </label>
+            
             @if (Route::has('password.request'))
-                <a class="text-sm text-gray-500 hover:text-gray-700" href="{{ route('password.request') }}">Mot de passe oublié ?</a>
+                <a class="text-sm text-violet-custom hover:text-violet-700 font-medium transition-colors duration-200" href="{{ route('password.request') }}">
+                    Mot de passe oublié ?
+                </a>
             @endif
         </div>
 
         <!-- Login Button -->
-        <div class="mt-4">
-            <button type="submit" class="w-full p-2 rounded-md text-white" style="background-color: oklch(0.702 0.183 293.541); font-size: 14px;">
+        <div class="pt-2">
+            <button 
+                type="submit" 
+                class="w-full bg-gradient-to-r from-violet-custom to-indigo-700 hover:from-violet-700 hover:to-indigo-800 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-violet-300"
+            >
+                <i class="fas fa-sign-in-alt mr-2"></i>
                 Se connecter
             </button>
         </div>
-    </form>
-</x-guest-layout>
 
+        <!-- Séparateur -->
+        <div class="relative my-6">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-200"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-4 bg-white text-gray-500">ou</span>
+            </div>
+        </div>
+
+        <!-- Boutons sociaux (optionnel) -->
+        <div class="grid grid-cols-2 gap-4">
+            <button type="button" class="flex items-center justify-center px-4 py-3 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-200">
+                <i class="fab fa-google text-red-500 mr-2"></i>
+                <span class="text-sm font-medium text-gray-700">Google</span>
+            </button>
+            <button type="button" class="flex items-center justify-center px-4 py-3 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-200">
+                <i class="fab fa-microsoft text-blue-500 mr-2"></i>
+                <span class="text-sm font-medium text-gray-700">Microsoft</span>
+            </button>
+        </div>
+    </form>
+
+    <!-- Footer -->
+    <div class="mt-8 text-center">
+        <p class="text-xs text-gray-500">
+            En vous connectant, vous acceptez nos 
+            <a href="#" class="text-violet-custom hover:text-violet-700">conditions d'utilisation</a> 
+            et notre 
+            <a href="#" class="text-violet-custom hover:text-violet-700">politique de confidentialité</a>
+        </p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
+</script>
+
+</x-guest-layout>
 
 
 
