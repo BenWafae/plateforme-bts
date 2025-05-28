@@ -153,6 +153,24 @@
         <span class="badge">{{ $notif_count }}</span>
       @endif
     </a>
+    <form method="GET" action="{{ route('etudiant.dashboard') }}" class="d-flex align-items-center me-3" style="gap: 8px;">
+  @if(request('annee'))
+    <input type="hidden" name="annee" value="{{ request('annee') }}">
+  @endif
+  @if(request('filiere_id'))
+    <input type="hidden" name="filiere_id" value="{{ request('filiere_id') }}">
+  @endif
+  @if(request('matiere_id'))
+    <input type="hidden" name="matiere_id" value="{{ request('matiere_id') }}">
+  @endif
+  @if(request('type_id'))
+    <input type="hidden" name="type_id" value="{{ request('type_id') }}">
+  @endif
+
+  <input class="form-control form-control-sm" type="search" name="search" placeholder="Rechercher un support..." value="{{ request('search') }}">
+  <button class="btn btn-light btn-sm" type="submit"><i class="fas fa-search"></i></button>
+</form>
+
   </div>
 
 
