@@ -10,6 +10,7 @@ use App\Http\Controllers\EtudiantHomeController;
 use App\Http\Controllers\AccueilController;
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\FichierController;
+use App\Http\Controllers\RechercheSupportController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ForumEtudiantsController as ControllersForumEtudiantsController;
 use App\Http\Controllers\SearchController;
@@ -65,7 +66,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'etudiant.auth'])->get('/etudiant/dashboard', [EtudiantController::class, 'dashboard'])->name('etudiant.dashboard');
    Route::prefix('etudiant')->group(function(){
     Route::middleware(['auth'])->post('/reports', [\App\Http\Controllers\ReportsController::class, 'store'])->name('reports.store');
-    Route::get('/search', [SearchController::class, 'index'])->name('search');
+   Route::get('/supports/recherche', [RechercheSupportController::class, 'rechercher'])->name('supports.recherche');
+
     // route etudiant supprot:
     Route::get('/supports/{id}/ouvrir', [SupportController::class, 'showPdf'])->name('etudiant.supports.showPdf');
     Route::get('/supports/{id}/download', [SupportController::class, 'download'])->name('etudiant.supports.download');

@@ -14,16 +14,15 @@
 
 {{-- Barre de filtres --}}
 <div class="container py-3 mb-4 rounded-3 text-white" style="background-color: #5E60CE;">
-    <div class="d-flex flex-wrap align-items-center justify-content-center gap-3">
+    <div class="d-flex align-items-center justify-content-center gap-3 flex-nowrap">
+    <form method="GET" action="{{ route('etudiant.dashboard') }}" class="d-inline-block m-0 p-0">
+        <select name="annee" class="form-select fw-bold" onchange="this.form.submit()" style="width: auto; min-width: 150px;">
+            <option value="">Choisissez l'année</option>
+            <option value="1" {{ request('annee') == '1' ? 'selected' : '' }}>1ère année</option>
+            <option value="2" {{ request('annee') == '2' ? 'selected' : '' }}>2ème année</option>
+        </select>
+    </form>
 
-        {{-- Filtre : Année --}}
-        <form method="GET" action="{{ route('etudiant.dashboard') }}" class="d-inline-block">
-            <select name="annee" class="form-select fw-bold" onchange="this.form.submit()" style="width: auto;">
-                <option value="">Choisissez l'année</option>
-                <option value="1" {{ request('annee') == '1' ? 'selected' : '' }}>1ère année</option>
-                <option value="2" {{ request('annee') == '2' ? 'selected' : '' }}>2ème année</option>
-            </select>
-        </form>
 
         {{-- Filtre : Filière --}}
         @if(request('annee'))
@@ -173,6 +172,24 @@
         padding-left: 0;
         list-style: none;
     }
+    select.select-annee {
+    height: 38px; /* même hauteur que les boutons btn-outline-light */
+    padding: 0 12px;
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+    font-weight: 700;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    appearance: none; /* retire la flèche native */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg fill='white' height='12' viewBox='0 0 20 20' width='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 12px 12px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
 
     nav ul.pagination li a,
     nav ul.pagination li span {
