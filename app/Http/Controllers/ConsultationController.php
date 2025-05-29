@@ -74,15 +74,11 @@ public function statistiquesParType(Request $request)
         'selectedMatiere'
     ));
 }
-
-
-
 public function statistiquesGlobalesPourAdmin(Request $request)
 {
-    // Récupération de toutes les matières pour le menu déroulant
-    $matieres =Matiere::all();
+    $matieres = Matiere::all();
+    $types = \App\Models\Type::all();
 
-    // Statistiques pour le graphe (inchangé)
     $supports = SupportEducatif::with(['matiere.filiere', 'consultations.user'])->get();
 
     $consultationsParMatiere = $supports->groupBy(function ($support) {
@@ -93,24 +89,34 @@ public function statistiquesGlobalesPourAdmin(Request $request)
         });
     });
 
-    // Filtrage des consultations par matière
-    $consultations = \App\Models\Consultation::with(['user', 'support.matiere.filiere', 'support.type'])
-        ->whereHas('support.matiere', function ($query) use ($request) {
-            if ($request->filled('matiere')) {
-                $query->where('id_Matiere', $request->matiere);
-            }
-        })
-        ->orderByDesc('date_consultation')
-        ->paginate(10);
+    $consultationsQuery = \App\Models\Consultation::with(['user', 'support.matiere.filiere', 'support.type']);
+
+    // Filtrage
+    if ($request->filled('matiere')) {
+        $consultationsQuery->whereHas('support', function ($query) use ($request) {
+            $query->where('id_Matiere', $request->matiere);
+        });
+    }
+
+    if ($request->filled('type')) {
+        $consultationsQuery->whereHas('support', function ($query) use ($request) {
+            $query->where('id_type', $request->type);
+        });
+    }
+
+    // CORRECTION: Tri par date décroissante (du plus récent au plus ancien)
+    $consultations = $consultationsQuery
+        ->orderByDesc('date_consultation') // Du plus récent au plus ancien
+        ->paginate(5)
+        ->withQueryString(); // Conserver les paramètres de filtrage
 
     return view('admin_consultation', compact(
         'consultationsParMatiere',
         'consultations',
-        'matieres'
+        'matieres',
+        'types'
     ));
 }
-
-
    /**
      * Display the specified resource.
      *
