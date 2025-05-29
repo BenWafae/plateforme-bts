@@ -74,6 +74,8 @@ public function statistiquesParType(Request $request)
         'selectedMatiere'
     ));
 }
+
+
 public function statistiquesGlobalesPourAdmin(Request $request)
 {
     $matieres = Matiere::all();
@@ -81,6 +83,7 @@ public function statistiquesGlobalesPourAdmin(Request $request)
 
     $supports = SupportEducatif::with(['matiere.filiere', 'consultations.user'])->get();
 
+    // Total des consultations par matière (global)
     $consultationsParMatiere = $supports->groupBy(function ($support) {
         return $support->matiere->Nom ?? 'Autre';
     })->map(function ($group) {
@@ -89,9 +92,35 @@ public function statistiquesGlobalesPourAdmin(Request $request)
         });
     });
 
+    // ➕ Consultations par matière par semaine
+    $consultationsParMatiereParSemaine = [];
+
+    foreach ($supports as $support) {
+        $matiereNom = $support->matiere->Nom ?? 'Autre';
+
+        foreach ($support->consultations as $consultation) {
+            $semaine = Carbon::parse($consultation->date_consultation)->startOfWeek()->format('Y-m-d');
+
+            if (!isset($consultationsParMatiereParSemaine[$matiereNom])) {
+                $consultationsParMatiereParSemaine[$matiereNom] = [];
+            }
+
+            if (!isset($consultationsParMatiereParSemaine[$matiereNom][$semaine])) {
+                $consultationsParMatiereParSemaine[$matiereNom][$semaine] = 0;
+            }
+
+            $consultationsParMatiereParSemaine[$matiereNom][$semaine]++;
+        }
+    }
+
+    // 🔽 Facultatif : trier les semaines pour chaque matière
+    foreach ($consultationsParMatiereParSemaine as &$semaineData) {
+        ksort($semaineData);
+    }
+
+    // Récupération des consultations filtrées (comme avant)
     $consultationsQuery = \App\Models\Consultation::with(['user', 'support.matiere.filiere', 'support.type']);
 
-    // Filtrage
     if ($request->filled('matiere')) {
         $consultationsQuery->whereHas('support', function ($query) use ($request) {
             $query->where('id_Matiere', $request->matiere);
@@ -104,19 +133,34 @@ public function statistiquesGlobalesPourAdmin(Request $request)
         });
     }
 
-    // CORRECTION: Tri par date décroissante (du plus récent au plus ancien)
     $consultations = $consultationsQuery
-        ->orderByDesc('date_consultation') // Du plus récent au plus ancien
+        ->orderByDesc('date_consultation')
         ->paginate(5)
-        ->withQueryString(); // Conserver les paramètres de filtrage
+        ->withQueryString();
+
+        // 📊 Données pour les recommandations (optionnel - déjà calculées avec $consultationsParMatiere)
+$totalConsultations = $consultationsParMatiere->sum();
+$moyenneConsultations = $consultationsParMatiere->avg();
+
+// Les recommandations sont calculées directement dans le Blade avec les données existantes
+// Pas besoin de calculs supplémentaires côté contrôleur
 
     return view('admin_consultation', compact(
         'consultationsParMatiere',
+        'consultationsParMatiereParSemaine',
         'consultations',
         'matieres',
-        'types'
+        'types',
+        'totalConsultations',      
+       'moyenneConsultations' 
     ));
 }
+
+/**
+ * Générer des recommandations automatiques basées sur les données
+ */
+
+
    /**
      * Display the specified resource.
      *
