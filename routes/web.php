@@ -101,6 +101,9 @@ Route::post('/supports/translate', [SupportController::class, 'translate'])->nam
     Route::get('/supports/consultation/{id_support}', [SupportController::class, 'enregistrerConsultation'])
         ->name('etudiant.supports.consultation');
 
+     
+
+
 
 
 
@@ -171,6 +174,11 @@ Route::prefix('admin/reports')->name('admin.reports.')->group(function () {
 
 // route tableau de bord
 Route::middleware(['auth', 'admin.auth'])->get('/admin/tableau-de-bord', [TableauDeBordController::class, 'index'])->name('admin.tableau-de-bord');
+
+
+// route pour ladmin consultation:
+
+Route::get('/admin/consultations', [ConsultationController::class, 'statistiquesGlobalesPourAdmin'])->name('admin.consultations');
 
 // Routes pour les professeurs
 Route::middleware(['auth', 'professeur.auth'])->get('/professeur/dashboard' ,[ProfesseurController::class,'dashboard'])->name('professeur.dashboard');

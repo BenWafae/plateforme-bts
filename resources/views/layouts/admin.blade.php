@@ -318,6 +318,15 @@
                         <i class="fas fa-comments"></i> <span>Forum</span>
                     </a>
                 </li>
+
+                {{-- consultation --}}
+
+                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.consultations.*') ? 'active' : '' }}" href="{{ route('admin.consultations') }}">
+                        <i class="fas fa-chart-bar text-sm"></i> <span>Consultations</span>
+                    </a>
+                </li>
+                
                 
                 <div class="menu-separator"></div>
                 
@@ -423,5 +432,7 @@
             });
         });
     </script>
+@yield('scripts')
+   
 </body>
 </html>

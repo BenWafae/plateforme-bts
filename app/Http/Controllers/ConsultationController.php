@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Carbon;
 use App\Models\Consultation;
+use App\Models\Matiere;
 use App\Models\SupportEducatif;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class ConsultationController extends Controller
 
@@ -73,36 +75,43 @@ public function statistiquesParType(Request $request)
     ));
 }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        // Validation simple
-        $request->validate([
-            'id_support' => 'required|exists:support_educatifs,id_support',
-        ]);
 
-        // Récupérer l'id de l'étudiant connecté (authentifié)
-        $id_user = Auth::id();
 
-        // Créer la consultation
-        $consultation = Consultation::create([
-            'id_user' => $id_user,
-            'id_support' => $request->id_support,
-            'date_consultation' => now(),
-        ]);
+public function statistiquesGlobalesPourAdmin(Request $request)
+{
+    // Récupération de toutes les matières pour le menu déroulant
+    $matieres =Matiere::all();
 
-        return response()->json([
-            'message' => 'Consultation enregistrée avec succès.',
-            'consultation' => $consultation
-        ], 201);
-    }
+    // Statistiques pour le graphe (inchangé)
+    $supports = SupportEducatif::with(['matiere.filiere', 'consultations.user'])->get();
 
-    /**
+    $consultationsParMatiere = $supports->groupBy(function ($support) {
+        return $support->matiere->Nom ?? 'Autre';
+    })->map(function ($group) {
+        return $group->sum(function ($support) {
+            return $support->consultations->count();
+        });
+    });
+
+    // Filtrage des consultations par matière
+    $consultations = \App\Models\Consultation::with(['user', 'support.matiere.filiere', 'support.type'])
+        ->whereHas('support.matiere', function ($query) use ($request) {
+            if ($request->filled('matiere')) {
+                $query->where('id_Matiere', $request->matiere);
+            }
+        })
+        ->orderByDesc('date_consultation')
+        ->paginate(10);
+
+    return view('admin_consultation', compact(
+        'consultationsParMatiere',
+        'consultations',
+        'matieres'
+    ));
+}
+
+
+   /**
      * Display the specified resource.
      *
      * @param  \App\Models\Consultation  $consultation
