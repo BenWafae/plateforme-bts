@@ -269,13 +269,26 @@
                     </tbody>
                 </table>
                 
-                @if($reports->isEmpty())
-                    <div class="text-center py-12">
-                        <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
-                        <p class="text-xl text-gray-500 mb-2">Aucun signalement trouvé</p>
-                        <p class="text-gray-400">Il n'y a actuellement aucun signalement à traiter.</p>
-                    </div>
-                @endif
+             @if($reports->isEmpty())
+    <div class="text-center py-12">
+        <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
+        <p class="text-xl text-gray-500 mb-2">Aucun signalement trouvé</p>
+        <p class="text-gray-400">Il n'y a actuellement aucun signalement à traiter.</p>
+    </div>
+@endif
+
+{{-- Afficher la table / liste des rapports ici --}}
+
+{{-- Pagination --}}
+@if($reports->hasPages())
+    <div class="mt-6 flex justify-center">
+        <nav class="flex items-center space-x-2">
+            {{ $reports->appends(request()->query())->links('pagination::bootstrap-4') }}
+        </nav>
+    </div>
+@endif
+
+
             </div>
         </div>
     </div>

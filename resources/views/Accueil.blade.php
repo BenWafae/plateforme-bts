@@ -114,12 +114,14 @@
         </div>
        @endforelse
     </div>
-    <!-- PAGINATION -->
-    @if($supports instanceof \Illuminate\Pagination\LengthAwarePaginator)
-        <div class="mt-6">
-            {{ $supports->appends(request()->except('page'))->links('pagination::tailwind') }}
-        </div>
-    @endif
+    @if($supports->hasPages())
+    <div class="mt-6 flex justify-center">
+        <nav class="flex items-center space-x-2">
+            {{ $supports->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
+        </nav>
+    </div>
+@endif
+
 
     @elseif(request()->has('type'))
     <!-- Filtres de sélection - affichage horizontal progressif -->

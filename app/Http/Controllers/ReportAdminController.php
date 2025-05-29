@@ -15,7 +15,8 @@ class ReportAdminController extends Controller
     public function index()
     {
         // Récupérer tous les signalements
-        $reports = Report::all();
+        $reports = Report::orderBy('created_at', 'desc')->paginate(10);
+
         return view('reports_index', compact('reports'));
     }
 

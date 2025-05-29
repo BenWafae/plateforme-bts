@@ -12,18 +12,20 @@
         @foreach($notifications as $notification)
             @php
                 $typesNotification = [
-                    'App\Notifications\QuestionPosee' => ['title' => 'Question posée', 'class' => 'alert-info'],
-                    'App\Notifications\QuestionSupprimee' => ['title' => 'Question supprimée', 'class' => 'alert-danger'],
-                    'App\Notifications\ReponseAjoutee' => ['title' => 'Réponse ajoutée', 'class' => 'alert-success'],
-                    'default' => ['title' => 'Notification', 'class' => 'alert-secondary'],
+                    'App\Notifications\QuestionPosee' => ['title' => 'Question posée'],
+                    'App\Notifications\QuestionSupprimee' => ['title' => 'Question supprimée'],
+                    'App\Notifications\ReponseAjoutee' => ['title' => 'Réponse ajoutée'],
+                    'default' => ['title' => 'Notification'],
                 ];
 
                 $type = $typesNotification[$notification->type] ?? $typesNotification['default'];
+                $isRead = $notification->lue;
+                $textClass = $isRead ? '' : 'fw-bold'; // Texte en gras si non lue
             @endphp
 
             <a href="{{ route('notifications.detail', $notification->id_notification) }}" class="text-decoration-none text-dark">
-                <div class="alert {{ $notification->lue ? 'alert-light' : 'alert-success' }} alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
-                    <div class="d-flex align-items-center">
+                <div class="alert alert-light border d-flex justify-content-between align-items-center" role="alert">
+                    <div class="d-flex align-items-center w-100">
                         @if($notification->type == 'App\Notifications\QuestionPosee')
                             <i class="fas fa-question-circle me-2"></i>
                         @elseif($notification->type == 'App\Notifications\QuestionSupprimee')
@@ -34,15 +36,14 @@
                             <i class="fas fa-bell me-2"></i>
                         @endif
 
-                        <div>
-                            <strong>{{ $type['title'] }}</strong>
+                        <div class="{{ $textClass }}">
+                            <div>{{ $type['title'] }}</div>
                             <p class="mb-0">{{ $notification->contenu ?? 'Détails non disponibles' }}</p>
                             <small class="text-muted">
                                 {{ optional($notification->created_at)->format('d/m/Y H:i') ?? 'Date inconnue' }}
                             </small>
                         </div>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </a>
         @endforeach

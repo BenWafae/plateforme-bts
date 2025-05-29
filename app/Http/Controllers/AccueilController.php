@@ -47,7 +47,8 @@ class AccueilController extends Controller
                     ->latest();
 
                 // Paginer les résultats
-                $supports = $supportsQuery->paginate(10)->appends($request->except('page'));
+               $supports = $supportsQuery->paginate(10);
+
 
                 // Ajouter les URLs d'action
                 $supports->getCollection()->transform(function ($support) {
