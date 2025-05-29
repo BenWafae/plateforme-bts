@@ -101,18 +101,7 @@
             </div>
         </div>
 
-        <!-- Boutons sociaux (optionnel) -->
-        <div class="grid grid-cols-2 gap-4">
-            <button type="button" class="flex items-center justify-center px-4 py-3 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-200">
-                <i class="fab fa-google text-red-500 mr-2"></i>
-                <span class="text-sm font-medium text-gray-700">Google</span>
-            </button>
-            <button type="button" class="flex items-center justify-center px-4 py-3 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-200">
-                <i class="fab fa-microsoft text-blue-500 mr-2"></i>
-                <span class="text-sm font-medium text-gray-700">Microsoft</span>
-            </button>
-        </div>
-    </form>
+       
 
     <!-- Footer -->
     <div class="mt-8 text-center">
