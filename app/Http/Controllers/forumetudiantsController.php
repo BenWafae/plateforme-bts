@@ -157,4 +157,68 @@ class ForumEtudiantsController extends Controller
 
         return redirect()->route('forumetudiants.index')->with('success', 'Votre réponse a été supprimée.');
     }
+public function edit($id)
+{
+    $question = Question::findOrFail($id);
+
+    // Assurer que l'utilisateur est bien le propriétaire
+    if (Auth::id() !== $question->id_user) {
+        abort(403, 'Accès refusé');
+    }
+
+    $matieres = Matiere::all();
+
+    return view('forum_edit', compact('question', 'matieres'));
+}
+
+public function update(Request $request, $id)
+{
+    $question = Question::findOrFail($id);
+
+    if (Auth::id() !== $question->id_user) {
+        abort(403);
+    }
+
+    $request->validate([
+        'titre' => 'required|string|max:255',
+        'contenue' => 'required|string',
+        'id_Matiere' => 'required|exists:matieres,id_Matiere',
+    ]);
+
+    $question->update([
+        'titre' => $request->titre,
+        'contenue' => $request->contenue,
+        'id_Matiere' => $request->id_Matiere,
+    ]);
+
+    return redirect()->route('forumetudiants.index')->with('success', 'Question mise à jour avec succès.');
+}
+public function editReponse($id)
+{
+    $reponse = Reponse::findOrFail($id);
+
+    if ($reponse->id_user !== auth()->id()) {
+        abort(403, 'Non autorisé.');
+    }
+
+    return view('forum_editreponse', compact('reponse'));
+}
+
+public function updateReponse(Request $request, $id)
+{
+    $request->validate([
+        'contenu' => 'required|string|max:1000',
+    ]);
+
+    $reponse = Reponse::findOrFail($id);
+
+    if ($reponse->id_user !== auth()->id()) {
+        abort(403, 'Action non autorisée.');
+    }
+
+    $reponse->contenu = $request->contenu;
+    $reponse->save();
+
+    return redirect()->route('forumetudiants.index')->with('success', 'Réponse modifiée avec succès.');
+}
 }

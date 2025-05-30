@@ -102,42 +102,57 @@
                         | <span class="badge bg-light text-dark border">{{ $question->matiere->Nom }}</span>
                     </div>
                 </div>
-                <div class="text-end ms-3">
-                    @if($question->id_user == Auth::id())
-                        <form action="{{ route('questions.destroy', $question->id_question) }}" method="POST">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-outline-danger btn-sm rounded-pill">
-                                <i class="bi bi-trash"></i> Supprimer
+                <div class="text-end ms-3 d-flex gap-2">
+    @if($question->id_user == Auth::id())
+        <form action="{{ route('questions.destroy', $question->id_question) }}" method="POST" class="m-0 p-0">
+            @csrf 
+            @method('DELETE')
+            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill p-2" title="Supprimer">
+                <i class="bi bi-trash"></i>
+            </button>
+        </form>
+
+        <a href="{{ route('questions.edit', $question->id_question) }}" class="btn btn-outline-primary btn-sm rounded-pill p-2" title="Modifier">
+            <i class="bi bi-pencil"></i>
+        </a>
+    @else
+        <button class="btn btn-outline-secondary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#reportModal{{ $question->id_question }}">
+            <i class="bi bi-flag"></i> Signaler
+        </button>
+    @endif
+</div>
+
+            </div>
+@if($question->reponses->isNotEmpty())
+    <div class="mt-4">
+        <h6 class="text-muted mb-3"><i class="bi bi-chat-dots"></i> Réponses ({{ $question->reponses->count() }})</h6>
+        @foreach($question->reponses as $reponse)
+            <div class="bg-light rounded-3 p-3 mb-2 d-flex justify-content-between align-items-start">
+                <div>
+                    <p class="mb-1">{{ $reponse->contenu }}</p>
+                    <div class="small text-muted">Par {{ $reponse->user->nom }} {{ $reponse->user->prenom }} le {{ $reponse->created_at->format('d/m/Y à H:i') }}</div>
+                </div>
+
+                @if($reponse->id_user == Auth::id())
+                    <div class="d-flex align-items-center ms-3">
+                        <form action="{{ route('reponse.destroy', $reponse->id) }}" method="POST" class="m-0 p-0">
+                            @csrf 
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill p-1" title="Supprimer">
+                                <i class="bi bi-x-circle"></i>
                             </button>
                         </form>
-                    @else
-                        <button class="btn btn-outline-secondary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#reportModal{{ $question->id_question }}">
-                            <i class="bi bi-flag"></i> Signaler
-                        </button>
-                    @endif
-                </div>
-            </div>
 
-            <!-- Réponses -->
-            @if($question->reponses->isNotEmpty())
-                <div class="mt-4">
-                    <h6 class="text-muted mb-3"><i class="bi bi-chat-dots"></i> Réponses ({{ $question->reponses->count() }})</h6>
-                    @foreach($question->reponses as $reponse)
-                        <div class="bg-light rounded-3 p-3 mb-2">
-                            <p class="mb-1">{{ $reponse->contenu }}</p>
-                            <div class="small text-muted">Par {{ $reponse->user->nom }} {{ $reponse->user->prenom }} le {{ $reponse->created_at->format('d/m/Y à H:i') }}</div>
-                            @if($reponse->id_user == Auth::id())
-                                <form action="{{ route('reponse.destroy', $reponse->id) }}" method="POST" class="mt-1">
-                                    @csrf @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger rounded-pill">
-                                        <i class="bi bi-x-circle"></i> Supprimer
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
-            @endif
+                        <a href="{{ route('reponse.edit', $reponse->id) }}" class="btn btn-outline-primary btn-sm rounded-pill p-1 ms-2" title="Modifier">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    </div>
+                @endif
+            </div>
+        @endforeach
+    </div>
+@endif
+
 
             <!-- Formulaire réponse -->
             @auth

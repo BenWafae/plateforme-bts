@@ -81,6 +81,13 @@ Route::middleware(['auth'])->delete('/etudiant/forumetudiants/{id}', [ForumEtudi
 Route::middleware(['auth'])->post('/etudiant/forumetudiants/{id}/reponse', [ForumEtudiantsController::class, 'storeReponse'])->name('reponse.store');
 Route::middleware(['auth'])->delete('/etudiant/forumetudiants/reponse/{id}', [ForumEtudiantsController::class, 'destroyReponse'])->name('reponse.destroy');
 Route::middleware(['auth'])->get('/etudiant/forumetudiants/questions/create', [ForumEtudiantsController::class, 'create'])->name('questions.create');
+Route::middleware(['auth'])->get('/etudiant/forumetudiants/questions/{id}/edit', [ForumEtudiantsController::class, 'edit'])->name('questions.edit');
+Route::middleware(['auth'])->put('/etudiant/forumetudiants/questions/{id}', [ForumEtudiantsController::class, 'update'])->name('questions.update');
+// Réponses (gérées maintenant par ForumEtudiantsController)
+Route::get('/reponses/{id}/edit', [ForumEtudiantsController::class, 'editReponse'])->name('reponse.edit');
+Route::put('/reponses/{id}', [ForumEtudiantsController::class, 'updateReponse'])->name('reponse.update');
+
+
 // Route pour afficher les notifications
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 Route::post('/notifications/lire/{id}', [NotificationController::class, 'marquerCommeLue'])->name('notifications.lire');
