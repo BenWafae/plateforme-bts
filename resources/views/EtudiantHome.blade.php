@@ -5,7 +5,7 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-6 py-12 bg-gray-50 min-h-screen">
 
-  <div class="text-white rounded-xl p-10 text-center shadow-lg mb-12" style="background-color:rgb(109, 111, 225);">
+  <div class="text-white rounded-xl p-10 text-center shadow-lg mb-12" style="background-color:#5E60CE;">
     <h2 class="text-3xl font-extrabold mb-4">Plateforme BTS Al Idrissi</h2>
     @auth
       <p class="text-lg font-semibold mb-3">
