@@ -5,7 +5,7 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-6 py-12 bg-gray-50 min-h-screen">
 
-  <div class="text-white rounded-xl p-10 text-center shadow-lg mb-12" style="background-color:rgb(91, 93, 202);">
+  <div class="text-white rounded-xl p-10 text-center shadow-lg mb-12" style="background-color:rgb(109, 111, 225);">
     <h2 class="text-3xl font-extrabold mb-4">Plateforme BTS Al Idrissi</h2>
     @auth
       <p class="text-lg font-semibold mb-3">
@@ -65,17 +65,24 @@
 
   @foreach ($filières as $filiereTitre => $matieres)
     <section class="mb-16">
-      <h2 class="text-3xl font-extrabold text-center text-blue-900 mb-8 border-b-4 border-blue-900 inline-block pb-2">
+      <h2 class="text-3xl font-extrabold text-center mb-8 border-b-4 inline-block pb-2"
+          style="color: rgb(109, 111, 225); border-color: rgb(109, 111, 225);">
         {{ $filiereTitre }}
       </h2>
       <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         @foreach ($matieres as $matiere)
           <article tabindex="0" role="button" aria-label="{{ $matiere['title'] }}"
             class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center cursor-pointer transition-transform transform hover:-translate-y-2 hover:scale-105 duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300">
-            <div class="text-5xl text-blue-700 mb-4 transition-colors duration-300 hover:text-blue-600">
+            <div class="text-5xl mb-4 transition-colors duration-300"
+                 style="color: rgb(109, 111, 225);"
+                 onmouseover="this.style.color='rgb(129,131,235)';"
+                 onmouseout="this.style.color='rgb(109,111,225)';">
               <i class="{{ $matiere['icon'] }}"></i>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ $matiere['title'] }}</h3>
+            <h3 class="text-xl font-semibold mb-2"
+                style="color: rgb(109, 111, 225);">
+              {{ $matiere['title'] }}
+            </h3>
             <p class="text-gray-600 text-sm">{{ $matiere['desc'] }}</p>
           </article>
         @endforeach
