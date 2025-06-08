@@ -253,11 +253,32 @@
         .sidebar.collapsed .profile-section {
             padding: 0.75rem 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
         .sidebar.collapsed .profile-content {
             justify-content: center;
+        }
+
+        .sidebar.collapsed .logout-section {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+        }
+
+        .sidebar.collapsed .logout-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            padding: 0;
+            min-width: auto;
+        }
+
+        .sidebar.collapsed .logout-btn span {
+            display: none;
         }
 
         .sidebar.collapsed .sidebar-collapse-btn {
@@ -378,24 +399,30 @@
                 overflow-y: auto;
                 padding: 0.5rem 0;
                 min-height: 0;
+                max-height: calc(100vh - 180px); /* Plus d'espace pour la déconnexion */
             }
             
             .nav-link {
-                padding: 1rem 1.5rem;
-                font-size: 0.95rem;
+                padding: 0.875rem 1.5rem; /* Réduire légèrement le padding */
+                font-size: 0.9rem;
             }
             
             .nav-link i {
-                width: 24px;
-                margin-right: 12px;
-                font-size: 1.2rem;
+                width: 20px;
+                margin-right: 10px;
+                font-size: 1.1rem;
             }
             
             /* S'assurer que la section profil est visible */
             .profile-section {
                 flex-shrink: 0;
                 margin-top: auto;
-                padding: 1rem;
+                padding: 0.875rem;
+            }
+
+            .logout-btn {
+                padding: 0.675rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -427,17 +454,23 @@
                 flex-grow: 1;
                 overflow-y: auto;
                 min-height: 0;
+                max-height: calc(100vh - 160px);
             }
             
             .nav-link {
-                padding: 0.875rem 1.25rem;
-                font-size: 0.9rem;
+                padding: 0.75rem 1.25rem;
+                font-size: 0.85rem;
             }
             
             .profile-section {
-                padding: 0.875rem;
+                padding: 0.75rem;
                 flex-shrink: 0;
                 margin-top: auto;
+            }
+
+            .logout-btn {
+                padding: 0.6rem;
+                font-size: 0.8rem;
             }
         }
 
@@ -453,16 +486,22 @@
                 overflow-y: auto;
                 flex-grow: 1;
                 min-height: 0;
+                max-height: calc(100vh - 140px);
             }
             
             .nav-link {
-                padding: 0.6rem 1.5rem;
+                padding: 0.5rem 1.5rem;
             }
             
             .profile-section {
-                padding: 0.75rem;
+                padding: 0.6rem;
                 flex-shrink: 0;
                 margin-top: auto;
+            }
+
+            .logout-btn {
+                padding: 0.5rem;
+                font-size: 0.75rem;
             }
             
             .sidebar-header {
@@ -580,14 +619,6 @@
                         <i class="fas fa-user-edit"></i> <span>Gestion Profil</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                        @csrf
-                        <button type="submit" class="nav-link w-100 text-left border-0 bg-transparent">
-                            <i class="fas fa-sign-out-alt"></i> <span>Déconnexion</span>
-                        </button>
-                    </form>
-                </li>
             </ul>
         </div>
         
@@ -606,6 +637,17 @@
                     <p class="profile-name">{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</p>
                     <p class="profile-role">Administrateur</p>
                 </div>
+            </div>
+            
+            <!-- Section déconnexion intégrée -->
+            <div class="logout-section">
+                <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Déconnexion</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
