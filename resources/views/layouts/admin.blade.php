@@ -13,9 +13,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
-
-    
     <style>
         body {
             display: flex;
@@ -39,7 +36,7 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             z-index: 1000;
-            overflow-y: hidden;
+            overflow-y: auto;
         }
 
         /* En-tête de la sidebar */
@@ -57,6 +54,9 @@
             flex-grow: 1;
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
+            overflow-y: auto;
+            min-height: 0;
+            max-height: calc(100vh - 200px); /* Réserver l'espace pour header et footer */
         }
 
         .nav-item {
@@ -107,11 +107,46 @@
             text-align: center;
         }
 
-        /* Section profil */
+        /* Section profil avec déconnexion intégrée */
         .profile-section {
             padding: 1rem;
             border-top: 1px solid rgba(0, 0, 0, 0.05);
             background-color: #F9FAFB;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+
+        .logout-section {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .logout-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #DC2626, #B91C1C);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .logout-btn i {
+            font-size: 1rem;
         }
 
         .profile-content {
@@ -236,10 +271,79 @@
             margin: 0.5rem 1rem;
         }
 
-        /* Responsive */
-        @media (max-width: 992px) {
+        /* Bouton toggle sidebar (visible uniquement en mobile) */
+        .toggle-sidebar {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1002;
+            background-color: #5E60CE;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+        }
+
+        .toggle-sidebar:hover {
+            background-color: #4C4FCF;
+            transform: translateY(-1px);
+        }
+
+        /* Overlay pour mobile */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Animation pour les transitions */
+        .sidebar, .content {
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive Breakpoints */
+        
+        /* Tablettes (768px - 1199px) */
+        @media (max-width: 1199px) and (min-width: 768px) {
+            .sidebar {
+                width: 220px;
+            }
+            
+            .content {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
+            
+            .sidebar.collapsed ~ .content {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
+        }
+
+        /* Mobiles et petites tablettes (max-width: 767px) */
+        @media (max-width: 767px) {
             .sidebar {
                 transform: translateX(-100%);
+                width: 280px;
+                z-index: 1000;
+                height: 100vh;
+                overflow-y: auto;
             }
             
             .sidebar.show {
@@ -249,44 +353,159 @@
             .content {
                 margin-left: 0;
                 width: 100%;
+                padding: 1rem;
             }
             
             .toggle-sidebar {
                 display: block;
-                position: fixed;
-                top: 1rem;
-                left: 1rem;
-                z-index: 1001;
-                background-color: #5E60CE;
-                color: white;
-                border: none;
-                border-radius: 0.25rem;
-                padding: 0.5rem;
-                cursor: pointer;
+            }
+            
+            /* Masquer le bouton de collapse en mobile */
+            .sidebar-collapse-btn {
+                display: none;
+            }
+            
+            /* Ajuster le header en mobile */
+            .sidebar-header {
+                padding: 1rem;
+                font-size: 1.1rem;
+                flex-shrink: 0;
+            }
+            
+            /* Ajuster la navigation en mobile */
+            .sidebar-nav {
+                flex-grow: 1;
+                overflow-y: auto;
+                padding: 0.5rem 0;
+                min-height: 0;
+            }
+            
+            .nav-link {
+                padding: 1rem 1.5rem;
+                font-size: 0.95rem;
+            }
+            
+            .nav-link i {
+                width: 24px;
+                margin-right: 12px;
+                font-size: 1.2rem;
+            }
+            
+            /* S'assurer que la section profil est visible */
+            .profile-section {
+                flex-shrink: 0;
+                margin-top: auto;
+                padding: 1rem;
             }
         }
 
-        /* Bouton toggle sidebar (visible uniquement en mobile) */
-        .toggle-sidebar {
-            display: none;
+        /* Très petits écrans (max-width: 480px) */
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+                height: 100vh;
+                overflow-y: auto;
+            }
+            
+            .content {
+                padding: 0.75rem;
+            }
+            
+            .toggle-sidebar {
+                top: 0.75rem;
+                left: 0.75rem;
+                padding: 0.6rem;
+            }
+            
+            .sidebar-header {
+                font-size: 1rem;
+                padding: 0.875rem;
+                flex-shrink: 0;
+            }
+            
+            .sidebar-nav {
+                flex-grow: 1;
+                overflow-y: auto;
+                min-height: 0;
+            }
+            
+            .nav-link {
+                padding: 0.875rem 1.25rem;
+                font-size: 0.9rem;
+            }
+            
+            .profile-section {
+                padding: 0.875rem;
+                flex-shrink: 0;
+                margin-top: auto;
+            }
         }
 
-        /* Animation pour les transitions */
-        .sidebar, .content {
-            transition: all 0.3s ease;
+        /* Mode paysage sur mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .sidebar {
+                width: 260px;
+                height: 100vh;
+                overflow-y: auto;
+            }
+            
+            .sidebar-nav {
+                overflow-y: auto;
+                flex-grow: 1;
+                min-height: 0;
+            }
+            
+            .nav-link {
+                padding: 0.6rem 1.5rem;
+            }
+            
+            .profile-section {
+                padding: 0.75rem;
+                flex-shrink: 0;
+                margin-top: auto;
+            }
+            
+            .sidebar-header {
+                padding: 0.75rem;
+                flex-shrink: 0;
+            }
+        }
+
+        /* Animation d'ouverture/fermeture améliorée */
+        @media (max-width: 767px) {
+            .sidebar {
+                transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+        }
+
+        /* Accessibilité - Focus states */
+        .toggle-sidebar:focus,
+        .sidebar-collapse-btn:focus,
+        .nav-link:focus {
+            outline: 2px solid #5E60CE;
+            outline-offset: 2px;
+        }
+
+        /* États de chargement */
+        .sidebar.loading {
+            pointer-events: none;
+            opacity: 0.7;
         }
     </style>
 </head>
 <body>
+    <!-- Overlay pour mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- Bouton pour afficher/masquer la sidebar en mobile -->
-    <button class="toggle-sidebar" id="toggleSidebar">
+    <button class="toggle-sidebar" id="toggleSidebar" aria-label="Toggle sidebar">
         <i class="fas fa-bars"></i>
     </button>
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <!-- Bouton pour réduire/agrandir la sidebar -->
-        <div class="sidebar-collapse-btn" id="sidebarCollapseBtn">
+        <!-- Bouton pour réduire/agrandir la sidebar (desktop uniquement) -->
+        <div class="sidebar-collapse-btn" id="sidebarCollapseBtn" aria-label="Collapse sidebar">
             <i class="fas fa-chevron-left"></i>
         </div>
 
@@ -320,13 +539,11 @@
                 </li>
 
                 {{-- consultation --}}
-
-                 <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.consultations.*') ? 'active' : '' }}" href="{{ route('admin.consultations') }}">
                         <i class="fas fa-chart-bar text-sm"></i> <span>Consultations</span>
                     </a>
                 </li>
-                
                 
                 <div class="menu-separator"></div>
                 
@@ -404,35 +621,162 @@
     @vite('resources/js/app.js')
 
     <script>
-        // Script pour le toggle de la sidebar en responsive
+        // Script amélioré pour la gestion responsive de la sidebar
         document.addEventListener('DOMContentLoaded', function() {
             const toggleBtn = document.getElementById('toggleSidebar');
             const sidebar = document.getElementById('sidebar');
             const collapseBtn = document.getElementById('sidebarCollapseBtn');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            let isDesktop = window.innerWidth > 767;
+            
+            // Fonction pour détecter le type d'écran
+            function updateScreenType() {
+                const newIsDesktop = window.innerWidth > 767;
+                if (newIsDesktop !== isDesktop) {
+                    isDesktop = newIsDesktop;
+                    // Réinitialiser l'état de la sidebar lors du changement de breakpoint
+                    if (isDesktop) {
+                        sidebar.classList.remove('show');
+                        overlay.classList.remove('show');
+                        document.body.style.overflow = '';
+                    } else {
+                        sidebar.classList.remove('collapsed');
+                    }
+                }
+            }
             
             // Toggle pour mobile
-            toggleBtn.addEventListener('click', function() {
+            toggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
                 sidebar.classList.toggle('show');
-            });
-            
-            // Réduire/agrandir la sidebar
-            collapseBtn.addEventListener('click', function() {
-                sidebar.classList.toggle('collapsed');
-            });
-            
-            // Fermer la sidebar quand on clique en dehors (mobile uniquement)
-            document.addEventListener('click', function(event) {
-                const isClickInsideSidebar = sidebar.contains(event.target);
-                const isClickOnToggleBtn = toggleBtn.contains(event.target);
-                const isClickOnCollapseBtn = collapseBtn.contains(event.target);
+                overlay.classList.toggle('show');
                 
-                if (!isClickInsideSidebar && !isClickOnToggleBtn && !isClickOnCollapseBtn && sidebar.classList.contains('show')) {
-                    sidebar.classList.remove('show');
+                // Empêcher le scroll du body quand la sidebar est ouverte en mobile
+                if (sidebar.classList.contains('show')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
                 }
             });
+            
+            // Réduire/agrandir la sidebar (desktop uniquement)
+            collapseBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (isDesktop) {
+                    sidebar.classList.toggle('collapsed');
+                    
+                    // Sauvegarder l'état dans localStorage
+                    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+                }
+            });
+            
+            // Fermer la sidebar avec l'overlay
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('show');
+                overlay.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+            
+            // Fermer la sidebar avec la touche Échap
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && sidebar.classList.contains('show') && !isDesktop) {
+                    sidebar.classList.remove('show');
+                    overlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Gestion du redimensionnement de la fenêtre
+            let resizeTimeout;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function() {
+                    updateScreenType();
+                }, 150);
+            });
+            
+            // Fermer la sidebar quand on clique sur un lien en mobile
+            const navLinks = sidebar.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (!isDesktop && sidebar.classList.contains('show')) {
+                        setTimeout(() => {
+                            sidebar.classList.remove('show');
+                            overlay.classList.remove('show');
+                            document.body.style.overflow = '';
+                        }, 100);
+                    }
+                });
+            });
+            
+            // Restaurer l'état de la sidebar depuis localStorage (desktop uniquement)
+            if (isDesktop) {
+                const savedState = localStorage.getItem('sidebarCollapsed');
+                if (savedState === 'true') {
+                    sidebar.classList.add('collapsed');
+                }
+            }
+            
+            // Amélioration des performances avec throttle pour les événements de scroll
+            let ticking = false;
+            function updateScrollState() {
+                // Logique pour gérer le scroll si nécessaire
+                ticking = false;
+            }
+            
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    requestAnimationFrame(updateScrollState);
+                    ticking = true;
+                }
+            });
+            
+            // Support pour les gestes tactiles (swipe) sur mobile
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            
+            document.addEventListener('touchstart', function(e) {
+                if (!isDesktop) {
+                    startX = e.touches[0].clientX;
+                    isDragging = true;
+                }
+            }, { passive: true });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (!isDesktop && isDragging) {
+                    currentX = e.touches[0].clientX;
+                }
+            }, { passive: true });
+            
+            document.addEventListener('touchend', function(e) {
+                if (!isDesktop && isDragging) {
+                    const diffX = currentX - startX;
+                    const threshold = 50;
+                    
+                    // Swipe depuis le bord gauche pour ouvrir
+                    if (startX < 20 && diffX > threshold && !sidebar.classList.contains('show')) {
+                        sidebar.classList.add('show');
+                        overlay.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    }
+                    // Swipe vers la gauche pour fermer
+                    else if (diffX < -threshold && sidebar.classList.contains('show')) {
+                        sidebar.classList.remove('show');
+                        overlay.classList.remove('show');
+                        document.body.style.overflow = '';
+                    }
+                    
+                    isDragging = false;
+                }
+            }, { passive: true });
+            
+            // Initialiser l'état de l'écran
+            updateScreenType();
         });
     </script>
-@yield('scripts')
-   
+    
+    @yield('scripts')
 </body>
 </html>
