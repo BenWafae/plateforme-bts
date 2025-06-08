@@ -82,7 +82,7 @@ class SupportController extends Controller
     public function create()
     {
         // Récupérer toutes les matières depuis la base de données
-        $matieres = Matiere::all();
+        $matieres = Matiere::where('id_user', auth()->id())->get();
         // Récupérer les types des supports
         $types = Type::all();
 
@@ -196,7 +196,7 @@ public function download($id)
             return redirect()->route('supports.index')->with('error', 'Vous ne pouvez pas modifier ce support.');
         }
 
-        $matieres = Matiere::all();
+         $matieres = Matiere::where('id_user', auth()->id())->get();
         $types = Type::all();
 
         return view('support_edit', compact('support', 'matieres', 'types'));
