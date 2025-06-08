@@ -214,4 +214,31 @@
         border-color: #5E60CE;
         cursor: default;
     }
+    @media (max-width: 768px) {
+        .d-flex.align-items-center.justify-content-center.gap-3.flex-nowrap {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
+        .dropdown .btn,
+        .form-select {
+            width: 100% !important;
+        }
+
+        .container.py-3.mb-4.rounded-3.text-white {
+            padding: 1rem !important;
+        }
+
+        .card .btn {
+            width: 100%;
+        }
+
+        .card .d-flex.flex-wrap.justify-content-center {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+
+
 </style>

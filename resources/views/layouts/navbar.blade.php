@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>@yield('title', 'Tableau de bord étudiant')</title>
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -34,11 +35,41 @@
       gap: 10px;
     }
 
+    /* Bouton hamburger visible uniquement mobile */
+    #btn-hamburger {
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: none; /* caché desktop */
+    }
+
+    /* Afficher bouton hamburger sur petits écrans */
+    @media (max-width: 767.98px) {
+      #btn-hamburger {
+        display: block;
+      }
+    }
+
     .nav-links {
       display: flex;
       align-items: center;
       gap: 50px;
       flex-wrap: wrap;
+    }
+
+    /* Cacher menu nav-links par défaut sur mobile */
+    @media (max-width: 767.98px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        margin-top: 10px;
+      }
+      .nav-links.show {
+        display: flex;
+      }
     }
 
     .navbar a {
@@ -122,7 +153,13 @@
 <body>
 
 <nav class="navbar">
-  <div class="nav-links">
+
+  <!-- Bouton hamburger pour mobile -->
+  <button id="btn-hamburger" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+    <i class="fas fa-bars fa-lg"></i>
+  </button>
+
+  <div class="nav-links" id="nav-links">
     <a href="{{ route('etudiant.home') }}">
       <i class="fas fa-user-graduate"></i> Espace étudiant
     </a>
@@ -189,7 +226,7 @@
   </div>
 
   <div class="dropdown">
-    <div class="user-circle dropdown-toggle" data-bs-toggle="dropdown">
+    <div class="user-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" role="button" tabindex="0">
       {{ strtoupper(auth()->user()->prenom[0]) }}
     </div>
     <ul class="dropdown-menu dropdown-menu-end">
@@ -215,6 +252,17 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  const btnHamburger = document.getElementById('btn-hamburger');
+  const navLinks = document.getElementById('nav-links');
+
+  btnHamburger.addEventListener('click', () => {
+    const expanded = btnHamburger.getAttribute('aria-expanded') === 'true';
+    btnHamburger.setAttribute('aria-expanded', !expanded);
+    navLinks.classList.toggle('show');
+  });
+</script>
 
 </body>
 </html>
