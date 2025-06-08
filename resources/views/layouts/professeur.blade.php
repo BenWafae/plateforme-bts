@@ -177,6 +177,52 @@
             background: rgba(94, 96, 206, 0.98);
             backdrop-filter: blur(15px);
         }
+
+        /* CORRECTIONS POUR LA RESPONSIVITÉ MOBILE */
+        
+        /* S'assurer que le menu mobile reste ouvert après clic */
+        .mobile-menu-open {
+            display: block !important;
+        }
+        
+        /* Améliorer l'affichage sur petits écrans */
+        @media (max-width: 768px) {
+            .navbar-glass {
+                padding: 0.5rem 0;
+            }
+            
+            .mobile-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            }
+            
+            /* Améliorer l'espacement des liens mobiles */
+            .mobile-menu a {
+                padding: 1rem 1.5rem !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .mobile-menu a:last-child {
+                border-bottom: none;
+            }
+        }
+        
+        /* Améliorer la visibilité du bouton hamburger */
+        .mobile-menu-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .mobile-menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
     </style>
 
     {{-- Permet à chaque vue d'ajouter son propre contenu dans le <head> --}}
@@ -296,30 +342,32 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button class="md:hidden text-white hover:text-gray-200 transition-colors duration-200 p-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-expanded="false">
+                <button class="md:hidden mobile-menu-toggle text-white hover:text-gray-200 transition-colors duration-200" type="button" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
             </div>
         </div>
 
         <!-- Mobile Menu -->
-        <div class="collapse md:hidden" id="mobileMenu">
-            <div class="mobile-menu py-4 space-y-2">
-                <a href="{{ route('supports.index') }}" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200">
+        <div class="mobile-menu md:hidden" id="mobileMenu" style="display: none;">
+            <div class="py-4 space-y-1">
+                <a href="{{ route('supports.index') }}" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 mx-4">
                     <i class="fas fa-book"></i>
                     <span>Supports éducatifs</span>
                 </a>
                 
                 
-                <a href="{{ route('professeur.questions.index') }}" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200">
+                <a href="{{ route('professeur.questions.index') }}" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 mx-4">
                     <i class="fas fa-comments"></i>
                     <span>Forum</span>
                 </a>
 
-
-
+                <a href="{{ route('consultations.index') }}" class="flex items-center space-x-3 px-4 py-3 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 mx-4">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Consultations</span>
+                </a>
                 
-                <a href="{{ route('professeur.notifications') }}" class="flex items-center justify-between px-4 py-3 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200">
+                <a href="{{ route('professeur.notifications') }}" class="flex items-center justify-between px-4 py-3 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all duration-200 mx-4">
                     <div class="flex items-center space-x-3">
                         <i class="fas fa-bell"></i>
                         <span>Notifications</span>
@@ -333,11 +381,11 @@
                     @endisset
                 </a>
 
-                <hr class="border-white border-opacity-20 my-4">
+                <hr class="border-white border-opacity-20 my-4 mx-4">
                 
                 <!-- Mobile Profile Section -->
                 <div class="px-4 py-3">
-                    <div class="flex items-center space-x-3 mb-3">
+                    <div class="flex items-center space-x-3 mb-3 px-4">
                         <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center font-bold text-lg text-white">
                             @if(auth()->check())
                                 @php
@@ -403,15 +451,33 @@
 
 <!-- Script pour améliorer l'UX -->
 <script>
-    // Fermer le menu mobile quand on clique sur un lien
-    document.querySelectorAll('#mobileMenu a').forEach(link => {
-        link.addEventListener('click', () => {
-            const mobileMenu = document.getElementById('mobileMenu');
-            if (mobileMenu.classList.contains('show')) {
-                bootstrap.Collapse.getInstance(mobileMenu).hide();
+    // NOUVEAU: Fonction pour gérer le menu mobile sans fermeture automatique
+    function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') {
+            mobileMenu.style.display = 'block';
+            mobileMenu.classList.add('mobile-menu-open');
+        } else {
+            mobileMenu.style.display = 'none';
+            mobileMenu.classList.remove('mobile-menu-open');
+        }
+    }
+
+    // Fermer le menu mobile si on clique en dehors
+    document.addEventListener('click', function(event) {
+        const mobileMenu = document.getElementById('mobileMenu');
+        const toggleButton = document.querySelector('.mobile-menu-toggle');
+        
+        if (!mobileMenu.contains(event.target) && !toggleButton.contains(event.target)) {
+            if (mobileMenu.style.display === 'block') {
+                mobileMenu.style.display = 'none';
+                mobileMenu.classList.remove('mobile-menu-open');
             }
-        });
+        }
     });
+
+    // SUPPRIMÉ: L'ancien code qui fermait automatiquement le menu après clic sur un lien
+    // Ce code causait le problème de fermeture immédiate
 
     // Animation de chargement
     window.addEventListener('load', () => {
