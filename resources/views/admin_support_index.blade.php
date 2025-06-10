@@ -307,38 +307,132 @@
             @endif
         @endforeach
 
-        <!-- Pagination modernisée -->
+        <!-- Pagination modernisée avec scroll mobile -->
         <div class="flex justify-center mt-8">
-            <div class="bg-white rounded-xl shadow-lg p-4">
+            <div class="pagination-container">
                 {{ $matieres->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
 
     <style>
-        /* Styles pour la pagination */
+        /* Styles pour la pagination avec scroll mobile */
+        .pagination-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            margin: 0 auto;
+            max-width: fit-content;
+        }
+
         .pagination {
             margin: 0;
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 4px;
         }
-        
+
         .pagination .page-link {
             color: #5E60CE;
             border: none;
             padding: 8px 16px;
-            margin: 0 4px;
             border-radius: 8px;
             transition: all 0.2s;
+            white-space: nowrap;
+            min-width: 40px;
+            text-align: center;
         }
-        
+
         .pagination .page-link:hover {
             background-color: rgba(94, 96, 206, 0.1);
             color: #4F50AD;
         }
-        
+
         .pagination .page-item.active .page-link {
             background-color: #5E60CE;
             border-color: #5E60CE;
-            border-radius: 8px;
+            color: white;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #9CA3AF;
+            cursor: not-allowed;
+        }
+
+        /* Styles spécifiques pour mobile */
+        @media (max-width: 768px) {
+            .pagination-container {
+                margin: 0 16px;
+                padding: 12px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(94, 96, 206, 0.3) transparent;
+            }
+            
+            /* Style pour la scrollbar sur Webkit */
+            .pagination-container::-webkit-scrollbar {
+                height: 4px;
+            }
+            
+            .pagination-container::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.05);
+                border-radius: 2px;
+            }
+            
+            .pagination-container::-webkit-scrollbar-thumb {
+                background: rgba(94, 96, 206, 0.3);
+                border-radius: 2px;
+            }
+            
+            .pagination-container::-webkit-scrollbar-thumb:hover {
+                background: rgba(94, 96, 206, 0.5);
+            }
+            
+            .pagination {
+                min-width: max-content;
+            }
+            
+            .pagination .page-link {
+                padding: 10px 14px;
+                font-size: 14px;
+                min-width: 44px; /* Taille minimum pour faciliter le touch */
+            }
+            
+            /* Indicateur de scroll pour mobile */
+            .pagination-container::before,
+            .pagination-container::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 20px;
+                pointer-events: none;
+                z-index: 1;
+            }
+            
+            .pagination-container::before {
+                left: 0;
+                background: linear-gradient(to right, white, transparent);
+            }
+            
+            .pagination-container::after {
+                right: 0;
+                background: linear-gradient(to left, white, transparent);
+            }
+            
+            .pagination-container {
+                position: relative;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pagination .page-link {
+                padding: 8px 12px;
+                font-size: 13px;
+                min-width: 40px;
+            }
         }
         
         /* Style pour line-clamp */

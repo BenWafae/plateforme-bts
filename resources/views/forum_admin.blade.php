@@ -106,6 +106,66 @@
             background-color: #f9fafb;
             border-color: #e5e7eb;
         }
+
+        /* Conteneur de pagination responsive */
+        .pagination-container {
+            position: relative;
+        }
+
+        /* Style de scroll pour la pagination sur mobile */
+        .pagination-scroll {
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #5E60CE #f1f5f9;
+            padding-bottom: 8px;
+        }
+
+        .pagination-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .pagination-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+
+        .pagination-scroll::-webkit-scrollbar-thumb {
+            background: #5E60CE;
+            border-radius: 3px;
+        }
+
+        .pagination-scroll::-webkit-scrollbar-thumb:hover {
+            background: #4F50AD;
+        }
+
+        /* Wrapper pour la pagination avec largeur minimale */
+        .pagination-wrapper {
+            min-width: max-content;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Responsive pour mobiles */
+        @media (max-width: 640px) {
+            .pagination-scroll {
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .pagination .page-link {
+                padding: 0.375rem 0.625rem;
+                font-size: 0.875rem;
+                min-width: 40px;
+                text-align: center;
+            }
+        }
+
+        /* Limitation du texte sur plusieurs lignes */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     </style>
 
     <div class="container mx-auto px-6 py-8">
@@ -230,17 +290,34 @@
                         @endforeach
                     </div>
 
-                    <!-- Pagination stylisée avec thème violet -->
+                    <!-- Pagination responsive avec scroll horizontal sur mobile -->
                     @if($questions->hasPages())
-                        <div class="mt-8 flex justify-center">
+                        <div class="mt-8">
                             <div class="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
                                 <div class="px-6 py-4">
-                                    <div class="flex items-center justify-center">
-                                        <span class="text-violet-custom mr-3 font-bold">
-                                            <i class="fas fa-file-alt mr-1"></i>
-                                            Pages :
-                                        </span>
-                                        {{ $questions->links('pagination::bootstrap-4') }}
+                                    <div class="pagination-container">
+                                        <!-- Label de pagination -->
+                                        <div class="text-center mb-3">
+                                            <span class="text-violet-custom font-bold">
+                                                <i class="fas fa-file-alt mr-1"></i>
+                                                Pages :
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Conteneur de pagination avec scroll -->
+                                        <div class="pagination-scroll">
+                                            <div class="pagination-wrapper">
+                                                {{ $questions->links('pagination::bootstrap-4') }}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Indicateur de scroll sur mobile (optionnel) -->
+                                        <div class="text-center mt-2 sm:hidden">
+                                            <small class="text-gray-500 text-xs">
+                                                <i class="fas fa-arrows-alt-h mr-1"></i>
+                                                Glissez horizontalement pour naviguer
+                                            </small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -267,18 +344,7 @@
             </div>
         </div>
     </div>
-
-    <style>
-        /* Limitation du texte sur plusieurs lignes */
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-    </style>
 @endsection
-
 
 
 

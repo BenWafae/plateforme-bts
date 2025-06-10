@@ -24,9 +24,13 @@ class FiliereController extends Controller
             })
             ->paginate(5); // Pagination de 5 éléments par page
 
+        //  Préserver le terme de recherche dans les liens de pagination
+        $filieres->appends($request->query());
+
         // Retourner la vue avec les filières et le terme de recherche
         return view('filiere', compact('filieres', 'searchTerm'));
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -122,6 +126,7 @@ class FiliereController extends Controller
         // Redirection avec un message de succès
         return redirect()->route('filiere.index')->with('success', 'Filière mise à jour avec succès!');
     }
+
     /**
      * Remove the specified resource from storage.
      *
