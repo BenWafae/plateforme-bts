@@ -13,16 +13,31 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+   public function index(Request $request)
     {
         $roleFilter = $request->input('role'); // Get role from query parameter
-        $users = User::when($roleFilter, function ($query, $roleFilter) {
-                        return $query->where('role', $roleFilter);
-                    })
-                    ->paginate(8)
-                    ->appends(['role' => $roleFilter]);  // Ajoute le filtre à l'URL de la pagination
-    
-        return view('users_index', compact('users', 'roleFilter'));
+        $searchTerm = $request->input('search'); // Get search term from query parameter
+        
+        $users = User::query()
+            // Appliquer le filtre de rôle si présent
+            ->when($roleFilter, function ($query, $roleFilter) {
+                return $query->where('role', $roleFilter);
+            })
+            // Appliquer la recherche si présente
+            ->when($searchTerm, function ($query, $searchTerm) {
+                return $query->where(function ($q) use ($searchTerm) {
+                    $q->where('nom', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('prenom', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('email', 'LIKE', '%' . $searchTerm . '%');
+                });
+            })
+            ->paginate(8)
+            ->appends([
+                'role' => $roleFilter,
+                'search' => $searchTerm
+            ]);  // Ajouter les filtres à l'URL de pagination
+
+        return view('users_index', compact('users', 'roleFilter', 'searchTerm'));
     }
     
 
