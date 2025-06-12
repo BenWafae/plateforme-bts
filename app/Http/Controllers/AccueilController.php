@@ -59,7 +59,7 @@ class AccueilController extends Controller
             }
         }
 
-        return view('accueil', compact('types', 'filieres', 'matieres', 'supports'));
+        return view('Accueil', compact('types', 'filieres', 'matieres', 'supports'));
     }
 
     /**
