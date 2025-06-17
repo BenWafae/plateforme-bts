@@ -15,36 +15,9 @@
 {{-- Barre de filtres --}}
 <div class="container py-3 mb-4 rounded-3 text-white" style="background-color: #5E60CE;">
     <div class="d-flex align-items-center justify-content-center gap-3 flex-nowrap">
-    <form method="GET" action="{{ route('etudiant.dashboard') }}" class="d-inline-block m-0 p-0">
-        <select name="annee" class="form-select fw-bold" onchange="this.form.submit()" style="width: auto; min-width: 150px;">
-            <option value="">Choisissez l'année</option>
-            <option value="1" {{ request('annee') == '1' ? 'selected' : '' }}>1ère année</option>
-            <option value="2" {{ request('annee') == '2' ? 'selected' : '' }}>2ème année</option>
-        </select>
-    </form>
-
-
-        {{-- Filtre : Filière --}}
-        @if(request('annee'))
-            <div class="dropdown">
-                <button class="btn btn-outline-light dropdown-toggle fw-bold" type="button" id="filiereDropdown" data-bs-toggle="dropdown">
-                    Filière
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="filiereDropdown">
-                    @foreach($filieres as $filiere)
-                        <li>
-                            <a class="dropdown-item {{ request('filiere_id') == $filiere->id_filiere ? 'active' : '' }}"
-                               href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => $filiere->id_filiere]) }}">
-                                {{ $filiere->nom_filiere }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         {{-- Filtre : Matière --}}
-        @if(request('filiere_id'))
+        @if($matières->count())
             <div class="dropdown">
                 <button class="btn btn-outline-light dropdown-toggle fw-bold" type="button" id="matiereDropdown" data-bs-toggle="dropdown">
                     Matière
@@ -53,7 +26,7 @@
                     @foreach($matières as $matiere)
                         <li>
                             <a class="dropdown-item {{ request('matiere_id') == $matiere->id_Matiere ? 'active' : '' }}"
-                               href="{{ route('etudiant.dashboard', ['annee' => request('annee'), 'filiere_id' => request('filiere_id'), 'matiere_id' => $matiere->id_Matiere]) }}">
+                               href="{{ route('etudiant.dashboard', ['matiere_id' => $matiere->id_Matiere]) }}">
                                 {{ $matiere->Nom }}
                             </a>
                         </li>
@@ -73,8 +46,6 @@
                         <li>
                             <a class="dropdown-item {{ request('type_id') == $type->id_type ? 'active' : '' }}"
                                href="{{ route('etudiant.dashboard', [
-                                   'annee' => request('annee'),
-                                   'filiere_id' => request('filiere_id'),
                                    'matiere_id' => request('matiere_id'),
                                    'type_id' => $type->id_type
                                ]) }}">
@@ -90,15 +61,13 @@
 </div>
 
 {{-- Instructions ou affichage des supports --}}
-@if(!request('annee') || !request('filiere_id') || !request('matiere_id') || !request('type_id'))
+@if(!request('matiere_id') || !request('type_id'))
     <div class="container text-center py-5">
         <div class="border rounded-4 p-5 shadow-sm" style="max-width: 720px; margin: auto; background-color: #E9ECFF; border-color: #5E60CE;">
             <p class="text-dark fw-semibold fs-5 mb-4">Veuillez suivre les étapes ci-dessous pour afficher les supports pédagogiques :</p>
             <ul class="text-start text-dark fw-normal fs-6 ps-3">
-                <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Sélectionnez l’<strong>année d’étude</strong></li>
-                <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Choisissez la <strong>filière</strong> correspondante</li>
-                <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Sélectionnez la <strong>matière</strong></li>
-                <li><i class="fas fa-check-circle text-primary me-2"></i> Définissez le <strong>type de support</strong></li>
+                <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Choisissez une <strong>matière</strong></li>
+                <li><i class="fas fa-check-circle text-primary me-2"></i> Sélectionnez le <strong>type de support</strong></li>
             </ul>
         </div>
     </div>
@@ -115,7 +84,6 @@
                             <p class="text-muted small flex-grow-1 mb-3">{{ $support->matiere->Nom ?? 'Matière inconnue' }}</p>
                             <div class="mt-auto d-flex gap-2 flex-wrap justify-content-center">
 
-                                {{-- Lien selon le format --}}
                                 @php $format = strtolower($support->format); @endphp
 
                                 @if(strpos($format, 'pdf') !== false)
@@ -136,7 +104,7 @@
                                     </a>
                                 @endif
 
-                                {{-- Bouton de traduction --}}
+                                {{-- Traduction --}}
                                 <a href="{{ route('etudiant.supports.showTranslateForm', ['id' => $support->id_support]) }}" class="btn btn-outline-secondary btn-sm" title="Traduire">
                                     <i class="fas fa-language"></i>
                                 </a>
@@ -172,24 +140,6 @@
         padding-left: 0;
         list-style: none;
     }
-    select.select-annee {
-    height: 38px; /* même hauteur que les boutons btn-outline-light */
-    padding: 0 12px;
-    background-color: transparent;
-    border: 2px solid white;
-    color: white;
-    font-weight: 700;
-    border-radius: 0.375rem;
-    cursor: pointer;
-    appearance: none; /* retire la flèche native */
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg fill='white' height='12' viewBox='0 0 20 20' width='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 12px 12px;
-    vertical-align: middle;
-    display: inline-block;
-}
-
 
     nav ul.pagination li a,
     nav ul.pagination li span {
@@ -214,6 +164,7 @@
         border-color: #5E60CE;
         cursor: default;
     }
+
     @media (max-width: 768px) {
         .d-flex.align-items-center.justify-content-center.gap-3.flex-nowrap {
             flex-direction: column;
@@ -239,6 +190,4 @@
             gap: 0.5rem;
         }
     }
-
-
 </style>

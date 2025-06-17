@@ -14,38 +14,33 @@ class EtudiantController extends Controller
 {
     public function dashboard(Request $request)
     {
-        $filieres = Filiere::all();
+        $user = auth()->user();
 
-        if ($request->has('annee')) {
-            $filieres = $filieres->filter(function ($filiere) use ($request) {
-                return strpos($filiere->nom_filiere, $request->input('annee')) !== false;
-            });
-        }
+        // ✅ On récupère la filière de l'étudiant
+        $filiere = $user->filiere;
 
-        $matières = [];
-        if ($request->has('filiere_id')) {
-            $filiere = Filiere::find($request->input('filiere_id'));
-            if ($filiere) {
-                $matières = $filiere->matieres;
-            }
-        }
+        // ✅ On récupère les matières associées à sa filière
+        $matières = $filiere ? $filiere->matieres : collect();
 
+        // ✅ Tous les types de support
         $types = Type::all();
 
-        // Construire la requête
+        // 🔍 Requête des supports
         $supportsQuery = SupportEducatif::query();
 
-        // 🔍 Requête de recherche (titre ou description)
+        // Si une recherche par mot-clé
         if ($request->filled('search')) {
             $search = $request->input('search');
             $supportsQuery->where(function ($query) use ($search) {
                 $query->where('titre', 'like', "%$search%")
                       ->orWhere('description', 'like', "%$search%");
             });
-        }
+        } else {
+            // Filtrer uniquement par matière de la filière de l'étudiant
+            $matiereIds = $matières->pluck('id_Matiere');
 
-        // Si pas de recherche mais des filtres
-        if (!$request->filled('search')) {
+            $supportsQuery->whereIn('id_Matiere', $matiereIds);
+
             if ($request->filled('matiere_id')) {
                 $supportsQuery->where('id_Matiere', $request->input('matiere_id'));
             }
@@ -55,13 +50,13 @@ class EtudiantController extends Controller
             }
         }
 
-        // Résultats paginés
+        // Pagination des résultats
         $supports = $supportsQuery->orderBy('created_at', 'desc')->paginate(16);
 
-        $user = auth()->user();
+        // Pour les questions/réponses de l'étudiant
         $questions = Question::where('id_user', $user->id)->get();
         $reponses = Reponse::whereIn('id_question', $questions->pluck('id_question'))->get();
 
-        return view('etudiant_dashboard', compact('filieres', 'matières', 'types', 'supports', 'user', 'questions', 'reponses'));
+        return view('etudiant_dashboard', compact('matières', 'types', 'supports', 'user', 'questions', 'reponses'));
     }
 }
