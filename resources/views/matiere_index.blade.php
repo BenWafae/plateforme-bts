@@ -124,6 +124,177 @@
             color: #155724;
             border-radius: 8px;
         }
+
+        /* Amélioration pour les noms de filières très longs */
+        .filiere-select-custom {
+            min-width: 100%;
+            width: 100%;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            text-overflow: ellipsis;
+        }
+        
+        .filiere-select-custom option {
+            padding: 10px 15px;
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.5;
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        /* Styles améliorés pour l'affichage des filières longues dans le tableau */
+        .filiere-badge {
+            display: inline-block;
+            position: relative;
+            max-width: 100%;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, rgba(94, 96, 206, 0.1), rgba(120, 121, 227, 0.05));
+            border: 1px solid rgba(94, 96, 206, 0.2);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #5E60CE;
+            cursor: help;
+            transition: all 0.3s ease;
+            line-height: 1.4;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .filiere-badge:hover {
+            background: linear-gradient(135deg, rgba(94, 96, 206, 0.15), rgba(120, 121, 227, 0.08));
+            border-color: rgba(94, 96, 206, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(94, 96, 206, 0.2);
+        }
+
+        /* Tooltip personnalisé pour les filières */
+        .filiere-tooltip {
+            position: relative;
+        }
+
+        .filiere-tooltip .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 1000;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            max-width: 300px;
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.3;
+        }
+
+        .filiere-tooltip .tooltip-text::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: #2d3748;
+        }
+
+        .filiere-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        /* Amélioration de la largeur des colonnes */
+        .table-custom th:nth-child(1) { /* Nom de la matière */
+            width: 25%;
+            min-width: 200px;
+        }
+        
+        .table-custom th:nth-child(2) { /* Filière */
+            width: 35%;
+            min-width: 250px;
+        }
+        
+        .table-custom th:nth-child(3) { /* Description */
+            width: 30%;
+            min-width: 200px;
+        }
+        
+        .table-custom th:nth-child(4) { /* Actions */
+            width: 10%;
+            min-width: 120px;
+        }
+
+        /* Amélioration du texte de description */
+        .description-cell {
+            max-width: 200px;
+            word-wrap: break-word;
+            line-height: 1.4;
+            color: #4a5568;
+        }
+
+        /* Bouton compact */
+        .btn-compact {
+            min-width: 60px;
+            padding: 8px 12px !important;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive design pour les noms longs */
+        @media (max-width: 768px) {
+            .search-filter-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            
+            .filiere-select-custom {
+                font-size: 0.85rem;
+            }
+            
+            .btn-compact {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .table-custom th:nth-child(1) { width: 30%; }
+            .table-custom th:nth-child(2) { width: 40%; }
+            .table-custom th:nth-child(3) { width: 20%; }
+            .table-custom th:nth-child(4) { width: 10%; }
+
+            .filiere-badge {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .filiere-select-custom {
+                font-size: 0.85rem;
+            }
+            
+            .filiere-badge {
+                font-size: 0.83rem;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .filiere-select-custom {
+                font-size: 0.95rem;
+            }
+            
+            .filiere-badge {
+                font-size: 0.87rem;
+            }
+        }
     </style>
 
     <div class="container mx-auto px-6 py-8">
@@ -143,9 +314,9 @@
         {{-- Formulaire de recherche et filtre --}}
         <div class="search-filter-container mb-6">
             <form method="GET" action="{{ route('matiere.index') }}" class="mb-0">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div class="search-filter-grid grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
                     {{-- Recherche --}}
-                    <div class="flex flex-col">
+                    <div class="lg:col-span-3 flex flex-col">
                         <label for="searchInput" class="text-violet-custom font-semibold mb-2 flex items-center">
                             <i class="fas fa-search mr-2"></i>
                             Rechercher
@@ -158,30 +329,36 @@
                                value="{{ request('search') }}">
                     </div>
 
-                    {{-- Filtre par Filière --}}
-                    <div class="flex flex-col">
+                    {{-- Filtre par Filière - Maximum d'espace --}}
+                    <div class="lg:col-span-7 flex flex-col">
                         <label for="filterFiliere" class="text-violet-custom font-semibold mb-2 flex items-center">
                             <i class="fas fa-filter mr-2"></i>
                             Filière
                         </label>
                         <select id="filterFiliere" 
                                 name="filiere" 
-                                class="form-control form-control-custom" 
-                                onchange="this.form.submit()">
+                                class="form-control form-control-custom filiere-select-custom" 
+                                onchange="this.form.submit()"
+                                title="Sélectionner une filière">
                             <option value="all" @if ($filiereFilter == 'all') selected @endif>Toutes les Filières</option>
                             @foreach ($filieres as $filiere)
-                                <option value="{{ strtolower($filiere->nom_filiere) }}" @if ($filiereFilter == strtolower($filiere->nom_filiere)) selected @endif>
+                                <option value="{{ strtolower($filiere->nom_filiere) }}" 
+                                        @if ($filiereFilter == strtolower($filiere->nom_filiere)) selected @endif
+                                        title="{{ $filiere->nom_filiere }}">
                                     {{ $filiere->nom_filiere }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
 
-                    {{-- Bouton Créer --}}
-                    <div class="flex justify-end">
-                        <a href="{{ route('matiere.form') }}" class="btn btn-violet-custom px-6 py-2 rounded-lg font-semibold flex items-center">
-                            <i class="fas fa-plus mr-2"></i>
-                            Créer une Matière
+                    {{-- Bouton Créer - Compact --}}
+                    <div class="lg:col-span-2 create-btn-container flex justify-end">
+                        <a href="{{ route('matiere.form') }}" 
+                           class="btn btn-violet-custom px-3 py-2 rounded-lg font-medium flex items-center w-full lg:w-auto justify-center text-sm"
+                           title="Créer une nouvelle matière">
+                            <i class="fas fa-plus mr-1"></i>
+                            <span class="hidden xl:inline">Créer</span>
+                            <span class="xl:hidden">+</span>
                         </a>
                     </div>
                 </div>
@@ -217,11 +394,16 @@
                             <tr>
                                 <td class="font-semibold text-gray-800">{{ $matiere->Nom }}</td>
                                 <td>
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-violet-50 text-violet-custom">
-                                        {{ $matiere->filiere->nom_filiere }}
-                                    </span>
+                                    <div class="filiere-tooltip">
+                                        <div class="filiere-badge" title="{{ $matiere->filiere->nom_filiere }}">
+                                            {{ $matiere->filiere->nom_filiere }}
+                                        </div>
+                                        <div class="tooltip-text">
+                                            {{ $matiere->filiere->nom_filiere }}
+                                        </div>
+                                    </div>
                                 </td>
-                                <td class="text-gray-600">{{ $matiere->description }}</td>
+                                <td class="description-cell">{{ $matiere->description }}</td>
                                 <td class="text-center">
                                     <div class="flex justify-center space-x-2">
                                         {{-- Bouton Modifier --}}
@@ -292,7 +474,5 @@
     </style>
 
 @endsection
-
-
 
 
