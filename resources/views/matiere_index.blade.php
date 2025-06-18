@@ -11,6 +11,8 @@
         .text-violet-custom {
             color: #5E60CE;
         }
+
+        
         .border-violet-custom {
             border-color: #5E60CE;
         }
