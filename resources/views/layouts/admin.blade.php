@@ -107,14 +107,10 @@
             text-align: center;
         }
 
-        /* Section profil simplifiée */
-        .profile-section {
-            padding: 1rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            background-color: #F9FAFB;
-            flex-shrink: 0;
-            margin-top: auto;
-        }
+
+        /* Section profil avec déconnexion intégrée */
+
+
 
         /* Bouton de déconnexion dans la navigation */
         .logout-nav-btn {
@@ -135,6 +131,8 @@
 
         .logout-nav-btn i {
             color: #5E60CE;
+
+
         }
 
         .profile-content {
@@ -265,11 +263,13 @@
             min-width: auto;
         }
 
+
         /* Correction pour desktop uniquement - ne pas appliquer en mobile */
         @media (min-width: 768px) {
             .sidebar.collapsed .logout-btn span {
                 display: none;
             }
+
         }
 
         .sidebar.collapsed .sidebar-collapse-btn {
@@ -414,12 +414,15 @@
             .logout-btn {
                 padding: 0.675rem;
                 font-size: 0.85rem;
+
             }
 
             /* Assurer que l'icône et le texte restent visibles en mobile */
             .logout-btn i,
             .logout-btn span {
                 display: inline-block !important;
+
+
             }
         }
 
@@ -470,11 +473,12 @@
                 font-size: 0.8rem;
             }
 
+
             /* Assurer que l'icône et le texte restent visibles en très petit écran */
             .logout-btn i,
             .logout-btn span {
                 display: inline-block !important;
-            }
+
         }
 
         /* Mode paysage sur mobile */
@@ -512,11 +516,13 @@
                 flex-shrink: 0;
             }
 
+
             /* Assurer que l'icône et le texte restent visibles en mode paysage */
             .logout-btn i,
             .logout-btn span {
                 display: inline-block !important;
             }
+
         }
 
         /* Animation d'ouverture/fermeture améliorée */
@@ -628,6 +634,7 @@
                         <i class="fas fa-user-edit"></i> <span>Gestion Profil</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                         @csrf
@@ -636,6 +643,7 @@
                         </button>
                     </form>
                 </li>
+
             </ul>
         </div>
         
@@ -654,6 +662,17 @@
                     <p class="profile-name">{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</p>
                     <p class="profile-role">Administrateur</p>
                 </div>
+            </div>
+            
+            <!-- Section déconnexion intégrée -->
+            <div class="logout-section">
+                <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Déconnexion</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
