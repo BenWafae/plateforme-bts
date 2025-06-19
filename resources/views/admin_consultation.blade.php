@@ -306,77 +306,77 @@
             </div>
         </div>
     </div>
-<!-- Liste des consultations avec styling optimisé pour mobile -->
-<div class="consultations-section">
-    <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-        <div class="bg-gradient-to-r from-purple-600 to-indigo-600 px-4 sm:px-6 py-4">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-white gap-3 sm:gap-4">
-                <h2 class="text-lg sm:text-xl font-bold flex items-center">
-                    <i class="fas fa-history mr-2 sm:mr-3"></i>
-                    Consultations Récentes
-                </h2>
-                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-                    <span class="bg-gray-200 text-gray-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
-                        {{ $consultations->total() }} au total
-                    </span>
-                    <div class="text-xs sm:text-sm opacity-90">
-                        <i class="fas fa-sort-amount-down mr-1"></i>
-                        Du plus récent au plus ancien
+
+    <!-- Liste des consultations avec styling optimisé pour mobile -->
+    <div class="consultations-section">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 px-4 sm:px-6 py-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-white gap-3 sm:gap-4">
+                    <h2 class="text-lg sm:text-xl font-bold flex items-center">
+                        <i class="fas fa-history mr-2 sm:mr-3"></i>
+                        Consultations Récentes
+                    </h2>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                        <span class="bg-gray-200 text-gray-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
+                            {{ $consultations->total() }} au total
+                        </span>
+                        <div class="text-xs sm:text-sm opacity-90">
+                            <i class="fas fa-sort-amount-down mr-1"></i>
+                            Du plus récent au plus ancien
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="p-2 sm:p-6">
-            @forelse($consultations as $index => $consultation)
-                <div class="consultation-item relative mb-4 sm:mb-6">
-                    <!-- Version Mobile (< 640px) -->
-                    <div class="block sm:hidden">
-                        <div class="bg-gradient-to-br from-white to-purple-50 rounded-2xl border-2 border-purple-200 p-4 shadow-lg hover:shadow-xl transition-all duration-300">
-                            <!-- Header avec numéro et badges -->
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center space-x-3">
-                                    <!-- Numéro d'ordre -->
-                                    <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
-                                        {{ ($consultations->currentPage() - 1) * $consultations->perPage() + $index + 1 }}
+            <div class="p-2 sm:p-6">
+                @forelse($consultations as $index => $consultation)
+                    <div class="consultation-item relative mb-4 sm:mb-6">
+                        <!-- Version Mobile (< 640px) - CORRIGÉE -->
+                        <div class="block sm:hidden">
+                            <div class="bg-gradient-to-br from-white to-purple-50 rounded-2xl border-2 border-purple-200 p-4 shadow-lg hover:shadow-xl transition-all duration-300">
+                                <!-- Header avec numéro et badges -->
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center space-x-3">
+                                        <!-- Numéro d'ordre -->
+                                        <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
+                                            {{ ($consultations->currentPage() - 1) * $consultations->perPage() + $index + 1 }}
+                                        </div>
+                                        <!-- Avatar utilisateur -->
+                                        <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
+                                            {{ strtoupper(substr($consultation->user->prenom, 0, 1)) }}{{ strtoupper(substr($consultation->user->nom, 0, 1)) }}
+                                        </div>
                                     </div>
-                                    <!-- Avatar utilisateur -->
-                                    <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
-                                        {{ strtoupper(substr($consultation->user->prenom, 0, 1)) }}{{ strtoupper(substr($consultation->user->nom, 0, 1)) }}
-                                    </div>
-                                </div>
-                                
-                                <!-- Badges en haut à droite -->
-                                <div class="flex flex-col items-end space-y-1">
-                                    <span class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-sm">
-                                        <i class="fas fa-user-graduate mr-1"></i>
-                                        Étudiant
-                                    </span>
-                                    @if(\Carbon\Carbon::parse($consultation->date_consultation)->diffInHours(now()) < 24)
-                                        <span class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 py-1 rounded-full text-xs font-semibold animate-pulse">
-                                            <i class="fas fa-star mr-1"></i>
-                                            Nouveau
+                                    
+                                    <!-- Badges en haut à droite -->
+                                    <div class="flex flex-col items-end space-y-1">
+                                        <span class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-sm">
+                                            <i class="fas fa-user-graduate mr-1"></i>
+                                            Étudiant
                                         </span>
-                                    @endif
+                                        @if(\Carbon\Carbon::parse($consultation->date_consultation)->diffInHours(now()) < 24)
+                                            <span class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 py-1 rounded-full text-xs font-semibold animate-pulse">
+                                                <i class="fas fa-star mr-1"></i>
+                                                Nouveau
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Nom de l'utilisateur -->
-                            <div class="text-center mb-4">
-                                <h3 class="text-lg font-bold text-gray-800 bg-white px-4 py-2 rounded-xl border border-purple-200">
-                                    {{ $consultation->user->prenom }} {{ $consultation->user->nom }}
-                                </h3>
-                            </div>
+                                <!-- Nom de l'utilisateur -->
+                                <div class="text-center mb-6">
+                                    <h3 class="text-lg font-bold text-gray-800 bg-white px-4 py-3 rounded-xl border border-purple-200">
+                                        {{ $consultation->user->prenom }} {{ $consultation->user->nom }}
+                                    </h3>
+                                </div>
 
-                            <!-- Support consulté -->
-                            <div class="mb-4">
-                                <div class="bg-purple-100 rounded-xl p-4 border border-purple-200">
-                                    <div class="flex items-start space-x-3">
-                                        <i class="fas fa-eye text-purple-600 mt-1 text-lg"></i>
-                                        <div class="flex-1">
-                                            <p class="text-sm text-purple-700 font-medium mb-1">A consulté :</p>
+                                <!-- Support consulté - PLUS GRAND ESPACE -->
+                                <div class="mb-6">
+                                    <div class="bg-purple-100 rounded-xl p-5 border border-purple-200">
+                                        <div class="text-center">
+                                            <i class="fas fa-eye text-purple-600 text-2xl mb-3"></i>
+                                            <p class="text-sm text-purple-700 font-medium mb-2">A consulté :</p>
                                             @if ($consultation->support)
-                                                <p class="font-semibold text-purple-800 break-words leading-relaxed">
+                                                <p class="font-bold text-purple-800 text-base leading-relaxed break-words px-2">
                                                     "{{ $consultation->support->titre }}"
                                                 </p>
                                             @else
@@ -385,60 +385,60 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Informations détaillées en grille -->
-                            <div class="space-y-3">
-                                <!-- Type -->
-                                <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-tag text-purple-600 text-sm"></i>
-                                        </div>
-                                        <div class="flex-1">
-                                            <p class="text-xs text-gray-500 font-medium">TYPE</p>
-                                            <p class="text-sm font-bold text-purple-700 mt-1">
-                                                {{ optional(optional($consultation->support)->type)->nom ?? 'Inconnu' }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Matière -->
-                                <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-book text-indigo-600 text-sm"></i>
-                                        </div>
-                                        <div class="flex-1">
-                                            <p class="text-xs text-gray-500 font-medium">MATIÈRE</p>
-                                            <p class="text-sm font-bold text-indigo-700 mt-1">
-                                                {{ $consultation->support->matiere->Nom ?? 'Non spécifiée' }}
-                                            </p>
+                                <!-- Informations détaillées - ESPACES AGRANDIS -->
+                                <div class="space-y-4">
+                                    <!-- Type - PLUS GRAND -->
+                                    <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                                        <div class="text-center">
+                                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                                <i class="fas fa-tag text-purple-600 text-lg"></i>
+                                            </div>
+                                            <p class="text-xs text-gray-500 font-medium uppercase tracking-wide mb-2">TYPE</p>
+                                            <div class="bg-purple-50 rounded-lg px-4 py-3">
+                                                <p class="text-sm font-bold text-purple-700 break-words leading-relaxed">
+                                                    {{ optional(optional($consultation->support)->type)->nom ?? 'Inconnu' }}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <!-- Date -->
-                                <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                                            <i class="fas fa-calendar-alt text-green-600 text-sm"></i>
+                                    
+                                    <!-- Matière - PLUS GRAND AVEC MEILLEUR WRAPPING -->
+                                    <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                                        <div class="text-center">
+                                            <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                                <i class="fas fa-book text-indigo-600 text-lg"></i>
+                                            </div>
+                                            <p class="text-xs text-gray-500 font-medium uppercase tracking-wide mb-2">MATIÈRE</p>
+                                            <div class="bg-indigo-50 rounded-lg px-4 py-3 min-h-[60px] flex items-center justify-center">
+                                                <p class="text-sm font-bold text-indigo-700 break-words leading-relaxed text-center">
+                                                    {{ $consultation->support->matiere->Nom ?? 'Non spécifiée' }}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div class="flex-1">
-                                            <p class="text-xs text-gray-500 font-medium">DATE & HEURE</p>
-                                            <p class="text-sm font-bold text-green-700 mt-1">
-                                                {{ \Carbon\Carbon::parse($consultation->date_consultation)->format('d/m/Y') }}
-                                            </p>
-                                            <p class="text-xs text-green-600 font-medium">
-                                                à {{ \Carbon\Carbon::parse($consultation->date_consultation)->format('H:i') }}
-                                            </p>
+                                    </div>
+                                    
+                                    <!-- Date - PLUS GRAND -->
+                                    <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                                        <div class="text-center">
+                                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                                <i class="fas fa-calendar-alt text-green-600 text-lg"></i>
+                                            </div>
+                                            <p class="text-xs text-gray-500 font-medium uppercase tracking-wide mb-2">DATE & HEURE</p>
+                                            <div class="bg-green-50 rounded-lg px-4 py-3">
+                                                <p class="text-sm font-bold text-green-700 mb-1">
+                                                    {{ \Carbon\Carbon::parse($consultation->date_consultation)->format('d/m/Y') }}
+                                                </p>
+                                                <p class="text-xs text-green-600 font-medium">
+                                                    à {{ \Carbon\Carbon::parse($consultation->date_consultation)->format('H:i') }}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
 
                     <!-- Version Desktop (≥ 640px) - Code existant -->
                     <div class="hidden sm:block">

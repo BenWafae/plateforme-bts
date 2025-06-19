@@ -107,12 +107,16 @@
             text-align: center;
         }
 
+        /* Section profil simplifiée */
+        .profile-section {
+            padding: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: #F9FAFB;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
 
-        /* Section profil avec déconnexion intégrée */
-
-
-
-        /* Bouton de déconnexion dans la navigation */
+        /* Bouton de déconnexion dans la navigation - CORRECTION PRINCIPALE */
         .logout-nav-btn {
             width: 100%;
             background: none;
@@ -120,19 +124,26 @@
             text-align: left;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: #4B5563;
+            color: #5E60CE; /* Couleur violette par défaut */
+            border-left: 3px solid transparent;
         }
 
         .logout-nav-btn:hover {
-            background-color: rgba(94, 96, 206, 0.05);
+            background-color: rgba(94, 96, 206, 0.1); /* Fond violet clair au hover */
             color: #5E60CE;
             border-left-color: #5E60CE;
         }
 
         .logout-nav-btn i {
-            color: #5E60CE;
+            color: #5E60CE; /* Icône violette */
+            width: 20px;
+            margin-right: 10px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
 
-
+        .logout-nav-btn span {
+            color: #5E60CE; /* Texte violet */
         }
 
         .profile-content {
@@ -222,6 +233,11 @@
             display: none;
         }
 
+        /* CORRECTION : Assurer l'affichage du texte de déconnexion en mode réduit desktop */
+        .sidebar.collapsed .logout-nav-btn span {
+            display: none;
+        }
+
         .sidebar.collapsed ~ .content {
             margin-left: 70px;
             width: calc(100% - 70px);
@@ -233,6 +249,15 @@
         }
 
         .sidebar.collapsed .nav-link i {
+            margin-right: 0;
+        }
+
+        .sidebar.collapsed .logout-nav-btn {
+            padding: 0.75rem;
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .logout-nav-btn i {
             margin-right: 0;
         }
 
@@ -261,15 +286,6 @@
             border-radius: 50%;
             padding: 0;
             min-width: auto;
-        }
-
-
-        /* Correction pour desktop uniquement - ne pas appliquer en mobile */
-        @media (min-width: 768px) {
-            .sidebar.collapsed .logout-btn span {
-                display: none;
-            }
-
         }
 
         .sidebar.collapsed .sidebar-collapse-btn {
@@ -404,6 +420,25 @@
                 font-size: 1.1rem;
             }
             
+            /* CORRECTION : S'assurer que le bouton de déconnexion reste visible et violet en mobile */
+            .logout-nav-btn {
+                padding: 0.875rem 1.5rem;
+                font-size: 0.9rem;
+                color: #5E60CE !important;
+            }
+
+            .logout-nav-btn i {
+                width: 20px;
+                margin-right: 10px;
+                font-size: 1.1rem;
+                color: #5E60CE !important;
+            }
+
+            .logout-nav-btn span {
+                display: inline-block !important;
+                color: #5E60CE !important;
+            }
+            
             /* S'assurer que la section profil est visible */
             .profile-section {
                 flex-shrink: 0;
@@ -414,15 +449,6 @@
             .logout-btn {
                 padding: 0.675rem;
                 font-size: 0.85rem;
-
-            }
-
-            /* Assurer que l'icône et le texte restent visibles en mobile */
-            .logout-btn i,
-            .logout-btn span {
-                display: inline-block !important;
-
-
             }
         }
 
@@ -461,6 +487,22 @@
                 padding: 0.75rem 1.25rem;
                 font-size: 0.85rem;
             }
+
+            /* CORRECTION : Maintenir le style violet pour déconnexion sur très petits écrans */
+            .logout-nav-btn {
+                padding: 0.75rem 1.25rem;
+                font-size: 0.85rem;
+                color: #5E60CE !important;
+            }
+
+            .logout-nav-btn i {
+                color: #5E60CE !important;
+            }
+
+            .logout-nav-btn span {
+                display: inline-block !important;
+                color: #5E60CE !important;
+            }
             
             .profile-section {
                 padding: 0.75rem;
@@ -472,13 +514,6 @@
                 padding: 0.6rem;
                 font-size: 0.8rem;
             }
-
-
-            /* Assurer que l'icône et le texte restent visibles en très petit écran */
-            .logout-btn i,
-            .logout-btn span {
-                display: inline-block !important;
-
         }
 
         /* Mode paysage sur mobile */
@@ -499,6 +534,21 @@
             .nav-link {
                 padding: 0.5rem 1.5rem;
             }
+
+            /* CORRECTION : Maintenir le style violet en mode paysage */
+            .logout-nav-btn {
+                padding: 0.5rem 1.5rem;
+                color: #5E60CE !important;
+            }
+
+            .logout-nav-btn i {
+                color: #5E60CE !important;
+            }
+
+            .logout-nav-btn span {
+                display: inline-block !important;
+                color: #5E60CE !important;
+            }
             
             .profile-section {
                 padding: 0.6rem;
@@ -515,14 +565,6 @@
                 padding: 0.75rem;
                 flex-shrink: 0;
             }
-
-
-            /* Assurer que l'icône et le texte restent visibles en mode paysage */
-            .logout-btn i,
-            .logout-btn span {
-                display: inline-block !important;
-            }
-
         }
 
         /* Animation d'ouverture/fermeture améliorée */
@@ -535,7 +577,8 @@
         /* Accessibilité - Focus states */
         .toggle-sidebar:focus,
         .sidebar-collapse-btn:focus,
-        .nav-link:focus {
+        .nav-link:focus,
+        .logout-nav-btn:focus {
             outline: 2px solid #5E60CE;
             outline-offset: 2px;
         }
@@ -634,7 +677,6 @@
                         <i class="fas fa-user-edit"></i> <span>Gestion Profil</span>
                     </a>
                 </li>
-
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                         @csrf
@@ -643,7 +685,6 @@
                         </button>
                     </form>
                 </li>
-
             </ul>
         </div>
         
@@ -662,17 +703,6 @@
                     <p class="profile-name">{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</p>
                     <p class="profile-role">Administrateur</p>
                 </div>
-            </div>
-            
-            <!-- Section déconnexion intégrée -->
-            <div class="logout-section">
-                <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                    @csrf
-                    <button type="submit" class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Déconnexion</span>
-                    </button>
-                </form>
             </div>
         </div>
     </div>
