@@ -146,6 +146,76 @@
             color: #9ca3af;
             border-color: #e5e7eb;
         }
+
+        /* NOUVELLES STYLES POUR RESPONSIVE MOBILE - GRAPHIQUE */
+        #consultationWeeklyChart {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100%;
+        }
+
+        /* Styles pour mobile */
+        @media (max-width: 768px) {
+            /* Réduire les paddings sur mobile pour le graphique */
+            .chart-container .p-6 {
+                padding: 1rem !important;
+            }
+            
+            /* Hauteur du graphique sur mobile */
+            #consultationWeeklyChart {
+                height: 300px !important;
+                max-height: 300px !important;
+            }
+            
+            /* Ajuster la hauteur du conteneur sur mobile */
+            .chart-container .relative {
+                height: 300px;
+                overflow: hidden;
+            }
+            
+            /* Réduire l'en-tête sur mobile */
+            .chart-container .bg-gradient-to-r {
+                padding: 0.75rem 1rem;
+            }
+            
+            .chart-container .bg-gradient-to-r h2 {
+                font-size: 1rem;
+                line-height: 1.25rem;
+            }
+            
+            .chart-container .bg-gradient-to-r i {
+                margin-right: 0.5rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Styles pour très petits écrans */
+        @media (max-width: 480px) {
+            #consultationWeeklyChart {
+                height: 250px !important;
+                max-height: 250px !important;
+            }
+            
+            .chart-container .relative {
+                height: 250px;
+            }
+            
+            .chart-container .p-6 {
+                padding: 0.75rem !important;
+            }
+        }
+
+        /* Optimisation pour le mode paysage mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            #consultationWeeklyChart {
+                height: 200px !important;
+                max-height: 200px !important;
+            }
+            
+            .chart-container .relative {
+                height: 200px;
+            }
+        }
     </style>
 @endsection
 
