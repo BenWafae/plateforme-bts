@@ -16,7 +16,7 @@ Ce projet est né comme **Projet de Fin d'Études (PFE)** dans le cadre du BTS S
 
 | Membre | Profil |
 |--------|--------|
-| **BENZHIR Wafa** | [LinkedIn](https://www.linkedin.com/in/wafae-benzhir) |
+| **BEN ZHIR Wafa** | [LinkedIn](https://www.linkedin.com/in/wafae-benzhir) |
 | **Fatima El Grafel** | [LinkedIn](https://www.linkedin.com/in/fatima-el-grafel-6219a6342/) |
 
 🙏 Encadré par **M. HAMDANE Yassine** & **M. ELMAZOUD Mohamed**
