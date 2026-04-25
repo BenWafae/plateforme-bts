@@ -1,66 +1,95 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎓 Plateforme BTS — Plateforme Éducative Intelligente
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> Plateforme de partage de compétences et de cours développée dans le cadre d'un PFE puis évoluée en stage de fin d'études.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+##  Description
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Plateforme web éducative complète permettant de centraliser les ressources pédagogiques, structurer la communication entre enseignants et étudiants, et offrir à chaque profil une interface adaptée à ses besoins.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Ce projet est né comme **Projet de Fin d'Études (PFE)** dans le cadre du BTS Systèmes et Réseaux Informatiques, puis a évolué en **Stage de Fin d'Études** avec une mise en production réelle au sein de l'établissement **BTS Al Idrissi**.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 👥 Réalisé par
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+| Membre | Profil |
+|--------|--------|
+| **BENZHIR Wafa** | [LinkedIn](https://www.linkedin.com/in/wafae-benzhir) |
+| **Fatima El Grafel** | [LinkedIn](https://www.linkedin.com/in/fatima-el-grafel-6219a6342/) |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+🙏 Encadré par **M. HAMDANE Yassine** & **M. ELMAZOUD Mohamed**
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## ✅ Fonctionnalités
 
-### Premium Partners
+###  Administrateur
+- Gestion des utilisateurs, filières et signalements
+- Gestion des supports pédagogiques et du forum
+- Notifications ciblées
+- Interface de suivi des interactions pédagogiques
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+###  Professeur
+- Ajout et gestion des supports (cours, exercices, examens)
+- Gestion du forum
+- Suivi des étudiants
 
-## Contributing
+###  Étudiant
+- Accès aux cours selon sa filière
+- Participation au forum
+- Signalement de problèmes
+- Notifications personnalisées
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+###  Espace Public
+- Accès sans authentification à certaines ressources
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+##  Modules d'Intelligence Artificielle
 
-## Security Vulnerabilities
+- **Classement automatique des cours** via API Hugging Face
+- **Traduction intelligente** des contenus
+- **Tri intelligent** des ressources pédagogiques
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+##  Évolutions — Stage de Fin d'Études
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Fonctionnalité | Détail |
+|----------------|--------|
+|  Notifications temps réel | Ciblées par profil |
+|  Intégration IA | API Hugging Face |
+|  Interface personnalisée | Selon filière à l'inscription |
+|  Tableau de bord | Suivi des interactions pédagogiques |
+|  Mise en production | Hébergement via Hostinger + FileZilla |
+
+---
+
+## 🛠️ Technologies
+
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![Trello](https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white)
+![Hostinger](https://img.shields.io/badge/Hostinger-673DE6?style=for-the-badge&logo=hostinger&logoColor=white)
+
+---
+
+## 📚 Contexte Académique
+
+| | |
+|-|-|
+|  Formation | BTS Systèmes et Réseaux Informatiques |
+|  Établissement | BTS Al Idrissi |
+|  Type | PFE + Stage de Fin d'Études |
+|  Statut | **Mis en production** |
+
+---
+
+> *"Réaliser un projet jusqu'à sa mise en production, c'est transformer une idée en solution concrète."*
